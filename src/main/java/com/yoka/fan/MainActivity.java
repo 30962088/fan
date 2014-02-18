@@ -14,11 +14,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-/**
- * 
- * @author zhangzimeng
- *
- */
+
 public class MainActivity extends SlidingFragmentActivity {
 
 
