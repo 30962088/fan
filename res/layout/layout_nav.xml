@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="213dp"
+    android:layout_height="match_parent"
+    android:background="@drawable/nav_bg"
+    android:paddingLeft="20dp"
+    android:paddingTop="20dp" >
+
+    <LinearLayout
+        android:id="@+id/nav_user"
+        android:layout_width="match_parent"
+        android:layout_height="132dp"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/photo_bg" />
+
+        <TextView
+            android:id="@+id/login_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="立即登录"
+            android:textColor="#fff"
+            android:textSize="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="分享你的每日搭配"
+            android:textColor="#fff"
+            android:textSize="12dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sidenav_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nav_user"
+        android:layout_marginTop="20dp"
+        android:divider="@color/blue"
+        android:orientation="vertical" >
+
+        <View style="@style/sideNavListSep" />
+
+        <LinearLayout style="@style/sideNavList" >
+
+            <LinearLayout style="@style/sideNavListItemLeft" >
+
+                <TextView
+                    
+                    style="@style/sideNavListTextView"
+                    android:text="@string/fashion" />
+                
+                <ImageView 
+                    style="@style/sideNavListNewDot"/>
+                
+            </LinearLayout>
+
+            <ImageView style="@style/sideNavListArrow" />
+        </LinearLayout>
+
+        <View style="@style/sideNavListSep" />
+
+        <LinearLayout style="@style/sideNavList" >
+
+            <LinearLayout style="@style/sideNavListItemLeft" >
+
+                <TextView
+                    
+                    style="@style/sideNavListTextView"
+                    android:text="@string/zone" />
+                
+                <ImageView 
+                    style="@style/sideNavListNewDot"/>
+                
+            </LinearLayout>
+
+            <ImageView style="@style/sideNavListArrow" />
+        </LinearLayout>
+
+        <View style="@style/sideNavListSep" />
+
+        <LinearLayout style="@style/sideNavList" >
+
+            <LinearLayout style="@style/sideNavListItemLeft" >
+
+                <TextView
+                    
+                    style="@style/sideNavListTextView"
+                    android:text="@string/setting" />
+                
+                <ImageView 
+                    style="@style/sideNavListNewDot"/>
+                
+            </LinearLayout>
+
+            <ImageView style="@style/sideNavListArrow" />
+        </LinearLayout>
+
+        <View style="@style/sideNavListSep" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sidenav_list"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="46dp"
+            android:layout_height="42.5dp"
+            android:src="@drawable/camera_big" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/share_your_match"
+            android:textColor="#fff"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</RelativeLayout>
