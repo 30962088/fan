@@ -29,24 +29,24 @@
                 android:gravity="center_vertical">
                 
                 <TextView 
-                    android:layout_width="wrap_content"
+                    android:layout_width="55dp"
                     android:layout_height="wrap_content"
                     android:textColor="#585858"
                     android:textSize="14sp"
-                    android:text="账号"/>
+                    android:text="用户名"/>
 
                 <EditText
-                    android:id="@+id/account"
+                    android:id="@+id/username"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:background="#00000000"
-                    android:hint="请输入邮箱"
+                    android:hint="2-20位字符"
+                    android:maxLength="20"
                     android:textCursorDrawable="@drawable/cursor_blue"
                     android:textColor="#585858"
                     android:textColorHint="#a8a8a8"
                     android:textSize="14sp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="27dp">
+                    android:layout_height="wrap_content">
 
                     <requestFocus />    
                 </EditText>
@@ -66,27 +66,58 @@
                 android:gravity="center_vertical">
                 
                 <TextView 
-                    android:layout_width="wrap_content"
+                    android:layout_width="55dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#585858"
+                    android:textSize="14sp"
+                    android:text="邮箱"/>
+
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:hint="请输入邮箱"
+                    android:maxLength="20"
+                    android:textCursorDrawable="@drawable/cursor_blue"
+                    android:textColor="#585858"
+                    android:textColorHint="#a8a8a8"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content">
+                </EditText>
+                
+            </LinearLayout>
+            
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#c8c7cc" />
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:gravity="center_vertical">
+                
+                <TextView 
+                    android:layout_width="55dp"
                     android:layout_height="wrap_content"
                     android:textColor="#585858"
                     android:textSize="14sp"
                     android:text="密码"/>
 
                 <EditText
-                    android:id="@+id/account"
+                    android:id="@+id/password"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:background="#00000000"
                     android:hint="6-16位字符"
                     android:maxLength="16"
+                    android:password="true"
                     android:textCursorDrawable="@drawable/cursor_blue"
                     android:textColor="#585858"
                     android:textColorHint="#a8a8a8"
                     android:textSize="14sp"
-                    android:layout_height="wrap_content"
-                    android:password="true"
-                    android:layout_marginLeft="27dp">
-                    
+                    android:layout_height="wrap_content">
                 </EditText>
                 
             </LinearLayout>
@@ -105,52 +136,10 @@
             android:layout_width="67dp"
             android:layout_height="28dp"
             android:background="@drawable/btn_border"
-            android:text="登录"
+            android:text="创建用户"
+            android:textSize="12sp"
             android:textColor="#ee4c9c"
             android:gravity="center"/>
-        
-        <TextView 
-            android:id="@+id/register"
-            android:layout_width="67dp"
-            android:layout_height="28dp"
-            android:background="@drawable/btn_border"
-            android:text="注册"
-            android:layout_marginLeft="32dp"
-            android:textColor="#ee4c9c"
-            android:gravity="center"/>
-        
-    </LinearLayout>
-    
-    <LinearLayout 
-        android:layout_below="@id/login_btn_group"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/table_border"
-        android:gravity="center">
-        
-        <TextView 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/weibo"
-            android:text="微博登录"
-            android:gravity="center"
-            android:drawablePadding="4dp"/>
-        
-        <View 
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="#c8c7cc"
-            android:layout_marginLeft="38dp"
-            android:layout_marginRight="38dp"/>
-        
-        <TextView 
-            android:id="@+id/login_qq_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/qq"
-            android:text="QQ登录"
-            android:gravity="center"
-            android:drawablePadding="4dp"/>
         
     </LinearLayout>
     

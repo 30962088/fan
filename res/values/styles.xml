@@ -5,6 +5,7 @@
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
+        <item name="android:background">#fff</item>
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -81,5 +82,33 @@
         <item name="android:layout_gravity">center_vertical</item> 
     </style>
     
+    <style name="listItemSep">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item> 
+        <item name="android:background">#cdcdcd</item> 
+    </style>
+    
+    <style name="listItemTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:textSize">12sp</item> 
+        <item name="android:gravity">center</item>
+        
+    </style>
+    
+    <style name="listItemTag">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">13dp</item>
+        <item name="android:paddingRight">13dp</item> 
+        <item name="android:textColor">#ee4c9c</item> 
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginRight">3dp</item>
+        <item name="android:background">@drawable/btn_border</item> 
+    </style>
     
 </resources>
