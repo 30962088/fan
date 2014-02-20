@@ -16,9 +16,7 @@ public class CommonListModel {
 	
 	private int comment;
 	
-	private List<LinkModel> linkList;
-	
-	private String img;
+	private LinkModel linkModel;
 	
 	private List<String> Tags;
 	
@@ -28,8 +26,7 @@ public class CommonListModel {
 	
 
 	public CommonListModel(String name, String photo, String datetime,
-			int star, boolean stared, int comment, List<LinkModel> linkList,
-			String img, List<String> tags) {
+			int star, boolean stared, int comment, LinkModel linkModel, List<String> tags) {
 		super();
 		this.name = name;
 		this.photo = photo;
@@ -37,8 +34,7 @@ public class CommonListModel {
 		this.star = star;
 		this.stared = stared;
 		this.comment = comment;
-		this.linkList = linkList;
-		this.img = img;
+		this.linkModel = linkModel;
 		Tags = tags;
 	}
 
@@ -90,22 +86,13 @@ public class CommonListModel {
 		this.comment = comment;
 	}
 
-	public List<LinkModel> getLinkList() {
-		return linkList;
+	public void setLinkModel(LinkModel linkModel) {
+		this.linkModel = linkModel;
 	}
-
-	public void setLinkList(List<LinkModel> linkList) {
-		this.linkList = linkList;
+	public LinkModel getLinkModel() {
+		return linkModel;
 	}
-
-	public String getImg() {
-		return img;
-	}
-
-	public void setImg(String img) {
-		this.img = img;
-	}
-
+	
 	public List<String> getTags() {
 		return Tags;
 	}

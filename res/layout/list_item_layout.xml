@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.yoka.fan"
+    android:background="#fff"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:paddingRight="20dp"
+    >
 
     <LinearLayout
         android:id="@+id/header"
@@ -11,10 +14,14 @@
         android:layout_height="55dp"
         android:gravity="center_vertical" >
 
-        <ImageView
+        <com.makeramen.RoundedImageView
+            android:background="#e2e2e2"
+            android:padding="2dp"
             android:id="@+id/photo"
             android:layout_width="33dp"
-            android:layout_height="33dp" />
+            android:layout_height="33dp"
+            app:is_oval="true" 
+            app:round_background="true"/>
 
         <TextView
             android:id="@+id/name"
@@ -52,8 +59,8 @@
             android:layout_weight="1"
             android:orientation="vertical" >
 
-            <com.yoka.fan.wiget.LinkedImageView
-                android:id="@+id/img"
+            <com.yoka.fan.wiget.LinkedView
+                android:id="@+id/linked"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"/>
@@ -63,15 +70,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
 
-                <TextView
-                    style="@style/listItemTag"
-                    android:text="街拍"/>
-                
-                <TextView
-                    style="@style/listItemTag"
-                    android:text="复古"/>
                 
             </LinearLayout>
         </LinearLayout>

@@ -1,39 +1,65 @@
 package com.yoka.fan.wiget;
 
-public class LinkModel {
+import java.util.List;
 
-	private String brand;
+public class LinkModel{
 	
-	private String type;
+	private String url;
 	
-	private int left;
-	
-	private int top;
-	
-	public LinkModel(String brand, String type, int left, int top) {
-		super();
-		this.brand = brand;
-		this.type = type;
-		this.left = left;
-		this.top = top;
+	private List<Link> linkList;
+		
+	public LinkModel(String url, List<Link> linkList) {
+
+		this.url = url;
+		this.linkList = linkList;
 	}
 
-	public String getBrand() {
-		return brand;
-	}
-
-	public String getTag() {
-		return type;
-	}
-
-	public int getLeft() {
-		return left;
-	}
-
-	public int getTop() {
-		return top;
+	public String getUrl() {
+		return url;
 	}
 	
+	public List<Link> getLinkList() {
+		return linkList;
+	}
 	
+	public static class Link {
+		
+		private String id;
+		
+		private String name;
+		
+		private float left;
+		
+		private float top;
+		
+		
+		
+		public Link(String id,String name, float left, float top) {
+			this.name = name;
+			this.left = left;
+			this.top = top;
+		}
+		
+		public String getId() {
+			return id;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public float getLeft() {
+			return left;
+		}
+
+		public float getTop() {
+			return top;
+		}
+		
+		
+		
+	}
 	
 }
+
+

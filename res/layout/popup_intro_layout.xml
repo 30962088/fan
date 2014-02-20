@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"/>
+    
+    <LinearLayout 
+        android:id="@+id/popup"
+        android:layout_centerInParent="true"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/popup_bg"
+        android:orientation="vertical">
+        
+        <RelativeLayout 
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+            
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#585858"
+                android:textSize="15sp"
+                android:layout_centerVertical="true"
+                android:text="搭配简述"/>
+            
+            <ImageView 
+                android:id="@+id/close"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:src="@drawable/close_dark"/>
+            
+        </RelativeLayout>
+        
+        <View 
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#e8e8e8"/>
+        
+        <ScrollView 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            
+            <TextView 
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="15dp"
+                android:text="红与黑是经典色彩搭配组合之一， 经典之间无数次复刻着不同年代和风格的时髦印记，经典的色彩搭配不仅能彰显风格，同时拼接之间能修饰身形，令女孩儿们更具魅力。小编总结了三种红黑配色的时髦，2013秋季中，设计师重新诠释了披肩斗篷的含义，加入了现代化的流行元素"/>
+            
+        </ScrollView>
+        
+    </LinearLayout>
+
+</RelativeLayout>
