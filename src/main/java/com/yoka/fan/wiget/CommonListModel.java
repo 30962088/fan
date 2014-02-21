@@ -4,6 +4,8 @@ import java.util.List;
 
 public class CommonListModel {
 	
+	private String id;
+	
 	private String name;
 	
 	private String photo;
@@ -20,13 +22,15 @@ public class CommonListModel {
 	
 	private List<String> Tags;
 	
+	private String descr;
+	
 	public CommonListModel() {
 		// TODO Auto-generated constructor stub
 	}
 	
 
 	public CommonListModel(String name, String photo, String datetime,
-			int star, boolean stared, int comment, LinkModel linkModel, List<String> tags) {
+			int star, boolean stared, int comment, LinkModel linkModel, List<String> tags,String desc) {
 		super();
 		this.name = name;
 		this.photo = photo;
@@ -35,7 +39,8 @@ public class CommonListModel {
 		this.stared = stared;
 		this.comment = comment;
 		this.linkModel = linkModel;
-		Tags = tags;
+		this.Tags = tags;
+		this.descr = desc;
 	}
 
 	public String getName() {
@@ -102,8 +107,20 @@ public class CommonListModel {
 	}
 	
 	
+	public void setDescr(String descr) {
+		this.descr = descr;
+	}
+	public String getDescr() {
+		return descr;
+	}
 	
+	public void setId(String id) {
+		this.id = id;
+	}
 	
+	public String getId() {
+		return id;
+	}
 	
 	
 	

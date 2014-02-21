@@ -1,13 +1,20 @@
 package com.yoka.fan.wiget;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.R;
+import com.yoka.fan.network.Like;
+import com.yoka.fan.network.Request;
+import com.yoka.fan.network.Request.Status;
+import com.yoka.fan.network.UnLike;
 import com.yoka.fan.utils.DisplayUtils;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.SharePopupWindow.Share;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +61,7 @@ public class CommonListAdapter extends BaseAdapter{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		CommonListModel model = list.get(position);
+		final CommonListModel model = list.get(position);
 		ViewHolder holder = null;
 		if(convertView == null){
 			convertView = LayoutInflater.from(context).inflate(R.layout.list_item_layout,null);
@@ -71,12 +78,79 @@ public class CommonListAdapter extends BaseAdapter{
 		holder.mStarCount.setText(""+model.getStar());
 		holder.mCommentCount.setText(""+model.getComment());
 		holder.setTags(context, model.getTags());
+		holder.mStarBtn.setSelected(model.isStared());
+		
+		
 		final View mMoreBtn = holder.mMoreBtn;
 		holder.mMoreBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				popup(context,"的撒旦撒旦撒旦撒旦撒的撒旦",mMoreBtn);
+				popup(context,model.getDescr(),mMoreBtn);
+				
+			}
+		});
+		holder.mLinkedView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				LinkModel linkModel = model.getLinkModel();
+				if(!linkModel.isShowLink()){
+					linkModel.setShowLink(true);
+					notifyDataSetChanged();
+				}
+				
+			}
+		});
+		holder.mStarBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				final boolean isStared= !model.isStared();
+				model.setStared(isStared);
+				notifyDataSetChanged();
+				Request request = null;
+				if(isStared){
+					request = new Like(model.getId());
+				}else{
+					request = new UnLike(model.getId());
+				}
+				
+				final Request req = request;
+				
+				new AsyncTask<String, Void, Status>(){
+
+					@Override
+					protected Request.Status doInBackground(String... params) {
+						
+						req.request();
+						return req.getStatus();
+					}
+					
+					protected void onPostExecute(Request.Status result) {
+						if(result == Request.Status.ERROR){
+							model.setStared(!isStared);
+							notifyDataSetChanged();
+						}
+					};
+				}.execute(model.getId());
+				
+				
+				
+			}
+		});
+		
+		holder.mShareBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				new SharePopupWindow(context, new ArrayList<SharePopupWindow.Share>(){{
+					add(new Share(context.getString(R.string.weibo),R.drawable.share_weibo,null));
+					add(new Share(context.getString(R.string.tencent),R.drawable.share_tencent,null));
+					add(new Share(context.getString(R.string.renren),R.drawable.share_renren,null));
+					add(new Share(context.getString(R.string.wechat),R.drawable.share_wechat,null));
+					add(new Share(context.getString(R.string.timeline),R.drawable.share_timeline,null));
+				}});
 				
 			}
 		});
@@ -94,6 +168,8 @@ public class CommonListAdapter extends BaseAdapter{
 		
 		private TextView mStarCount;
 		
+		private View mStarBtn;
+		
 		private TextView mCommentCount;
 		
 		private ViewGroup mTagContainer;
@@ -101,6 +177,8 @@ public class CommonListAdapter extends BaseAdapter{
 		private LinkedView mLinkedView;
 		
 		private View mMoreBtn;
+		
+		private View mShareBtn;
 		
 		public ViewHolder(View view) {
 			mPhotoView = (ImageView) view.findViewById(R.id.photo);
@@ -111,6 +189,8 @@ public class CommonListAdapter extends BaseAdapter{
 			mTagContainer = (ViewGroup) view.findViewById(R.id.tagList);
 			mLinkedView = (LinkedView) view.findViewById(R.id.linked);
 			mMoreBtn = view.findViewById(R.id.more);
+			mStarBtn = view.findViewById(R.id.star);
+			mShareBtn = view.findViewById(R.id.share);
 		}
 		
 		public void setTags(Context context,List<String> tags){

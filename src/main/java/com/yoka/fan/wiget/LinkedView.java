@@ -13,6 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -56,9 +57,12 @@ public class LinkedView extends RelativeLayout {
 
 			@Override
 			public void ondraw(float[] bounds) {
-				for (Link link : linkModel.getLinkList()) {
-					addView(new TagView(context, link, bounds));
+				if(linkModel.isShowLink()){
+					for (Link link : linkModel.getLinkList()) {
+						addView(new TagView(context, link, bounds));
+					}
 				}
+				
 
 			}
 		});
@@ -67,8 +71,21 @@ public class LinkedView extends RelativeLayout {
 
 	public void load(LinkModel model) {
 		this.linkModel = model;
+		changeImageSize();
 		removeAllTag();
 		imageLoader.displayImage(model.getUrl(), imageView);
+
+	}
+
+	private void changeImageSize() {
+		int width = linkModel.getWidth(), height = linkModel.getHeight();
+		if (width > 0 && height > 0 && imageView instanceof BackgroundImageView) {
+			RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imageView
+					.getLayoutParams();
+			params.width = width;
+			params.height = height;
+			imageView.setLayoutParams(params);
+		}
 
 	}
 
@@ -114,7 +131,7 @@ public class LinkedView extends RelativeLayout {
 								int w = getWidth();
 								int h = getHeight();
 								int width = w, height = h;
-								LayoutParams params = (LayoutParams) getLayoutParams();
+								RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) getLayoutParams();
 
 								int t = (int) (bounds[1]
 										+ (bounds[3] * link.getTop()) - height / 2);
@@ -139,6 +156,7 @@ public class LinkedView extends RelativeLayout {
 	}
 
 	public static class BackgroundImageView extends ImageView {
+
 		public static interface OnViewdrawListener {
 			public void ondraw(float[] bounds);
 		}
@@ -154,21 +172,39 @@ public class LinkedView extends RelativeLayout {
 			init();
 		}
 
-		public BackgroundImageView(Context context, AttributeSet attrs,
-				int defStyle) {
-			super(context, attrs, defStyle);
-			init();
-		}
+		@Override
+		protected void onMeasure(final int widthMeasureSpec,
+				int heightMeasureSpec) {
+			final Drawable d = this.getDrawable();
 
-		public BackgroundImageView(Context context, AttributeSet attrs) {
-			super(context, attrs);
-			init();
+			int minHeight = DisplayUtils.Dp2Px(getContext(), 220);
+			
+			if (d != null) {
+				// ceil not round - avoid thin vertical gaps along the
+				// left/right edges
+				final int width = MeasureSpec.getSize(widthMeasureSpec);
+				int height = (int) Math.ceil(width
+						* (float) d.getIntrinsicHeight()
+						/ d.getIntrinsicWidth());
+				if(height < minHeight){
+					height = minHeight;
+				}
+				this.setMeasuredDimension(width, height);
+			} else {
+				if(heightMeasureSpec < minHeight){
+					heightMeasureSpec = minHeight;
+				}
+				super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+			}
 		}
 
 		private void init() {
+			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
-			setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-					LayoutParams.WRAP_CONTENT));
+			setLayoutParams(params);
+
 			setScaleType(ScaleType.FIT_CENTER);
 
 		}
@@ -193,7 +229,7 @@ public class LinkedView extends RelativeLayout {
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			if (ondrawListener != null) {
+			if (ondrawListener != null && getDrawable() != null) {
 				ondrawListener.ondraw(getBitmapBound());
 			}
 

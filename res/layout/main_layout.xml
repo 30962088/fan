@@ -7,7 +7,7 @@
     <include
         layout="@layout/action_bar_main"/>
 
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
+    <com.yoka.fan.wiget.GetTopNewListView
         android:id="@+id/listview" 
         android:layout_width="match_parent"
         android:layout_height="0dp"

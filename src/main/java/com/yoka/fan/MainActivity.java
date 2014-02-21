@@ -8,6 +8,7 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.yoka.fan.wiget.CommonListAdapter;
 import com.yoka.fan.wiget.CommonListModel;
+import com.yoka.fan.wiget.CommonListView;
 import com.yoka.fan.wiget.LinkModel;
 import com.yoka.fan.wiget.LinkModel.Link;
 
@@ -26,9 +27,9 @@ public class MainActivity extends SlidingFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
 		initSlidingMenu();
-
 		
-		CommonListAdapter adapter = new CommonListAdapter(this,new ArrayList<CommonListModel>(){{
+		
+		/*CommonListAdapter adapter = new CommonListAdapter(this,new ArrayList<CommonListModel>(){{
 			for(int i = 0;i<10;i++){
 				
 			
@@ -57,7 +58,7 @@ public class MainActivity extends SlidingFragmentActivity {
 		TextView textView = new TextView(this);
 		textView.setText("底部");
 		listView.getRefreshableView().addFooterView(textView);
-		listView.setAdapter(adapter);
+		listView.setAdapter(adapter);*/
 		
 	
 	}

@@ -11,6 +11,8 @@ import com.yoka.fan.wiget.LinkModel;
 
 public class ListItemData {
 
+	public String _id;
+	
 	public String owner_id;
 	
 	public String owner_name;
@@ -35,8 +37,8 @@ public class ListItemData {
 	
 	public static class Img{
 		public String url;
-		public String width;
-		public String height;
+		public int width;
+		public int height;
 	}
 	
 	public static class Link{
@@ -75,6 +77,7 @@ public class ListItemData {
 	
 	public CommonListModel toCommonListModel(){
 		CommonListModel model = new CommonListModel();
+		model.setId(_id);
 		model.setComment(comments);
 		model.setDatetime(RelativeDateFormat.format(new Date(ctime)));
 		List<LinkModel.Link> links = new ArrayList<LinkModel.Link>();
@@ -82,7 +85,7 @@ public class ListItemData {
 			Link link = link_goods.get(id);
 			links.add(new LinkModel.Link(id, link.brand, link.getLeft(), link.getTop()));
 		}
-		model.setLinkModel(new LinkModel(show_img.url, links));
+		model.setLinkModel(new LinkModel(show_img.url,show_img.width,show_img.height, links));
 		model.setName(owner_name);
 		model.setPhoto(owner_face);
 		model.setStar(likes);
