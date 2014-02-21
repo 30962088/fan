@@ -8,8 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import com.jeremyfeinstein.slidingmenu.lib.R;
+
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.yoka.fan.R;
 
 public class SlidingActivityHelper {
 
