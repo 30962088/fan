@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:id="@+id/comment_layout">
+    
+    <include layout="@layout/action_bar_type1" />
+
+    <ListView 
+        android:background="#fff"
+        android:clipToPadding="true"
+        android:paddingLeft="20dp"
+        android:scrollbarStyle="outsideOverlay"
+        android:paddingRight="20dp"
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        
+    </ListView>
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <EditText 
+            android:id="@+id/comment"
+            android:paddingLeft="12dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="添加评论"
+            android:clickable="true"
+            
+            android:textSize="14sp"
+            android:gravity="center_vertical"/>
+        
+        <requestFocus />
+        
+        
+        <TextView 
+            android:id="@+id/publish"
+            android:layout_width="75dp"
+            android:layout_height="44dp"
+            android:background="#3a8ad3"
+            android:enabled="false"
+            android:textColor="@color/blue_selector"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:text="发布"/>
+        
+    </LinearLayout>
+    
+</LinearLayout>

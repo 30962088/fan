@@ -38,6 +38,7 @@ public class BuyPopupWindow implements OnClickListener{
 		View view = LayoutInflater.from(context).inflate(R.layout.popup_buy_layout,null);
 		view.setOnClickListener(this);
 		mPopupWindow = new PopupWindow(view, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
+		mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4D000000")));
 		mPopupWindow.setTouchable(true);
         mPopupWindow.setOutsideTouchable(true);
         ListView gridView = (ListView) view.findViewById(R.id.listview);

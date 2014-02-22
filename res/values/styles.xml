@@ -18,6 +18,18 @@
         
     	<item name="android:windowNoTitle">true</item>
         <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
+        <item name="android:editTextStyle">@style/editTextStyle</item>
+    </style>
+    
+    <style name="editTextStyle" parent="@android:style/Widget.Holo.EditText">
+        <item name="android:textCursorDrawable">@drawable/cursor_blue</item>
+        <item name="android:background">#00000000</item>
+        <item name="android:textAppearance">@style/editTextAppearance</item>
+    </style>
+    
+    <style name="editTextAppearance">
+        <item name="android:textColor">#585858</item>
+        <item name="android:textColorHint">#a8a8a8</item>
     </style>
     
     <style name="Widget">

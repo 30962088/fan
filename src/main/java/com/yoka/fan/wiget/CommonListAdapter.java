@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yoka.fan.CommentActivity;
 import com.yoka.fan.R;
 import com.yoka.fan.network.Like;
 import com.yoka.fan.network.Request;
@@ -14,6 +15,9 @@ import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.SharePopupWindow.Share;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -81,7 +85,14 @@ public class CommonListAdapter extends BaseAdapter{
 		holder.mCommentCount.setText(""+model.getComment());
 		holder.setTags(context, model.getTags());
 		holder.mStarBtn.setSelected(model.isStared());
-		
+		holder.mCommentBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				context.startActivity(new Intent(context, CommentActivity.class));
+				
+			}
+		});
 		
 		final View mMoreBtn = holder.mMoreBtn;
 		holder.mMoreBtn.setOnClickListener(new OnClickListener() {
@@ -174,6 +185,8 @@ public class CommonListAdapter extends BaseAdapter{
 		
 		private TextView mCommentCount;
 		
+		private View mCommentBtn;
+		
 		private ViewGroup mTagContainer;
 		
 		private LinkedView mLinkedView;
@@ -193,6 +206,7 @@ public class CommonListAdapter extends BaseAdapter{
 			mMoreBtn = view.findViewById(R.id.more);
 			mStarBtn = view.findViewById(R.id.star);
 			mShareBtn = view.findViewById(R.id.share);
+			mCommentBtn = view.findViewById(R.id.comment);
 		}
 		
 		public void setTags(Context context,List<String> tags){
@@ -221,6 +235,7 @@ public class CommonListAdapter extends BaseAdapter{
 		final PopupWindow mPopupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, true);
 		mPopupWindow.setTouchable(true);
         mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4D000000")));
         popupView.findViewById(R.id.close).setOnClickListener(new OnClickListener() {
 			
 			@Override
