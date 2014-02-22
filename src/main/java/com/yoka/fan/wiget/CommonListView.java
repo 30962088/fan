@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
@@ -34,7 +35,7 @@ public abstract class CommonListView extends PullToRefreshListView{
 	
 	
 	
-	private static int limit = 2;
+	private static int limit = 4;
 	
 	private int offset = 0;
 
@@ -89,7 +90,10 @@ public abstract class CommonListView extends PullToRefreshListView{
 
 			@Override
 			public void onLastItemVisible() {
-				load(false);
+				if(hasMode){
+					load(false);
+				}
+				
 			}
 		});
 		
@@ -103,47 +107,49 @@ public abstract class CommonListView extends PullToRefreshListView{
 		load(true);
 	}
 	
+	private boolean hasMode = false;
 
 
 	
 	private void _complete(final boolean more){
+		hasMode = more;
 		
-		new Handler(getContext().getMainLooper()).post(new Runnable() {
-			@Override
-			public void run() {
-				if(!more){
-					getRefreshableView().removeFooterView(mFooterLoading);
-				}
-				CommonListView.this.onRefreshComplete();
-				CommonListView.this.adapter.notifyDataSetChanged();
-				offset += limit;
-			}
-		});
+		if(!more){
+			getRefreshableView().removeFooterView(mFooterLoading);
+		}
+		CommonListView.this.onRefreshComplete();
+		CommonListView.this.adapter.notifyDataSetChanged();
+		offset += limit;
+		
 	}
 	
 	
 	
 	public void load(final boolean refresh){
 		
+		if(refresh){
+			offset = 0;
+			list.clear();
+		}
 		
-		new Thread(new Runnable() {
+		new AsyncTask<Void, Void, Result>() {
+
+			@Override
+			protected Result doInBackground(Void... s) {
+				// TODO Auto-generated method stub
+				return _load(offset,limit);
+			}
 			
 			@Override
-			public void run() {
+			protected void onPostExecute(Result result) {
 				
-				
-				Result result = _load(offset,limit);
-				if(refresh){
-					offset = 0;
-					list.clear();
-				}
 				list.addAll(result.list);
 				
 				_complete(result.hasMore);
-				
-				
 			}
-		}).start();	
+			
+		}.execute();
+		
 	}
 	
 	

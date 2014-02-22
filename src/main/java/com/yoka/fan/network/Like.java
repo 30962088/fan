@@ -28,11 +28,7 @@ public class Like extends Request{
 		
 	}
 
-	@Override
-	public void onServerError(int code) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public String getURL() {
@@ -48,6 +44,18 @@ public class Like extends Request{
 		params.add(new BasicNameValuePair("coll_id", coll_id));
 		params.add(new BasicNameValuePair("access_token", Constant.access_token));
 		return params;
+	}
+
+	@Override
+	public void onResultError(int code, String msg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onServerError(int code, String msg) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

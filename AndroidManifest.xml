@@ -43,6 +43,12 @@
         <activity android:name="com.tencent.connect.common.AssistActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:screenOrientation="portrait" />
+        
+        <!-- 授权认证 -->
+        <activity android:name="com.sina.weibo.sdk.demo.WBAuthActivity" />
+        <activity android:name="com.sina.weibo.sdk.demo.WBAuthCodeActivity" />
+        <activity android:name="com.sina.weibo.sdk.demo.WBShareMainActivity" />
+        
     </application>
 	<uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />

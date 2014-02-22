@@ -14,29 +14,71 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
-public class SharePopupWindow{
+public class SharePopupWindow implements OnClickListener{
 
-	private GridView gridView;
+	
 	
 	private PopupWindow mPopupWindow;
 	
-
-	
-	public SharePopupWindow(Context context,List<Share> shares) {
-		gridView = (GridView) LayoutInflater.from(context).inflate(R.layout.share_gridview,null);
-		mPopupWindow = new PopupWindow(gridView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
-		mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#E6000000")));
+	public SharePopupWindow(Context context,final List<Share> shares) {
+		View view = LayoutInflater.from(context).inflate(R.layout.share_layout,null);
+		view.setOnClickListener(this);
+		mPopupWindow = new PopupWindow(view, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
+		mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#E6ffffff")));
 		mPopupWindow.setTouchable(true);
         mPopupWindow.setOutsideTouchable(true);
+        GridView gridView = (GridView) view.findViewById(R.id.gridview);
+        gridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				
+				Share share = shares.get(position);
+				
+				if(share.onClickListener != null){
+					share.onClickListener.onClick(view);
+				}
+				
+				
+			}
+
+			
+		});
         GridViewAdapter adapter = new GridViewAdapter(shares, context);
         gridView.setAdapter(adapter);
-        mPopupWindow.showAtLocation(gridView, Gravity.BOTTOM, 0, 0);
+        Animation rotation = AnimationUtils.loadAnimation(context, R.anim.slide_in_from_bottom);
+        
+        View bottomBar = view.findViewById(R.id.bottom_bar);
+        bottomBar.setOnClickListener(this);
+        bottomBar.startAnimation(rotation);
+        view.findViewById(R.id.cancel);
+        mPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+        
+	}
+	
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.share_layout:
+		case R.id.bottom_bar:
+			mPopupWindow.dismiss();
+		default:
+			break;
+		}
+		
 	}
 	
 	
@@ -117,5 +159,6 @@ public class SharePopupWindow{
 		}
 		
 	}
+
 	
 }

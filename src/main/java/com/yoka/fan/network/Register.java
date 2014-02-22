@@ -8,12 +8,25 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.yoka.fan.utils.Constant;
 
-public class UnLike extends Request{
+public class Register extends Request{
 
-	private String coll_id;
+	private String email;
 	
-	public UnLike(String coll_id) {
-		this.coll_id = coll_id;
+	private String password;
+	
+	private String token = Constant.token;
+	
+	private String username;
+	
+	private String uuid = Constant.uuid;
+	
+	
+	
+	public Register(String username,String email, String password) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.username = username;
 	}
 
 	@Override
@@ -32,16 +45,17 @@ public class UnLike extends Request{
 	@Override
 	public String getURL() {
 		// TODO Auto-generated method stub
-		return HOST+"coll/like";
+		return HOST+"user/regyoka";
 	}
 
 	@Override
 	public List<NameValuePair> fillParams() {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("uuid", Constant.uuid));
-		params.add(new BasicNameValuePair("user_id", Constant.user.id));
-		params.add(new BasicNameValuePair("coll_id", coll_id));
-		params.add(new BasicNameValuePair("access_token", Constant.access_token));
+		params.add(new BasicNameValuePair("email", email));
+		params.add(new BasicNameValuePair("password", password));
+		params.add(new BasicNameValuePair("token", token));
+		params.add(new BasicNameValuePair("username", username));
+		params.add(new BasicNameValuePair("uuid", uuid));
 		return params;
 	}
 

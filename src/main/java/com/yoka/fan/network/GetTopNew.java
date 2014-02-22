@@ -93,11 +93,18 @@ public class GetTopNew extends Request{
 	}
 
 	@Override
-	public void onServerError(int code) {
+	public void onResultError(int code, String msg) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
+	public void onServerError(int code, String msg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 	
 
 

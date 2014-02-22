@@ -8,6 +8,8 @@ public interface Response {
 	
 	public void onError(int code,String msg);
 	
-	public void onServerError(int code);
+	public void onResultError(int code,String msg);
+	
+	public void onServerError(int code,String msg);
 	
 }

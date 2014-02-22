@@ -212,6 +212,7 @@ public class CommonListAdapter extends BaseAdapter{
 	
 	private static void popup(Context context,String text,View anchor){
 		View popupView = LayoutInflater.from(context).inflate(R.layout.popup_intro_layout,null);
+		((TextView)popupView.findViewById(R.id.text)).setText(text);
 		final PopupWindow mPopupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, true);
 		mPopupWindow.setTouchable(true);
         mPopupWindow.setOutsideTouchable(true);

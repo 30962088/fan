@@ -126,13 +126,13 @@
     </LinearLayout>
     
     <LinearLayout 
-        android:id="@+id/login_btn_group"
         android:layout_below="@id/login_form"
         android:layout_width="match_parent"
         android:layout_height="87dp"
         android:gravity="center">
         
         <TextView 
+            android:id="@+id/create_btn"
             android:layout_width="67dp"
             android:layout_height="28dp"
             android:background="@drawable/btn_border"

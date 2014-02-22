@@ -17,8 +17,12 @@ public class App extends Application{
 	public void onCreate() {
 		super.onCreate();
 		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-		Constant.uuid = tm.getDeviceId();
-		Constant.token = Utils.getMD5(Constant.uuid + "fan.yoka.com/app");
+//		Constant.uuid = tm.getDeviceId();
+//		Constant.token = Utils.getMD5(Constant.uuid + "fan.yoka.com/app");
+		Constant.uuid = "uuid12345678";
+		Constant.token = "258c60d8f7ec200a0aae782dca59d0a2";
+		
+		
 	}
 	
 }
