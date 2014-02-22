@@ -21,6 +21,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -212,6 +214,9 @@ public class CommonListAdapter extends BaseAdapter{
 	
 	private static void popup(Context context,String text,View anchor){
 		View popupView = LayoutInflater.from(context).inflate(R.layout.popup_intro_layout,null);
+		
+        Animation zoom = AnimationUtils.loadAnimation(context, R.anim.zoom_center);
+        popupView.findViewById(R.id.popup).startAnimation(zoom);
 		((TextView)popupView.findViewById(R.id.text)).setText(text);
 		final PopupWindow mPopupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, true);
 		mPopupWindow.setTouchable(true);
@@ -240,7 +245,7 @@ public class CommonListAdapter extends BaseAdapter{
 			}
 		});
         
-        mPopupWindow.showAtLocation(anchor, Gravity.CENTER, 0, 0);
+        mPopupWindow.showAtLocation(anchor, Gravity.BOTTOM, 0, 0);
         
 	}
 	

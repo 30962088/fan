@@ -1,9 +1,12 @@
 package com.yoka.fan.wiget;
 
+import java.util.ArrayList;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.R;
 import com.yoka.fan.utils.DisplayUtils;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.BuyPopupWindow.GoodsItem;
 import com.yoka.fan.wiget.LinkModel.Link;
 import com.yoka.fan.wiget.LinkedView.BackgroundImageView.OnViewdrawListener;
 
@@ -98,7 +101,7 @@ public class LinkedView extends RelativeLayout {
 		}
 	}
 
-	private static class TagView extends TextView {
+	private static class TagView extends TextView implements OnClickListener{
 
 		private Link link;
 
@@ -106,6 +109,7 @@ public class LinkedView extends RelativeLayout {
 
 		public TagView(Context context, final Link link, final float[] bounds) {
 			super(context);
+			setOnClickListener(this);
 			setTextColor(Color.WHITE);
 			setGravity(Gravity.CENTER);
 			setTextSize(DisplayUtils.Dp2Px(context, 9));
@@ -151,6 +155,33 @@ public class LinkedView extends RelativeLayout {
 						});
 			}
 
+		}
+
+		@Override
+		public void onClick(View v) {
+			new BuyPopupWindow(getContext(), new ArrayList<BuyPopupWindow.GoodsItem>(){{
+				for(int i = 0;i<5;i++){
+					GoodsItem item =  new GoodsItem();
+					item.img = "http://image.iask.sina.com.cn/cidian/21/90/13715390212009-07-151006466.jpg";
+					item.name ="goods";
+					item.price = 323.11f;
+					item.typeResId = R.drawable.blazers;
+					add(item);
+				}
+				GoodsItem item1 =  new GoodsItem();
+				item1.title = "编辑推荐";
+				add(item1);
+				for(int i = 0;i<10;i++){
+					GoodsItem item =  new GoodsItem();
+					item.img = "http://image.iask.sina.com.cn/cidian/21/90/13715390212009-07-151006466.jpg";
+					item.name ="goods";
+					item.price = 323.11f;
+					item.typeResId = R.drawable.blazers;
+					add(item);
+				}
+			
+			}});
+			
 		}
 
 	}

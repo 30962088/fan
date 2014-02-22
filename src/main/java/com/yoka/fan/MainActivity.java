@@ -6,14 +6,21 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
+import com.viewpagerindicator.TabPageIndicator;
 import com.yoka.fan.wiget.CommonListAdapter;
 import com.yoka.fan.wiget.CommonListModel;
 import com.yoka.fan.wiget.CommonListView;
+import com.yoka.fan.wiget.CommonPagerAdapter;
+import com.yoka.fan.wiget.CommonPagerAdapter.Page;
+import com.yoka.fan.wiget.GetTopNewListFragment;
 import com.yoka.fan.wiget.LinkModel;
 import com.yoka.fan.wiget.LinkModel.Link;
 
 import android.opengl.Visibility;
 import android.os.Bundle;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -28,7 +35,42 @@ public class MainActivity extends SlidingFragmentActivity {
 		setContentView(R.layout.main_layout);
 		initSlidingMenu();
 		
+		FragmentPagerAdapter adapter = new CommonPagerAdapter(getSupportFragmentManager(),new ArrayList<CommonPagerAdapter.Page>(){{
+			add(new Page("推荐", new GetTopNewListFragment()));
+			add(new Page("最新", new GetTopNewListFragment()));
+			add(new Page("关注", new GetTopNewListFragment()));
+		}});
 		
+		
+
+        ViewPager pager = (ViewPager)findViewById(R.id.pager);
+        pager.setAdapter(adapter);
+        
+        
+
+        TabPageIndicator indicator = (TabPageIndicator)findViewById(R.id.indicator);
+        indicator.setViewPager(pager);
+        
+        indicator.setOnPageChangeListener(new OnPageChangeListener() {
+			@Override
+			public void onPageScrollStateChanged(int arg0) { }
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) { }
+
+			@Override
+			public void onPageSelected(int position) {
+				switch (position) {
+				case 0:
+					getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+					break;
+				default:
+					getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+					break;
+				}
+			}
+
+		});
 		/*CommonListAdapter adapter = new CommonListAdapter(this,new ArrayList<CommonListModel>(){{
 			for(int i = 0;i<10;i++){
 				
