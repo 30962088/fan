@@ -6,6 +6,7 @@ import java.util.List;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.CommentActivity;
 import com.yoka.fan.R;
+import com.yoka.fan.TagActivity;
 import com.yoka.fan.network.Like;
 import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Request.Status;
@@ -209,14 +210,24 @@ public class CommonListAdapter extends BaseAdapter{
 			mCommentBtn = view.findViewById(R.id.comment);
 		}
 		
-		public void setTags(Context context,List<String> tags){
+		public void setTags(final Context context,List<String> tags){
 			mTagContainer.removeAllViews();
-			for(String tag:tags){
+			for(final String tag:tags){
 				TextView textView = (TextView) LayoutInflater.from(context).inflate(R.layout.tag_view,null);
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,DisplayUtils.Dp2Px(context, 30));
 				params.setMargins(0, 0, DisplayUtils.Dp2Px(context, 3), 0);
 				textView.setLayoutParams(params);
 				textView.setText(tag);
+				textView.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent(context, TagActivity.class);
+						intent.putExtra(TagActivity.PARAM_TAG, tag);
+						context.startActivity(intent);
+						
+					}
+				});
 				mTagContainer.addView(textView);
 			}
 			

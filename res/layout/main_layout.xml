@@ -6,25 +6,11 @@
 
     <include layout="@layout/action_bar_main" />
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical" >
-
-        <com.viewpagerindicator.TabPageIndicator
-            android:id="@+id/indicator"
-            android:background="@drawable/tag_bg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-        
-        
-    </LinearLayout>
+        android:layout_height="match_parent" />
+    
+    
 
 </LinearLayout>

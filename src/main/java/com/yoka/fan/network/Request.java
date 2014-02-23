@@ -25,6 +25,12 @@ import com.google.gson.JsonObject;
 
 public abstract class Request implements Response{
 
+	public static final int REFRESH_CACHE = 1;
+	
+	public static final int REFRESH_NO_CACHE = 2;
+	
+	public static final int REFRESH_READ_CACHE = 0;
+	
 	public static String HOST = "http://songaimin.fan.yoka.com/api/";
 	
 	public static enum Status{

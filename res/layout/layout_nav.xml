@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="213dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/nav_bg"
-    android:paddingLeft="20dp"
     android:paddingTop="20dp" >
 
     <LinearLayout
@@ -47,7 +46,9 @@
 
         <View style="@style/sideNavListSep" />
 
-        <LinearLayout style="@style/sideNavList" >
+        <LinearLayout
+            android:id="@+id/home" 
+            style="@style/sideNavList" >
 
             <LinearLayout style="@style/sideNavListItemLeft" >
 
@@ -66,7 +67,9 @@
 
         <View style="@style/sideNavListSep" />
 
-        <LinearLayout style="@style/sideNavList" >
+        <LinearLayout
+            android:id="@+id/zone" 
+            style="@style/sideNavList" >
 
             <LinearLayout style="@style/sideNavListItemLeft" >
 
@@ -85,7 +88,9 @@
 
         <View style="@style/sideNavListSep" />
 
-        <LinearLayout style="@style/sideNavList" >
+        <LinearLayout
+            android:id="@+id/setting"
+            style="@style/sideNavList" >
 
             <LinearLayout style="@style/sideNavListItemLeft" >
 

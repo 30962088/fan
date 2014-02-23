@@ -1,108 +1,52 @@
 package com.yoka.fan;
 
-import java.util.ArrayList;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
-import com.viewpagerindicator.TabPageIndicator;
-import com.yoka.fan.wiget.CommonListAdapter;
-import com.yoka.fan.wiget.CommonListModel;
-import com.yoka.fan.wiget.CommonListView;
-import com.yoka.fan.wiget.CommonPagerAdapter;
-import com.yoka.fan.wiget.CommonPagerAdapter.Page;
-import com.yoka.fan.wiget.GetTopNewListFragment;
-import com.yoka.fan.wiget.LinkModel;
-import com.yoka.fan.wiget.LinkModel.Link;
+import com.yoka.fan.wiget.HomeFragment;
+import com.yoka.fan.wiget.SettingFragment;
 
-import android.opengl.Visibility;
 import android.os.Bundle;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 
+
 public class MainActivity extends SlidingFragmentActivity {
 
-
+	private Fragment mContent;
+	
+	private TextView mTitleView;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (savedInstanceState != null)
+			mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");
+		if (mContent == null)
+			mContent = new HomeFragment();	
 		setContentView(R.layout.main_layout);
+		mTitleView = (TextView) findViewById(R.id.actionbar_title);
 		initSlidingMenu();
 		
-		FragmentPagerAdapter adapter = new CommonPagerAdapter(getSupportFragmentManager(),new ArrayList<CommonPagerAdapter.Page>(){{
-			add(new Page("推荐", new GetTopNewListFragment()));
-			add(new Page("最新", new GetTopNewListFragment()));
-			add(new Page("关注", new GetTopNewListFragment()));
-		}});
 		
 		
-
-        ViewPager pager = (ViewPager)findViewById(R.id.pager);
-        pager.setAdapter(adapter);
-        
-        
-
-        TabPageIndicator indicator = (TabPageIndicator)findViewById(R.id.indicator);
-        indicator.setViewPager(pager);
-        
-        indicator.setOnPageChangeListener(new OnPageChangeListener() {
-			@Override
-			public void onPageScrollStateChanged(int arg0) { }
-
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) { }
-
-			@Override
-			public void onPageSelected(int position) {
-				switch (position) {
-				case 0:
-					getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-					break;
-				default:
-					getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-					break;
-				}
-			}
-
-		});
-		/*CommonListAdapter adapter = new CommonListAdapter(this,new ArrayList<CommonListModel>(){{
-			for(int i = 0;i<10;i++){
-				
-			
-			CommonListModel model = new CommonListModel();
-			model.setComment(111);
-			model.setDatetime("20分钟前");
-			model.setLinkModel(new LinkModel("http://1101.169bb.com/169mm/201005/134/32.jpg", new ArrayList<LinkModel.Link>(){{
-				add(new Link("123","ZARA 衬衫", 0.5f, 0.5f));
-				add(new Link("123","ZARA 衬衫", 0.4f, 0.13f));
-			}}));
-			model.setName("云儿");
-			model.setPhoto("http://tp4.sinaimg.cn/2129028663/180/5684393877/1");
-			model.setStar(11);
-			model.setStared(false);
-			model.setTags(new ArrayList<String>(){{
-				add("街拍");
-				add("复古");
-			}});
-			add(model);
-			}
-		}});
-		PullToRefreshListView listView = ((PullToRefreshListView)findViewById(R.id.listview));
+		getSupportFragmentManager()
+		.beginTransaction()
+		.replace(R.id.content_frame, mContent)
+		.commit();
 		
-		listView.setMode(Mode.BOTH);
 		
-		TextView textView = new TextView(this);
-		textView.setText("底部");
-		listView.getRefreshableView().addFooterView(textView);
-		listView.setAdapter(adapter);*/
 		
 	
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		getSupportFragmentManager().putFragment(outState, "mContent", mContent);
 	}
 	
 	private void initSlidingMenu(){
@@ -128,6 +72,20 @@ public class MainActivity extends SlidingFragmentActivity {
 			}
 		});
 		
+	}
+	
+	public void switchContent(Fragment fragment) {
+		if(fragment instanceof HomeFragment){
+			mTitleView.setText("潮流搭配");
+		}else if(fragment instanceof SettingFragment){
+			mTitleView.setText("设置");
+		}
+		mContent = fragment;
+		getSupportFragmentManager()
+		.beginTransaction()
+		.replace(R.id.content_frame, fragment)
+		.commit();
+		getSlidingMenu().showContent();
 	}
 
 

@@ -30,6 +30,9 @@
         <activity 
             android:name=".RegisterActivity"></activity>
         
+        <activity 
+            android:name=".TagActivity"></activity>
+        
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"

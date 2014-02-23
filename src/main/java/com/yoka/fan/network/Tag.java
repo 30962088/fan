@@ -10,58 +10,36 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.yoka.fan.utils.Constant;
 
-public class GetTopNew extends Request{
+public class Tag extends Request{
 
-	
-	
-	
 	private String uuid = Constant.uuid;
+	
+	private String access_token = Constant.access_token;
+	
+	private String tags;
+	
+	private String tag_type;
+	
+	private int refresh = REFRESH_NO_CACHE;
 	
 	private int limit;
 	
 	private int skip;
 	
-	private int refresh = REFRESH_NO_CACHE;
-	
-	private String topic_type = "";
 	
 	private List<ListItemData> listData;
 	
 	
-	public GetTopNew( int skip, int limit, int refresh) {
+	public Tag(String tags, String tag_type, int skip,int limit) {
 		super();
-		this.limit = limit;
-		this.skip = skip;
-		this.refresh = refresh;
-	}
-
-	public GetTopNew(int skip,int limit) {
-		super();
+		this.tags = tags;
+		this.tag_type = tag_type;
 		this.limit = limit;
 		this.skip = skip;
 	}
-
-	@Override
-	public String getURL() {
-		// TODO Auto-generated method stub
-		return HOST+"coll/get_top_new";
-	}
-
-	@Override
-	public List<NameValuePair> fillParams() {
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("uuid", uuid));
-		params.add(new BasicNameValuePair("limit", ""+limit));
-		params.add(new BasicNameValuePair("skip", ""+skip));
-		params.add(new BasicNameValuePair("refresh", ""+refresh));
-		params.add(new BasicNameValuePair("topic_type", topic_type));
-		return params;
-	}
-
 
 	@Override
 	public void onSuccess(String data) {
@@ -100,12 +78,23 @@ public class GetTopNew extends Request{
 		
 	}
 
-	
-	
+	@Override
+	public String getURL() {
+		// TODO Auto-generated method stub
+		return HOST+"coll/search";
+	}
 
-
-
-
-
+	@Override
+	public List<NameValuePair> fillParams() {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("uuid",uuid));
+		params.add(new BasicNameValuePair("access_token	",access_token));
+		params.add(new BasicNameValuePair("limit",""+limit));
+		params.add(new BasicNameValuePair("refresh",""+refresh));
+		params.add(new BasicNameValuePair("skip",""+skip));
+		params.add(new BasicNameValuePair("tag_type",tag_type));
+		params.add(new BasicNameValuePair("tags",tags));
+		return params;
+	}
 
 }
