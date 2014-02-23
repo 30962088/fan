@@ -79,8 +79,20 @@ public class CommonListAdapter extends BaseAdapter{
 		}
 		
 		holder.mLinkedView.load(model.getLinkModel());
-		imageLoader.displayImage(model.getPhoto(), holder.mPhotoView);
-		holder.mNameView.setText(model.getName());
+		if(model.getPhoto() == null){
+			holder.mPhotoView.setVisibility(View.GONE);
+		}else{
+			holder.mPhotoView.setVisibility(View.VISIBLE);
+			imageLoader.displayImage(model.getPhoto(), holder.mPhotoView);
+		}
+		
+		if(model.getName() == null){
+			holder.mNameView.setVisibility(View.GONE);
+		}else{
+			holder.mNameView.setVisibility(View.VISIBLE);
+			holder.mNameView.setText(model.getName());
+		}
+		
 		holder.mDatetimeView.setText(model.getDatetime());
 		holder.mStarCount.setText(""+model.getStar());
 		holder.mCommentCount.setText(""+model.getComment());

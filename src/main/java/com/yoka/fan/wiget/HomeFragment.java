@@ -1,9 +1,9 @@
 package com.yoka.fan.wiget;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.viewpagerindicator.TabPageIndicator;
 import com.yoka.fan.MainActivity;
 import com.yoka.fan.R;
 import com.yoka.fan.wiget.CommonPagerAdapter.Page;
@@ -31,11 +31,12 @@ public class HomeFragment extends Fragment{
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onViewCreated(view, savedInstanceState);
-		FragmentPagerAdapter adapter = new CommonPagerAdapter(getChildFragmentManager(),new ArrayList<CommonPagerAdapter.Page>(){{
-			add(new Page("推荐", new GetTopNewListFragment()));
-			add(new Page("最新", new GetTopNewListFragment()));
-			add(new Page("关注", new GetTopNewListFragment()));
-		}});
+		List<CommonPagerAdapter.Page> pages = new ArrayList<CommonPagerAdapter.Page>(){{
+			add(new Page("推荐", new GetTopNewListFragment(),true));
+			add(new Page("最新", new GetTopNewListFragment(),true));
+			add(new Page("关注", new GetTopNewListFragment(),true));
+		}};
+		FragmentPagerAdapter adapter = new CommonPagerAdapter(getChildFragmentManager(),pages);
 		
 		
 
@@ -45,6 +46,7 @@ public class HomeFragment extends Fragment{
         
 
         TabPageIndicator indicator = (TabPageIndicator)view.findViewById(R.id.indicator);
+        indicator.setModel(pages);
         indicator.setViewPager(pager);
         
         indicator.setOnPageChangeListener(new OnPageChangeListener() {

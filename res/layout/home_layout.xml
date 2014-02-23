@@ -4,11 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <com.viewpagerindicator.TabPageIndicator
+    <com.yoka.fan.wiget.TabPageIndicator
             android:id="@+id/indicator"
             android:background="@drawable/tag_bg"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="33dp" 
+            android:showDividers="middle"
+            android:divider="@drawable/divider"
+            android:dividerPadding="10dp"
+            android:gravity="center_vertical"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"

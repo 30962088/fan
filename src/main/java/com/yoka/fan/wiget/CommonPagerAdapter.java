@@ -19,11 +19,23 @@ public class CommonPagerAdapter extends FragmentPagerAdapter{
 	public static class Page{
 		private String name;
 		private Fragment fragment;
-		public Page(String name, Fragment fragment) {
+		private boolean isNew;
+		public Page(String name, Fragment fragment,boolean isNew) {
 			super();
 			this.name = name;
 			this.fragment = fragment;
+			this.isNew = isNew;
 		}
+		public String getName() {
+			return name;
+		}
+		public Fragment getFragment() {
+			return fragment;
+		}
+		public boolean isNew() {
+			return isNew;
+		}
+		
 	}
 	
 	@Override

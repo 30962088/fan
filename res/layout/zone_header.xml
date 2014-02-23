@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.yoka.fan"
+    android:layout_width="match_parent"
+    android:layout_height="94dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp" 
+    android:gravity="center_vertical">
+
+    <RelativeLayout
+        android:layout_width="60dp"
+        android:layout_height="60dp" >
+
+        <com.makeramen.RoundedImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/test_img1"
+            app:is_oval="true" />
+        
+        <ImageView 
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/vip"/>
+    </RelativeLayout>
+    
+    <LinearLayout 
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="20dp">
+       
+        
+        <LinearLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
+            
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="345"
+                android:textSize="15sp"
+                android:textColor="#585858"/>
+            
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="搭配"
+                android:textSize="12sp"
+                android:textColor="#a8a8a8"/>
+            
+        </LinearLayout>
+        
+        <LinearLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
+            
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="345"
+                android:textSize="15sp"
+                android:textColor="#585858"/>
+            
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="搭配"
+                android:textSize="12sp"
+                android:textColor="#a8a8a8"/>
+            
+        </LinearLayout>
+        
+        <LinearLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="345"
+                android:textSize="15sp"
+                android:textColor="#585858"/>
+            
+            <TextView 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="搭配"
+                android:textSize="12sp"
+                android:textColor="#a8a8a8"/>
+            
+        </LinearLayout>
+        
+    </LinearLayout>
+    
+    <TextView 
+            android:layout_width="64dp"
+            android:layout_height="26dp"
+            android:background="@drawable/btn_border"
+            android:text="登录"
+            android:textColor="#ee4c9c"
+            android:gravity="center"/>
+
+</LinearLayout>
