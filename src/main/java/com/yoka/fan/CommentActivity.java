@@ -26,7 +26,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class CommentActivity extends Activity{
+public class CommentActivity extends BaseActivity{
 
 	
 	@Override
@@ -34,15 +34,7 @@ public class CommentActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.comment_layout);
 		
-		((TextView) findViewById(R.id.actionbar_title)).setText("评论");
-		findViewById(R.id.actionbar_close).setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						finish();
-
-					}
-				});
+		
 		ListView gridView = (ListView) findViewById(R.id.listview);
 		ListViewAdapter adapter = new ListViewAdapter(new ArrayList<CommentActivity.Comment>(){{
 			for(int i = 0;i<30;i++){
@@ -187,6 +179,12 @@ public class CommentActivity extends Activity{
 			}	
 		}
 		
+	}
+
+	@Override
+	protected String getActionBarTitle() {
+		// TODO Auto-generated method stub
+		return "评论";
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 public class CommonPagerAdapter extends FragmentPagerAdapter{
 
@@ -42,5 +43,6 @@ public class CommonPagerAdapter extends FragmentPagerAdapter{
 		// TODO Auto-generated method stub
 		return pages.size();
 	}
+	
 	
 }

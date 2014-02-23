@@ -5,8 +5,6 @@
     android:orientation="vertical" 
     android:id="@+id/comment_layout">
     
-    <include layout="@layout/action_bar_type1" />
-
     <ListView 
         android:background="#fff"
         android:clipToPadding="true"

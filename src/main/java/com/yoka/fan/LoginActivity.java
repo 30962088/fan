@@ -16,6 +16,7 @@ import com.yoka.fan.network.LoginThird;
 import com.yoka.fan.network.LoginThird.Info;
 import com.yoka.fan.utils.Constant;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LoginActivity extends BaseActivity implements OnClickListener {
+public class LoginActivity extends BaseActivity2 implements OnClickListener {
 
 	private QQAuth mQQAuth;
 	private Tencent mTencent;
@@ -41,15 +42,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		super.onCreate(arg0);
 		this.context = this;
 		setContentView(R.layout.login_layout);
-		((TextView) findViewById(R.id.actionbar_title)).setText("登录");
-		findViewById(R.id.actionbar_close).setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						finish();
-
-					}
-				});
+		
 		mWeiboAuth = new WeiboAuth(this, Constant.APP_KEY, Constant.REDIRECT_URL, Constant.SCOPE);
 		mQQAuth = QQAuth.createInstance("222222", this);
 		mTencent = Tencent.createInstance("222222", this);
@@ -191,6 +184,12 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		} else {
 
 		}
+	}
+
+	@Override
+	protected String getActionBarTitle() {
+		// TODO Auto-generated method stub
+		return "登录";
 	}
 
 }

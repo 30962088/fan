@@ -27,14 +27,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
 		setContentView(R.layout.register_layout);
-		((TextView)findViewById(R.id.actionbar_title)).setText("注册");
-		findViewById(R.id.actionbar_close).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-				
-			}
-		});
+	
 		
 		mNameText = (EditText) findViewById(R.id.username);
 		
@@ -112,6 +105,12 @@ public class RegisterActivity extends BaseActivity implements OnClickListener{
 			
 		});
 		
+	}
+
+	@Override
+	protected String getActionBarTitle() {
+		// TODO Auto-generated method stub
+		return "注册";
 	}
 	
 	
