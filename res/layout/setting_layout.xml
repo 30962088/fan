@@ -126,6 +126,7 @@
                     android:background="#c8c7cc" />
 
                 <LinearLayout
+                    android:id="@+id/guide"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:gravity="center_vertical" >
@@ -198,10 +199,12 @@
                         android:textColor="#585858"
                         android:textSize="14sp" />
 
-                    <ImageView
-                        android:layout_width="8dp"
-                        android:layout_height="13dp"
-                        android:src="@drawable/arrow_right2" />
+                    <TextView 
+                        android:id="@+id/cache_size"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="#c7c7cc"/>
                 </LinearLayout>
 
                 <View
