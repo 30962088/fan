@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.yoka.fan"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f6f6f6" xmlns:app="http://schemas.android.com/apk/res/com.yoka.fan">
+    android:background="#f6f6f6" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,27 +86,33 @@
 
                 <LinearLayout
                     android:id="@+id/user_frame"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/table_border"
                     android:orientation="vertical"
                     android:paddingLeft="20dp"
-                    android:paddingRight="20dp" >
+                    android:paddingRight="20dp"
+                    android:visibility="gone" >
 
                     <LinearLayout
                         android:id="@+id/user_btn"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
                         android:gravity="center_vertical" >
-						
-                        <com.makeramen.RoundedImageView
-                            android:id="@+id/user_photo"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
-                            app:is_oval="true"/>
-                        
+                            android:background="@drawable/photo_bg" >
+
+                            <com.makeramen.RoundedImageView
+                                android:id="@+id/user_photo"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                app:is_oval="true" />
+                        </FrameLayout>
+
                         <TextView
                             android:id="@+id/user_nickname"
                             android:layout_width="0dp"

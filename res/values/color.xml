@@ -2,4 +2,6 @@
 <resources> 
     <color name="blue">#3b8ad3</color>
     <color name="mask">#4D000000</color>
+    <color name="holo_green_light">#80000000</color>
+    <color name="transparent">#00000000</color>
 </resources>

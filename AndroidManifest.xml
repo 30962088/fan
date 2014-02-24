@@ -39,6 +39,15 @@
             android:name=".ModifyActivity"></activity>
         
         
+        <activity 
+            android:name=".DragRectActivity">
+            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+            
+        </activity>
+        
         
         <activity
             android:name="com.tencent.tauth.AuthActivity"
