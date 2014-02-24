@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:background="#f6f6f6">
+    android:layout_height="match_parent"
+    android:background="#f6f6f6" xmlns:app="http://schemas.android.com/apk/res/com.yoka.fan">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,57 +25,127 @@
                 android:textColor="#6d6d72"
                 android:textSize="14sp" />
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/table_border"
-                android:orientation="vertical"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp" >
+                android:layout_height="wrap_content" >
 
                 <LinearLayout
+                    android:id="@+id/login_frame"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:gravity="center_vertical" >
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_border"
+                    android:orientation="vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp" >
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="登录"
-                        android:textColor="#585858"
-                        android:textSize="14sp" />
+                    <LinearLayout
+                        android:id="@+id/login_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:gravity="center_vertical" >
 
-                    <ImageView
-                        android:layout_width="8dp"
-                        android:layout_height="13dp"
-                        android:src="@drawable/arrow_right2" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="登录"
+                            android:textColor="#585858"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:layout_width="8dp"
+                            android:layout_height="13dp"
+                            android:src="@drawable/arrow_right2" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#c8c7cc" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:gravity="center_vertical" >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="申请成为卖家，免费获流量"
+                            android:textColor="#585858"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:layout_width="8dp"
+                            android:layout_height="13dp"
+                            android:src="@drawable/arrow_right2" />
+                    </LinearLayout>
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#c8c7cc" />
 
                 <LinearLayout
+                    android:id="@+id/user_frame"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:gravity="center_vertical" >
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/table_border"
+                    android:orientation="vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp" >
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="卖家免费获流量"
-                        android:textColor="#585858"
-                        android:textSize="14sp" />
+                    <LinearLayout
+                        android:id="@+id/user_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:gravity="center_vertical" >
+						
+                        <com.makeramen.RoundedImageView
+                            android:id="@+id/user_photo"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginRight="10dp"
+                            app:is_oval="true"/>
+                        
+                        <TextView
+                            android:id="@+id/user_nickname"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="登录"
+                            android:textColor="#585858"
+                            android:textSize="14sp" />
 
-                    <ImageView
-                        android:layout_width="8dp"
-                        android:layout_height="13dp"
-                        android:src="@drawable/arrow_right2" />
+                        <ImageView
+                            android:layout_width="8dp"
+                            android:layout_height="13dp"
+                            android:src="@drawable/arrow_right2" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#c8c7cc" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:gravity="center_vertical" >
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="卖家免费获流量"
+                            android:textColor="#585858"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:layout_width="8dp"
+                            android:layout_height="13dp"
+                            android:src="@drawable/arrow_right2" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -200,12 +270,12 @@
                         android:textColor="#585858"
                         android:textSize="14sp" />
 
-                    <TextView 
+                    <TextView
                         android:id="@+id/cache_size"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:textColor="#c7c7cc"/>
+                        android:textColor="#c7c7cc"
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <View

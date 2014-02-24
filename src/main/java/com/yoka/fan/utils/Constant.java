@@ -10,6 +10,10 @@ public class Constant {
 	
 	public static class User{
 		
+		public static final int MALE = 1;
+		
+		public static final int FEMALE = 2;
+		
 		public String id = "3843561";
 		
 		public String nickname = "1233";

@@ -35,6 +35,10 @@
         
         <activity 
             android:name=".WebViewActivity"></activity>
+        <activity 
+            android:name=".ModifyActivity"></activity>
+        
+        
         
         <activity
             android:name="com.tencent.tauth.AuthActivity"

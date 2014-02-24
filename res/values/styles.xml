@@ -29,6 +29,7 @@
     <style name="editTextAppearance">
         <item name="android:textColor">#585858</item>
         <item name="android:textColorHint">#a8a8a8</item>
+        <item name="android:textSize">14sp</item>
     </style>
     
     <style name="Widget">

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.yoka.fan"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="#f6f6f6" 
+    android:orientation="vertical">
+
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="115dp"
+        android:gravity="center">
+        
+        <com.makeramen.RoundedImageView
+            android:id="@+id/user_photo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:is_oval="true"/>
+        
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/table_border" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp" 
+            android:orientation="vertical">
+
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:gravity="center_vertical">
+                
+                <TextView 
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#585858"
+                    android:textSize="14sp"
+                    android:text="昵称"/>
+
+                <EditText
+                    android:id="@+id/username"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="27dp">
+
+                    <requestFocus />    
+                </EditText>
+                
+            </LinearLayout>
+            
+            
+            
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#c8c7cc" />
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:gravity="center_vertical">
+                
+                <TextView 
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#585858"
+                    android:textSize="14sp"
+                    android:text="职业"/>
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:hint="3-16位字符"
+                    android:maxLength="16"
+                    android:layout_height="wrap_content"
+                    android:password="true"
+                    android:layout_marginLeft="27dp">
+                    
+                </EditText>
+                
+            </LinearLayout>
+            
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#c8c7cc" />
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:gravity="center_vertical">
+                
+                <TextView 
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#585858"
+                    android:textSize="14sp"
+                    android:text="性别"
+                    android:layout_marginRight="27dp"/>
+
+                <LinearLayout 
+                    android:id="@+id/sex_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+                    
+                    <ImageView 
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/radio_selector"/>
+                    
+                    <TextView 
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#585858"
+                    	android:textSize="14sp"
+                        android:text="女士"/>
+                    
+                </LinearLayout>
+                
+                <LinearLayout 
+                    android:id="@+id/sex_male"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+                    
+                    <ImageView 
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/radio_selector"/>
+                    
+                    <TextView 
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#585858"
+                    	android:textSize="14sp"
+                        android:text="男士"/>
+                    
+                </LinearLayout>
+                
+            </LinearLayout>
+            
+        </LinearLayout>
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/login_btn_group"
+        android:layout_below="@id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="87dp"
+        android:gravity="center">
+        
+        <TextView 
+            android:id="@+id/login_btn"
+            android:layout_width="67dp"
+            android:layout_height="28dp"
+            android:background="@drawable/btn_border"
+            android:text="保存"
+            android:textColor="#ee4c9c"
+            android:gravity="center"/>
+        
+    </LinearLayout>
+    
+    
+    
+    
+
+</LinearLayout>
