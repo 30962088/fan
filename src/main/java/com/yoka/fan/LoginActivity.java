@@ -12,8 +12,10 @@ import com.tencent.connect.auth.QQAuth;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
+import com.yoka.fan.network.Login;
 import com.yoka.fan.network.LoginThird;
 import com.yoka.fan.network.LoginThird.Info;
+import com.yoka.fan.network.Register.Result;
 import com.yoka.fan.utils.Constant;
 
 import android.app.Activity;
@@ -24,6 +26,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +38,10 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 	private WeiboAuth mWeiboAuth;
 
 	private Context context;
+	
+	private EditText usernameView;
+	
+	private EditText passwordView;
 	
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -49,7 +56,9 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 		findViewById(R.id.login_qq_btn).setOnClickListener(this);
 		findViewById(R.id.register).setOnClickListener(this);
 		findViewById(R.id.login_weibo_btn).setOnClickListener(this);
-
+		findViewById(R.id.login_btn).setOnClickListener(this);
+		usernameView = (EditText) findViewById(R.id.username);
+		passwordView = (EditText) findViewById(R.id.password);
 	}
 
 	@Override
@@ -65,18 +74,74 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 		case R.id.login_weibo_btn:
 			onWeiboLogin();
 			break;
+		case R.id.login_btn:
+			onLogin();
+			break;
 		default:
 			break;
 		}
 
 	}
 	
+	private void onLoginSuccess(Result result){
+		Constant.user = result.toUser();
+		finish();
+		MainActivity.getInstance().login(Constant.user);
+	}
+	
+	private void onLogin() {
+		final String username = usernameView.getText().toString();
+		final String password = passwordView.getText().toString();
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				new Login(username,password) {
+					
+					@Override
+					protected void onSuccess(final Result result) {
+						runOnUiThread(new Runnable() {
+							
+							@Override
+							public void run() {
+								onLoginSuccess(result);
+								
+							}
+						});
+						
+						
+					}
+					public void onError(int code, String msg) {
+						
+						tip(msg);
+						
+					};
+				}.request();
+				
+			}
+		}).start();
+		
+	}
+	
+	private void tip(final String str){
+		runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				Toast.makeText(LoginActivity.this, str, Toast.LENGTH_SHORT).show();
+				
+			}
+			
+		});
+		
+	}
+
 	private void onWeiboLogin(){
 		mWeiboAuth.anthorize(new WeiboAuthListener() {
 			
 			@Override
 			public void onWeiboException(WeiboException arg0) {
-				// TODO Auto-generated method stub
+				Log.d("zzm", "exception:"+arg0);
 				
 			}
 			
@@ -99,7 +164,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 			
 			@Override
 			public void onCancel() {
-				// TODO Auto-generated method stub
+				Log.d("zzm", "cancel");
 				
 			}
 		});

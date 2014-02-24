@@ -17,7 +17,7 @@ public class Tag extends Request{
 
 	private String uuid = Constant.uuid;
 	
-	private String access_token = Constant.access_token;
+	private String access_token = Constant.user.access_token;
 	
 	private String tags;
 	

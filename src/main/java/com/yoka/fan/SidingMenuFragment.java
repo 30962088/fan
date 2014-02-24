@@ -1,6 +1,9 @@
 package com.yoka.fan;
 
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yoka.fan.utils.Constant.User;
+import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.HomeFragment;
 import com.yoka.fan.wiget.SettingFragment;
 
@@ -11,8 +14,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class SidingMenuFragment extends Fragment implements OnClickListener{
+	
+	private ImageLoader imageLoader;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		imageLoader = Utils.getImageLoader(getActivity());
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +71,14 @@ public class SidingMenuFragment extends Fragment implements OnClickListener{
 			MainActivity fca = (MainActivity) getActivity();
 			fca.switchContent(fragment);
 		}
+	}
+	
+	public void login(User user){
+		getView().findViewById(R.id.login_btn).setVisibility(View.GONE);
+		getView().findViewById(R.id.user_btn).setVisibility(View.VISIBLE);
+		imageLoader.displayImage(user.photo, ((ImageView)getView().findViewById(R.id.user_photo)));
+		((TextView)getView().findViewById(R.id.user_name)).setText(user.nickname);
+		
 	}
 
 }

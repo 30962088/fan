@@ -82,7 +82,7 @@ public abstract class Request implements Response{
 				status = Status.ERROR;
 			}
 		}catch(Exception e){
-			
+			e.printStackTrace();
 		}
 		
 		

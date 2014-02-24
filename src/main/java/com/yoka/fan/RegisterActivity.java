@@ -3,9 +3,14 @@ package com.yoka.fan;
 
 
 
+import com.google.gson.Gson;
 import com.yoka.fan.network.Register;
+import com.yoka.fan.network.Register.Result;
+import com.yoka.fan.utils.Constant;
+import com.yoka.fan.utils.Constant.User;
 import com.yoka.fan.utils.Utils;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -59,6 +64,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener{
 		final String email = mEmailText.getText().toString();
 		final String password = mPasswordText.getText().toString();
 		if(validate(username,email,password)){
+	
 			new Thread(new Runnable() {
 				
 				@Override
@@ -66,6 +72,13 @@ public class RegisterActivity extends BaseActivity implements OnClickListener{
 					new Register(username, email, password){
 						public void onError(int code, final String msg) {
 							error(msg);
+						};
+						@Override
+						protected void onSuccess(Result result) {
+							Constant.user = result.toUser();
+							error("注册成功");
+							finish();
+							
 						};
 						
 					}.request();

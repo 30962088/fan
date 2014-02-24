@@ -41,7 +41,7 @@ public class UnLike extends Request{
 		params.add(new BasicNameValuePair("uuid", Constant.uuid));
 		params.add(new BasicNameValuePair("user_id", Constant.user.id));
 		params.add(new BasicNameValuePair("coll_id", coll_id));
-		params.add(new BasicNameValuePair("access_token", Constant.access_token));
+		params.add(new BasicNameValuePair("access_token", Constant.user.access_token));
 		return params;
 	}
 

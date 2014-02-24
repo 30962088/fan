@@ -6,9 +6,15 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.yoka.fan.utils.Constant;
+import android.content.Context;
+import android.widget.Toast;
 
-public class Register extends Request{
+import com.google.gson.Gson;
+import com.yoka.fan.LoginActivity;
+import com.yoka.fan.utils.Constant;
+import com.yoka.fan.utils.Constant.User;
+
+public abstract class Register extends Request{
 
 	private String email;
 	
@@ -20,24 +26,60 @@ public class Register extends Request{
 	
 	private String uuid = Constant.uuid;
 	
+	private Result result;
 	
+
 	
-	public Register(String username,String email, String password) {
-		super();
+	public static class Result{
+		public String access_token;
+		public Binds binds;
+		public int first;
+		public String head_url;
+		public int isCheckMail;
+		public long lastLoginTime;
+		public int loginApi;
+		public String nick;
+		public int type;
+		public String uid;
+		public String user_id;
+		public String yokausername;
+		
+		public static class Binds{
+			public int YOKA;
+		}
+		
+		public User toUser(){
+			User user = new User();
+			user.id = user_id;
+			user.nickname = nick;
+			user.photo = head_url;
+			return user;
+		}
+		
+	}
+	
+	public Register( String username,String email, String password) {
+
 		this.email = email;
 		this.password = password;
 		this.username = username;
 	}
 
+	public Result getResult() {
+		return result;
+	}
+	
+	protected abstract void onSuccess(Result result); 
+	
 	@Override
 	public void onSuccess(String data) {
-		// TODO Auto-generated method stub
+		onSuccess(new Gson().fromJson(data, Result.class));
 		
 	}
 
 	@Override
 	public void onError(int code, String msg) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
