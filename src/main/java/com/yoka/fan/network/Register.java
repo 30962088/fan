@@ -6,13 +6,10 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import android.content.Context;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.yoka.fan.LoginActivity;
 import com.yoka.fan.utils.Constant;
-import com.yoka.fan.utils.Constant.User;
+import com.yoka.fan.utils.User;
 
 public abstract class Register extends Request{
 
@@ -53,6 +50,8 @@ public abstract class Register extends Request{
 			user.id = user_id;
 			user.nickname = nick;
 			user.photo = head_url;
+			user.access_token = access_token;
+			User.saveUser(user);
 			return user;
 		}
 		

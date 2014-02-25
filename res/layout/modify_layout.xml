@@ -51,7 +51,7 @@
                     android:textSize="14sp" />
 
                 <EditText
-                    android:id="@+id/username"
+                    android:id="@+id/nick"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="27dp"
@@ -79,7 +79,7 @@
                     android:textSize="14sp" />
 
                 <EditText
-                    android:id="@+id/password"
+                    android:id="@+id/job"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="27dp"

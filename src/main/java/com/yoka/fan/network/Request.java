@@ -1,11 +1,13 @@
 package com.yoka.fan.network;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -15,6 +17,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
@@ -51,7 +57,23 @@ public abstract class Request implements Response{
 		try{
 			DefaultHttpClient httpclient = new DefaultHttpClient();
 			HttpPost httpost = new HttpPost(getURL());
-			httpost.setEntity(new UrlEncodedFormEntity(fillParams(), HTTP.UTF_8));
+			Map<String, File> fileMap = fillFiles();
+			HttpEntity requsetEntity = null;
+			if(fileMap != null){
+				MultipartEntityBuilder builder = MultipartEntityBuilder.create();        
+			    builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+			    
+			    for(String filename:fileMap.keySet()){
+			    	builder.addPart(filename, new FileBody(fileMap.get(filename)));
+			    }
+			    for(NameValuePair param : fillParams()){
+			    	builder.addTextBody(param.getName(), param.getValue());
+			    }
+			    requsetEntity = builder.build();
+			}else{
+				requsetEntity = new UrlEncodedFormEntity(fillParams(), HTTP.UTF_8);
+			}
+			httpost.setEntity(requsetEntity);
 			HttpResponse response = httpclient.execute(httpost);
 			HttpEntity entity = response.getEntity();
 			int status_code = response.getStatusLine().getStatusCode();
@@ -87,6 +109,10 @@ public abstract class Request implements Response{
 		
 		
 		
+	}
+	
+	protected Map<String, File> fillFiles(){
+		return null;
 	}
 	
 	public abstract String getURL();

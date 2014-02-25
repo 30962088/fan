@@ -8,8 +8,9 @@ import com.yoka.fan.WebViewActivity;
 import com.yoka.fan.network.Login;
 import com.yoka.fan.utils.CacheManager;
 import com.yoka.fan.utils.Constant;
+import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
-import com.yoka.fan.utils.Constant.User;
+
 
 import android.content.Context;
 import android.content.Intent;
@@ -60,7 +61,13 @@ public class SettingFragment extends Fragment implements OnClickListener{
 		super.onResume();
 		
 		getCacheSize();
-		login(Constant.user);
+		User user = User.readUser();
+		if(user != null){
+			login(user);
+		}else{
+			logout(user);
+		}
+		
 	}
 	
 	private void getCacheSize(){
@@ -108,6 +115,11 @@ public class SettingFragment extends Fragment implements OnClickListener{
 		getView().findViewById(R.id.user_frame).setVisibility(View.VISIBLE);
 		imageLoader.displayImage(user.photo, (ImageView)getView().findViewById(R.id.user_photo));
 		((TextView)getView().findViewById(R.id.user_nickname)).setText(user.nickname);
+	}
+	
+	public void logout(User user){
+		getView().findViewById(R.id.login_frame).setVisibility(View.VISIBLE);
+		getView().findViewById(R.id.user_frame).setVisibility(View.GONE);
 	}
 	
 }

@@ -12,12 +12,13 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yoka.fan.utils.Constant;
+import com.yoka.fan.utils.User;
 
 public class Tag extends Request{
 
 	private String uuid = Constant.uuid;
 	
-	private String access_token = Constant.user.access_token;
+	private String access_token = User.readUser().access_token;
 	
 	private String tags;
 	

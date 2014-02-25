@@ -1,29 +1,13 @@
 package com.yoka.fan.utils;
 
+
+
 public class Constant {
 
 	public static String uuid;
 	
 	public static String token;
-	
-	public static User user = new User();
-	
-	public static class User{
 		
-		public static final int MALE = 1;
-		
-		public static final int FEMALE = 2;
-		
-		public String id;
-		
-		public String nickname;
-		
-		public String photo;
-		
-		public String access_token;
-		
-	}
-	
 	/** 当前 DEMO 应用的 APP_KEY，第三方应用应该使用自己的 APP_KEY 替换该 APP_KEY */
     public static final String APP_KEY      = "2045436852";
 

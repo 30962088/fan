@@ -1,14 +1,16 @@
 package com.yoka.fan;
 
 
+
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yoka.fan.utils.Constant;
+import com.yoka.fan.network.Modify;
+import com.yoka.fan.network.Request;
+import com.yoka.fan.network.Request.Status;
+import com.yoka.fan.utils.ChangeHead;
 import com.yoka.fan.utils.Dirctionary;
-import com.yoka.fan.utils.Constant.User;
+import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.PhotoSelectPopupWindow;
 import com.yoka.fan.wiget.PhotoSelectPopupWindow.OnItemClickListener;
@@ -16,11 +18,12 @@ import com.yoka.fan.wiget.PhotoSelectPopupWindow.OnItemClickListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 public class ModifyActivity extends BaseActivity implements OnClickListener{
@@ -43,19 +46,29 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 	
 	private ImageLoader imageLoader;
 	
+	private File photoFile;
+	
+	private EditText nickView;
+	
+	private EditText jobView;
+	
 	@Override
 	protected void onCreate(Bundle bundle) {
 		// TODO Auto-generated method stub
 		super.onCreate(bundle);
 		setContentView(R.layout.modify_layout);
+		jobView = (EditText) findViewById(R.id.job);
+		nickView = (EditText) findViewById(R.id.nick);
+		nickView.setText(User.readUser().nickname);
 		photoView = (ImageView) findViewById(R.id.user_photo);
 		radioFemale = findViewById(R.id.sex_female);
 		radioMale = findViewById(R.id.sex_male);
 		radioMale.setOnClickListener(this);
 		radioFemale.setOnClickListener(this);
 		photoView.setOnClickListener(this);
-		setSex(Constant.user.MALE);
+		setSex(User.readUser().sex);
 		imageLoader = Utils.getImageLoader(this);
+		findViewById(R.id.login_btn).setOnClickListener(this);
 	}
 	
 	@Override
@@ -114,12 +127,59 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 				}
 			});
 			break;
+		case R.id.login_btn:
+			onlogin();
+			break;
 		default:
 			break;
 		}
 		
 	}
 	
+	private void onlogin() {
+		final User user = User.readUser();
+		final String user_id = user.id;
+		final String access_token = user.access_token;
+		final String job = jobView.getText().toString();
+		final String nick = nickView.getText().toString();
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				if(photoFile != null){
+					ChangeHead changeHead = new ChangeHead(user_id, photoFile, access_token){
+						public void onError(int code, String msg) {
+							Utils.tip(ModifyActivity.this, msg);
+						};
+					};
+					changeHead.request();	
+					user.photo = changeHead.getFileUrl();
+				}
+				
+				Modify modify = new Modify(access_token, job, nick, sex, user_id){
+					public void onSuccess(String data) {
+						user.nickname = nick;
+						user.sex = sex;
+						user.job = job;
+						User.saveUser(user);
+						Utils.tip(ModifyActivity.this,"修改成功");
+						finish();
+					};
+					
+					public void onError(int code, String msg) {
+						Utils.tip(ModifyActivity.this, msg);
+					};
+				};
+				modify.request();
+				
+				
+			}
+		}).start();
+		
+	}
+	
+
 	private void onSelectSuccess(Uri uri){
 		Intent intent = new Intent(this, DragRectActivity.class);
 		intent.setData(uri);
@@ -144,6 +204,7 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 			break;
 		case ACTION_REQUEST_SELECTION:
 			if (resultCode == Activity.RESULT_OK) {
+				photoFile = new File(data.getData().getPath());
 				imageLoader.displayImage(data.getDataString(), photoView);
 			}
 			break;

@@ -17,6 +17,8 @@ import com.yoka.fan.network.LoginThird;
 import com.yoka.fan.network.LoginThird.Info;
 import com.yoka.fan.network.Register.Result;
 import com.yoka.fan.utils.Constant;
+import com.yoka.fan.utils.User;
+import com.yoka.fan.utils.Utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -84,9 +86,9 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 	}
 	
 	private void onLoginSuccess(Result result){
-		Constant.user = result.toUser();
+		User.saveUser(result.toUser());
 		finish();
-		MainActivity.getInstance().login(Constant.user);
+		MainActivity.getInstance().login(User.readUser());
 	}
 	
 	private void onLogin() {
@@ -113,7 +115,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 					}
 					public void onError(int code, String msg) {
 						
-						tip(msg);
+						Utils.tip(context, msg);
 						
 					};
 				}.request();
@@ -123,18 +125,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 		
 	}
 	
-	private void tip(final String str){
-		runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				Toast.makeText(LoginActivity.this, str, Toast.LENGTH_SHORT).show();
-				
-			}
-			
-		});
-		
-	}
+	
 
 	private void onWeiboLogin(){
 		mWeiboAuth.anthorize(new WeiboAuthListener() {

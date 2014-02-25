@@ -3,8 +3,7 @@ package com.yoka.fan;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
-import com.yoka.fan.utils.Constant;
-import com.yoka.fan.utils.Constant.User;
+import com.yoka.fan.utils.User;
 import com.yoka.fan.wiget.HomeFragment;
 import com.yoka.fan.wiget.SettingFragment;
 
@@ -58,7 +57,7 @@ public class MainActivity extends SlidingFragmentActivity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		login(Constant.user);
+		login(User.readUser());
 	}
 	
 	@Override
@@ -110,7 +109,12 @@ public class MainActivity extends SlidingFragmentActivity {
 	}
 	
 	public void login(User user){
-		menuFragment.login(user);
+		if(user != null){
+			menuFragment.login(user);
+		}else{
+			menuFragment.logout();
+		}
+		
 	}
 
 

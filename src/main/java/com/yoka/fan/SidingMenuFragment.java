@@ -2,7 +2,8 @@ package com.yoka.fan;
 
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yoka.fan.utils.Constant.User;
+
+import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.HomeFragment;
 import com.yoka.fan.wiget.SettingFragment;
@@ -78,7 +79,11 @@ public class SidingMenuFragment extends Fragment implements OnClickListener{
 		getView().findViewById(R.id.user_btn).setVisibility(View.VISIBLE);
 		imageLoader.displayImage(user.photo, ((ImageView)getView().findViewById(R.id.user_photo)));
 		((TextView)getView().findViewById(R.id.user_name)).setText(user.nickname);
-		
+	}
+	
+	public void logout(){
+		getView().findViewById(R.id.login_btn).setVisibility(View.VISIBLE);
+		getView().findViewById(R.id.user_btn).setVisibility(View.GONE);
 	}
 
 }

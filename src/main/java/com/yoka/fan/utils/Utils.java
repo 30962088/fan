@@ -5,10 +5,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import android.content.Context;
+import android.os.Handler;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.yoka.fan.LoginActivity;
 
 /**
  * 
@@ -75,6 +78,18 @@ public class Utils {
 	    java.util.regex.Pattern p = java.util.regex.Pattern.compile(emailRegex);
 	    java.util.regex.Matcher m = p.matcher(email);
 	    return m.matches();
+	}
+	
+	public static void tip(final Context context,final String str){
+		new Handler(context.getMainLooper()).post(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+				
+			}
+		});
+		
 	}
 	
 }

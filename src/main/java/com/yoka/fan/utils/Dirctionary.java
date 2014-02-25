@@ -11,12 +11,23 @@ public class Dirctionary {
 
 	private static File pictureDir;
 	
+	private static File userObjectFile;
+	
 	public static void init(Context context){
 		initPicture(context);
+		initUserObjectFile(context);
 	}
 	
 	public static File getPictureDir() {
 		return pictureDir;
+	}
+	
+	private static void initUserObjectFile(Context context){
+		userObjectFile = new File(context.getCacheDir(),"user.class");
+	}
+	
+	public static File getUserObjectFile() {
+		return userObjectFile;
 	}
 	
 	private static void initPicture(Context context){

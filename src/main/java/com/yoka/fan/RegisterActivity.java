@@ -7,7 +7,8 @@ import com.google.gson.Gson;
 import com.yoka.fan.network.Register;
 import com.yoka.fan.network.Register.Result;
 import com.yoka.fan.utils.Constant;
-import com.yoka.fan.utils.Constant.User;
+import com.yoka.fan.utils.User;
+
 import com.yoka.fan.utils.Utils;
 
 import android.os.AsyncTask;
@@ -75,7 +76,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener{
 						};
 						@Override
 						protected void onSuccess(Result result) {
-							Constant.user = result.toUser();
+							User.saveUser(result.toUser());
 							error("注册成功");
 							finish();
 							
