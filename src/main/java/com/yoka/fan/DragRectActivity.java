@@ -13,10 +13,10 @@ public class DragRectActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.drag_rect_layout);
-
-		ImageLoader imageLoader = Utils.getImageLoader(this);
-
-		imageLoader.displayImage(getIntent().getData().toString(),
-				((ImageView) findViewById(R.id.dragRect)));
+//
+//		ImageLoader imageLoader = Utils.getImageLoader(this);
+//
+//		imageLoader.displayImage(getIntent().getData().toString(),
+//				((ImageView) findViewById(R.id.dragRect)));
 	}
 }

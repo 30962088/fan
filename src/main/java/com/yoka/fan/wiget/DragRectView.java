@@ -5,12 +5,10 @@ import com.yoka.fan.R;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Bitmap.Config;
-import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -209,18 +207,25 @@ public class DragRectView extends ImageView {
 
 
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    	super.onDraw(canvas);
         if(SELECTION_COMPLETE) {
-        	Bitmap maskBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Config.ARGB_8888);
-        	Canvas maskCanvas = new Canvas(maskBitmap);
+        	if(maskBitmap == null){
+        		maskBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Config.ARGB_8888);
+        		maskCanvas = new Canvas(maskBitmap);
+        	}
         	maskCanvas.drawRect(0,0,getWidth(),getHeight() , paint);
         	maskCanvas.drawRect(Math.min(startX, endX), Math.min(startY, endY), Math.max(startX, endX), Math.max(startY, endY),clearPaint);
-        	maskCanvas.save();
-        	canvas.drawBitmap(maskBitmap, 0f,0f, null);
+        	canvas.drawBitmap(maskBitmap, 0f,0f, paint);
         }
     }
     
+    
     private Paint clearPaint = new Paint();
+    
+    private Bitmap maskBitmap;
+    
+    private Canvas maskCanvas;
+    
     
     private void init(){
         DRAW = 1;
@@ -241,7 +246,7 @@ public class DragRectView extends ImageView {
         
         clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR)); 
         clearPaint.setColor(getContext().getResources().getColor(R.color.transparent));
-
+        clearPaint.setFilterBitmap(true);
     }
 }
 // Source GIT HUB Libraries
