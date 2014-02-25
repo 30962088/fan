@@ -14,13 +14,13 @@ public class Constant {
 		
 		public static final int FEMALE = 2;
 		
-		public String id = "3843561";
+		public String id;
 		
-		public String nickname = "1233";
+		public String nickname;
 		
-		public String photo = "http://tp4.sinaimg.cn/2129028663/180/5684393877/1";
+		public String photo;
 		
-		public String access_token = "5a1348acc3b8d94097c00c664d234482";
+		public String access_token;
 		
 	}
 	

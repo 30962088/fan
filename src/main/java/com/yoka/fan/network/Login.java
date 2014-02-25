@@ -29,6 +29,7 @@ public abstract class Login extends Request{
 
 	@Override
 	public void onSuccess(String data) {
+		
 		onSuccess(new Gson().fromJson(data, Result.class));
 		
 	}

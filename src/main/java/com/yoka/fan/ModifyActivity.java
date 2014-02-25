@@ -5,8 +5,11 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.utils.Constant;
+import com.yoka.fan.utils.Dirctionary;
 import com.yoka.fan.utils.Constant.User;
+import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.PhotoSelectPopupWindow;
 import com.yoka.fan.wiget.PhotoSelectPopupWindow.OnItemClickListener;
 
@@ -26,6 +29,8 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 	
 	private static final int ACTION_REQUEST_CAMERA = 2;
 	
+	private static final int ACTION_REQUEST_SELECTION = 3;
+	
 	private int sex;
 	
 	private View radioFemale;
@@ -35,6 +40,8 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 	private ImageView photoView;
 	
 	private Uri cameraPic;
+	
+	private ImageLoader imageLoader;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -48,6 +55,7 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 		radioFemale.setOnClickListener(this);
 		photoView.setOnClickListener(this);
 		setSex(Constant.user.MALE);
+		imageLoader = Utils.getImageLoader(this);
 	}
 	
 	@Override
@@ -89,22 +97,7 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 					switch (id) {
 					case R.id.take_photo:
 						Intent getCameraImage = new Intent("android.media.action.IMAGE_CAPTURE");
-
-			            File cameraFolder;
-
-			            if (android.os.Environment.getExternalStorageState().equals
-			                    (android.os.Environment.MEDIA_MOUNTED))
-			                cameraFolder = new File(android.os.Environment.getExternalStorageDirectory(),
-			                        "pictures/");
-			            else
-			                cameraFolder= getCacheDir();
-			            if(!cameraFolder.exists())
-			                cameraFolder.mkdirs();
-
-			            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
-			            String timeStamp = dateFormat.format(new Date());
-			            String imageFileName = "picture_" + timeStamp + ".jpg";
-			            cameraPic = Uri.fromFile(new File(cameraFolder,imageFileName));
+			            cameraPic = Uri.fromFile(Dirctionary.creatPicture());
 			            getCameraImage.putExtra(MediaStore.EXTRA_OUTPUT, cameraPic);
 			            startActivityForResult(getCameraImage, ACTION_REQUEST_CAMERA);
 						break;
@@ -127,6 +120,12 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 		
 	}
 	
+	private void onSelectSuccess(Uri uri){
+		Intent intent = new Intent(this, DragRectActivity.class);
+		intent.setData(uri);
+		startActivityForResult(intent, ACTION_REQUEST_SELECTION);
+	}
+	
 	@Override
 	public void onActivityResult(int reqCode, int resultCode, Intent data){
 		
@@ -135,16 +134,17 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 		switch (reqCode) {
 		case ACTION_REQUEST_GALLERY:
 			if (resultCode == Activity.RESULT_OK) {        
-				Intent intent = new Intent(this, DragRectActivity.class);
-				intent.setData(data.getData());
-				startActivity(intent);
+				onSelectSuccess(data.getData());
 			}
 			break;
 		case ACTION_REQUEST_CAMERA:
 			if (resultCode == Activity.RESULT_OK) {        
-				Intent intent = new Intent(this, DragRectActivity.class);
-				intent.setData(cameraPic);
-				startActivity(intent);
+				onSelectSuccess(cameraPic);
+			}
+			break;
+		case ACTION_REQUEST_SELECTION:
+			if (resultCode == Activity.RESULT_OK) {
+				imageLoader.displayImage(data.getDataString(), photoView);
 			}
 			break;
 		default:

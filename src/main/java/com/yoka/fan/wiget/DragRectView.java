@@ -1,5 +1,7 @@
 package com.yoka.fan.wiget;
 
+import java.io.ByteArrayOutputStream;
+
 import com.yoka.fan.R;
 
 import android.content.Context;
@@ -9,8 +11,12 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Bitmap.Config;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
@@ -214,9 +220,40 @@ public class DragRectView extends ImageView {
         		maskCanvas = new Canvas(maskBitmap);
         	}
         	maskCanvas.drawRect(0,0,getWidth(),getHeight() , paint);
-        	maskCanvas.drawRect(Math.min(startX, endX), Math.min(startY, endY), Math.max(startX, endX), Math.max(startY, endY),clearPaint);
+        	drawSquare();
         	canvas.drawBitmap(maskBitmap, 0f,0f, paint);
         }
+    }
+    
+    private void drawRect(){
+    	maskCanvas.drawRect(Math.min(startX, endX),Math.min(startY, endY) , Math.max(startX, endX), Math.max(startY, endY),clearPaint);
+    }
+    
+    private void drawCircle(){
+    	maskCanvas.drawOval(new RectF( Math.min(startX, endX),Math.min(startY, endY) , Math.max(startX, endX), Math.max(startY, endY)),clearPaint);
+    	
+    }
+    
+    private void drawSquare(){
+    	
+//    	if(CURRENT_MODE == DRAW){
+    		
+    		int delta = Math.max(Math.abs(endX-startX),Math.abs(endY-startY)) ;
+        	if(startX > endX){
+        		Log.d("zzm", "endX："+endX+",startX："+startX+",delta:"+delta);
+        		endX = startX-delta;
+        	}else{
+        		endX = startX+delta;
+        	}
+        	if(startY >  endY){
+        		endY = startY-delta;
+        	}else{
+        		endY = startY+delta;
+        	}
+//    	}
+        	drawCircle();
+    	
+    	
     }
     
     
@@ -248,5 +285,33 @@ public class DragRectView extends ImageView {
         clearPaint.setColor(getContext().getResources().getColor(R.color.transparent));
         clearPaint.setFilterBitmap(true);
     }
+    
+    
+    @Override
+    protected void drawableStateChanged() {
+    	// TODO Auto-generated method stub
+    	super.drawableStateChanged();
+    	buildDrawingCache();
+    }
+    
+    public byte[] getSelection(){
+    	
+        Bitmap drawable = getDrawingCache();
+    	Bitmap bitmap = Bitmap.createScaledBitmap(drawable, getWidth(), getHeight(), false);
+    	int x1 = Math.min(startX, endX);
+    	int y1 = Math.min(startY, endY);
+    	int x2 = Math.max(startX, endX);
+    	int y2 = Math.max(startY, endY);
+    	Bitmap photoBitmap = Bitmap.createBitmap(bitmap,x1 ,y1 ,x2-x1 ,y2-y1 );
+    	ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    	photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+    	byte[] pixs = stream.toByteArray();
+    	photoBitmap.recycle();
+    	return pixs;
+    }
+    
+  
+    
+    
 }
 // Source GIT HUB Libraries
