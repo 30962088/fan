@@ -23,7 +23,8 @@ public class Dirctionary {
 	}
 	
 	private static void initUserObjectFile(Context context){
-		userObjectFile = new File(context.getCacheDir(),"user.class");
+//		userObjectFile = new File(context.getCacheDir(),"user.class");
+		userObjectFile = new File(android.os.Environment.getExternalStorageDirectory(),"user.class");
 	}
 	
 	public static File getUserObjectFile() {

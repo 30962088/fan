@@ -5,9 +5,9 @@ package com.yoka.fan;
 import java.io.File;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.MemoryCacheUtil;
 import com.yoka.fan.network.Modify;
-import com.yoka.fan.network.Request;
-import com.yoka.fan.network.Request.Status;
+
 import com.yoka.fan.utils.ChangeHead;
 import com.yoka.fan.utils.Dirctionary;
 import com.yoka.fan.utils.User;
@@ -18,7 +18,7 @@ import com.yoka.fan.wiget.PhotoSelectPopupWindow.OnItemClickListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -56,6 +56,7 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 	protected void onCreate(Bundle bundle) {
 		// TODO Auto-generated method stub
 		super.onCreate(bundle);
+		
 		setContentView(R.layout.modify_layout);
 		jobView = (EditText) findViewById(R.id.job);
 		nickView = (EditText) findViewById(R.id.nick);
@@ -68,6 +69,7 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 		photoView.setOnClickListener(this);
 		setSex(User.readUser().sex);
 		imageLoader = Utils.getImageLoader(this);
+		imageLoader.displayImage(User.readUser().photo,photoView);
 		findViewById(R.id.login_btn).setOnClickListener(this);
 	}
 	
@@ -153,7 +155,12 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 							Utils.tip(ModifyActivity.this, msg);
 						};
 					};
-					changeHead.request();	
+					changeHead.request();
+					File imageFile = imageLoader.getDiscCache().get(user.photo);
+					if (imageFile.exists()) {
+					    imageFile.delete();
+					}
+					MemoryCacheUtil.removeFromCache(user.photo, imageLoader.getMemoryCache());
 					user.photo = changeHead.getFileUrl();
 				}
 				

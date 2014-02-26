@@ -1,17 +1,22 @@
 package com.yoka.fan.wiget;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 import com.yoka.fan.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.Bitmap.Config;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.FloatMath;
@@ -115,23 +120,57 @@ public class TouchView extends ImageView {
 		init();
 	}
 
-	public static Bitmap convertViewToBitmap(View view) {
-//		view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-		view.buildDrawingCache();
-		Bitmap bitmap = view.getDrawingCache();
-
-		return bitmap;
+	public Bitmap loadBitmapFromView() {
+		Bitmap bitmap = ((BitmapDrawable)getDrawable()).getBitmap();
+		//02-26 08:11:45.282: D/zmm(2028): x1:-257,y1:-319,x2:737,y2:910,width:640,height:960
+		Log.d("zmm", "x1:"+bounds[0]+",y1:"+bounds[1]+",x2:"+bounds[2]+",y2:"+bounds[3]+",width:"+bitmap.getWidth()+",height:"+bitmap.getHeight());
+		Log.d("zmm", "left:"+getLeft()+",top:"+getTop());
+		Log.d("zmm", "x1:"+rectBounds[0]+",y1:"+rectBounds[1]+",width:"+rectBounds[2]+",height:"+rectBounds[3]);
+		bitmap = Bitmap.createScaledBitmap(bitmap, Math.abs(bounds[2]-bounds[0]), Math.abs( bounds[3]-bounds[1]), true);
+		int x1 = Math.max(-getLeft()+rectBounds[0], 0);
+		int y1 = Math.max(-getTop()+rectBounds[1], 0);
+		int width = Math.min(rectBounds[2], bitmap.getWidth());
+		int height = Math.min(rectBounds[3], bitmap.getHeight());
+		bitmap = Bitmap.createBitmap(bitmap, x1,y1,width,height);
+		
+	    return bitmap;
 	}
+	
+	public static Bitmap getBitmapFromView(View view) {
+        //Define a bitmap with the same size as the view
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
+        //Bind a canvas to it
+        Canvas canvas = new Canvas(returnedBitmap);
+        //Get the view's background
+        Drawable bgDrawable =view.getBackground();
+        if (bgDrawable!=null) 
+            //has background drawable, then draw it on the canvas
+            bgDrawable.draw(canvas);
+        else 
+            //does not have background drawable, then draw white background on the canvas
+            canvas.drawColor(Color.WHITE);
+        // draw the view on the canvas
+        view.draw(canvas);
+        //return the bitmap
+        return returnedBitmap;
+    }
 
 	public byte[] getSelection() {
-		Bitmap bitmap = convertViewToBitmap(this);
-		Log.d("zzm", "bounds:"+rectBounds[0]+","+rectBounds[1]+","+rectBounds[2]+","+rectBounds[3]);
-		Bitmap photoBitmap = Bitmap.createBitmap(bitmap, rectBounds[0],
-				rectBounds[1], rectBounds[2], rectBounds[3]);
+		maskView.setVisibility(View.GONE);
+		Bitmap bitmap = getBitmapFromView((View)getParent());
+		bitmap = Bitmap.createBitmap(bitmap,rectBounds[0] ,rectBounds[1],rectBounds[2],rectBounds[3]);
+//		try {
+//			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream("/sdcard/fantest.jpg"));
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		Log.d("zzm", "bounds:"+rectBounds[0]+","+rectBounds[1]+","+rectBounds[2]+","+rectBounds[3]);
+		
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+		bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 		byte[] pixs = stream.toByteArray();
-		photoBitmap.recycle();
+		bitmap.recycle();
 		return pixs;
 	}
 
@@ -213,22 +252,28 @@ public class TouchView extends ImageView {
 		return true;
 	}
 
+	private int bounds[] = new int[4];
+	
 	/**
 	 * 实现处理缩放
 	 */
 	private void setScale(float temp, int flag) {
-
+		
+		
+		
 		if (flag == BIGGER) {
-			this.setFrame(this.getLeft() - (int) (temp * this.getWidth()),
-					this.getTop() - (int) (temp * this.getHeight()),
-					this.getRight() + (int) (temp * this.getWidth()),
-					this.getBottom() + (int) (temp * this.getHeight()));
+			bounds = new int[]{this.getLeft() - (int) (temp * this.getWidth()),this.getTop() - (int) (temp * this.getHeight())
+					,this.getRight() + (int) (temp * this.getWidth()),
+					this.getBottom() + (int) (temp * this.getHeight())};
+			
 		} else if (flag == SMALLER) {
-			this.setFrame(this.getLeft() + (int) (temp * this.getWidth()),
+			bounds = new int[]{this.getLeft() + (int) (temp * this.getWidth()),
 					this.getTop() + (int) (temp * this.getHeight()),
 					this.getRight() - (int) (temp * this.getWidth()),
-					this.getBottom() - (int) (temp * this.getHeight()));
+					this.getBottom() - (int) (temp * this.getHeight())};
+			
 		}
+		this.setFrame(bounds[0], bounds[1], bounds[2], bounds[3]);
 
 	}
 

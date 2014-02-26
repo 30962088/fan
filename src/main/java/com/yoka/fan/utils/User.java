@@ -52,9 +52,7 @@ public class User {
 	}
 
 	public static void saveUser(User _user) {
-		if(user == _user){
-			return;
-		}
+		
 		user = _user;
 		try {
 
