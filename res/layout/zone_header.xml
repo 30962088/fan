@@ -2,112 +2,139 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.yoka.fan"
     android:layout_width="match_parent"
-    android:layout_height="94dp"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp" 
-    android:gravity="center_vertical">
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-    <RelativeLayout
-        android:layout_width="60dp"
-        android:layout_height="60dp" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="94dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" >
 
-        <com.makeramen.RoundedImageView
+        <RelativeLayout
             android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/test_img1"
-            app:is_oval="true" />
-        
-        <ImageView 
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:src="@drawable/vip"/>
-    </RelativeLayout>
-    
-    <LinearLayout 
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginLeft="20dp">
-       
-        
-        <LinearLayout 
-            android:layout_width="wrap_content"
+            android:layout_height="60dp" >
+
+            <com.makeramen.RoundedImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/test_img1"
+                app:is_oval="true" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/vip" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginRight="20dp"
-            android:orientation="vertical">
-            
-            <TextView 
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1" >
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="345"
-                android:textSize="15sp"
-                android:textColor="#585858"/>
-            
-            <TextView 
+                android:layout_marginRight="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/match"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="345"
+                    android:textColor="#585858"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="搭配"
+                    android:textColor="#a8a8a8"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="搭配"
-                android:textSize="12sp"
-                android:textColor="#a8a8a8"/>
-            
+                android:layout_marginRight="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/focus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="345"
+                    android:textColor="#585858"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="关注"
+                    android:textColor="#a8a8a8"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/fans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="345"
+                    android:textColor="#585858"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="粉丝"
+                    android:textColor="#a8a8a8"
+                    android:textSize="12sp" />
+            </LinearLayout>
         </LinearLayout>
-        
-        <LinearLayout 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginRight="20dp"
-            android:orientation="vertical">
-            
-            <TextView 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="345"
-                android:textSize="15sp"
-                android:textColor="#585858"/>
-            
-            <TextView 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="搭配"
-                android:textSize="12sp"
-                android:textColor="#a8a8a8"/>
-            
-        </LinearLayout>
-        
-        <LinearLayout 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-            
-            <TextView 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="345"
-                android:textSize="15sp"
-                android:textColor="#585858"/>
-            
-            <TextView 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="搭配"
-                android:textSize="12sp"
-                android:textColor="#a8a8a8"/>
-            
-        </LinearLayout>
-        
-    </LinearLayout>
-    
-    <TextView 
+
+        <TextView
             android:layout_width="64dp"
             android:layout_height="26dp"
             android:background="@drawable/btn_border"
-            android:text="登录"
-            android:textColor="#ee4c9c"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:text="关注"
+            android:textColor="#ee4c9c" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <com.yoka.fan.wiget.TabPageIndicator
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:background="@drawable/tag_bg"
+            android:divider="@drawable/divider"
+            android:dividerPadding="10dp"
+            android:gravity="center_vertical"
+            android:showDividers="middle" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 
 </LinearLayout>
