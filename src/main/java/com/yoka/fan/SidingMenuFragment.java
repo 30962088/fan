@@ -7,6 +7,7 @@ import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.HomeFragment;
 import com.yoka.fan.wiget.SettingFragment;
+import com.yoka.fan.wiget.ZoneFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ public class SidingMenuFragment extends Fragment implements OnClickListener{
 		view.findViewById(R.id.login_btn).setOnClickListener(this);
 		view.findViewById(R.id.setting).setOnClickListener(this);
 		view.findViewById(R.id.home).setOnClickListener(this);
-		
+		view.findViewById(R.id.zone).setOnClickListener(this);
 	}
 
 	@Override
@@ -57,6 +58,13 @@ public class SidingMenuFragment extends Fragment implements OnClickListener{
 			break;
 		case R.id.home:
 			switchFragment(new HomeFragment());
+			break;
+		case R.id.zone:
+			ZoneFragment fragment = new ZoneFragment();
+			Bundle arguments =  new Bundle();
+			arguments.putString("target_id", User.readUser().id);
+			fragment.setArguments(arguments);
+			switchFragment(fragment);
 			break;
 		default:
 			break;

@@ -37,13 +37,19 @@
             android:name=".WebViewActivity"></activity>
         
         <activity 
-            android:name=".ModifyActivity">
+            android:name=".ZoneActivity"></activity>
+        
+        
+        <activity 
+            android:name=".FansListActivity">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
             
         </activity>
+        <activity 
+            android:name=".ModifyActivity"></activity>
         
         <activity 
             android:name=".DragRectActivity">

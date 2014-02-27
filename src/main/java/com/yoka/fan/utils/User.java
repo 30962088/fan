@@ -6,8 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-public class User {
+public class User implements Serializable{
 	public static final int MALE = 1;
 
 	public static final int FEMALE = 2;

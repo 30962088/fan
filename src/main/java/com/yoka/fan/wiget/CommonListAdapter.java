@@ -7,6 +7,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.CommentActivity;
 import com.yoka.fan.R;
 import com.yoka.fan.TagActivity;
+import com.yoka.fan.ZoneActivity;
 import com.yoka.fan.network.Like;
 import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Request.Status;
@@ -98,6 +99,16 @@ public class CommonListAdapter extends BaseAdapter{
 		holder.mCommentCount.setText(""+model.getComment());
 		holder.setTags(context, model.getTags());
 		holder.mStarBtn.setSelected(model.isStared());
+		holder.mPhotoView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, ZoneActivity.class);
+				intent.putExtra("target_id", ""+model.getId());
+				context.startActivity(intent);
+				
+			}
+		});
 		holder.mCommentBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override

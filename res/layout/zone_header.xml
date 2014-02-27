@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res/com.yoka.fan"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="#ffffff">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,9 +18,9 @@
             android:layout_height="60dp" >
 
             <com.makeramen.RoundedImageView
+                android:id="@+id/photo"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/test_img1"
                 app:is_oval="true" />
 
             <ImageView

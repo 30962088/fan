@@ -2,14 +2,40 @@ package com.yoka.fan.network;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yoka.fan.utils.Constant;
 
-public class Info extends Request{
+public abstract class Info extends Request{
+	
+	public static class Result{
+		private String _id;
+		private int follows;
+		private int followers;
+		private int show_specials;
+		private String head_url;
+		public int getFollowers() {
+			return followers;
+		}
+		public int getFollows() {
+			return follows;
+		}
+		public String getId() {
+			return _id;
+		}
+		public int getShow_specials() {
+			return show_specials;
+		}
+		public String getHead_url() {
+			return IMG_HOST+head_url;
+		}
+	}
 
 	private String access_token;
 	
@@ -33,10 +59,13 @@ public class Info extends Request{
 		this.target_ids = StringUtils.join(target_ids, ',');
 		this.user_id = user_id;
 	}
+	
+	
+	public abstract void onSuccess(Map<String, Result> result);
 
 	@Override
 	public void onSuccess(String data) {
-		// TODO Auto-generated method stub
+		onSuccess((Map<String, Result>)new Gson().fromJson(data, new TypeToken<Map<String, Result>>(){}.getType()));
 		
 	}
 
