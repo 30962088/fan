@@ -7,8 +7,10 @@ import java.util.Map;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yoka.fan.FansListActivity;
 import com.yoka.fan.MainActivity;
 import com.yoka.fan.R;
+import com.yoka.fan.network.Fans;
 import com.yoka.fan.network.Info;
 import com.yoka.fan.network.Info.Result;
 import com.yoka.fan.utils.User;
@@ -16,6 +18,7 @@ import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.CommonPagerAdapter.Page;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -24,10 +27,11 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ZoneFragment extends Fragment{
+public class ZoneFragment extends Fragment implements OnClickListener{
 
 	private TextView matchView;
 	
@@ -65,6 +69,7 @@ public class ZoneFragment extends Fragment{
 		focusView = (TextView) view.findViewById(R.id.focus);
 		fansView = (TextView) view.findViewById(R.id.fans);
 		photoView = (ImageView)view.findViewById(R.id.photo);
+		view.findViewById(R.id.fans_btn).setOnClickListener(this);
 		initView();
 		
 	}
@@ -159,6 +164,21 @@ public class ZoneFragment extends Fragment{
 			}
 
 		});
+		
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.fans_btn:
+			Intent intent = new Intent(getActivity(), FansListActivity.class);
+			intent.putExtra("target_id", target_id);
+			startActivity(intent);
+			break;
+
+		default:
+			break;
+		}
 		
 	}
 	

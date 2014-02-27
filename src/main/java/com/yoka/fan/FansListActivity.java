@@ -3,7 +3,15 @@ package com.yoka.fan;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yoka.fan.network.Fans;
+import com.yoka.fan.network.Info.Result;
+import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 
 import android.content.Context;
@@ -13,22 +21,60 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class FansListActivity extends BaseActivity{
 
+	private FansListAdapter adapter;
+	
+	private List<Model> list;
+	
+	private int offset = 0;
+	
+	private int limit = 20;
+	
+	private PullToRefreshListView listView;
+	
+	private String target_id;
+	
+	private boolean hasMore;
+	
+	private View footerView;
+	
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		ListView listView = new ListView(this);
-		FansListAdapter adapter = new FansListAdapter(this, new ArrayList<FansListActivity.Model>(){{
-			for(int i = 0;i<20;i++){
-				add(new Model("1","http://tp4.sinaimg.cn/2129028663/180/5684393877/1","自萌",false));
-			}
-		}});
+		target_id = getIntent().getStringExtra("target_id");
+		listView = new PullToRefreshListView(this);
+		list = new ArrayList<FansListActivity.Model>();
+		adapter = new FansListAdapter(this, list);
+		footerView = LayoutInflater.from(this).inflate( R.layout.footer_loading, null);
+		listView.getRefreshableView().addFooterView(footerView);
 		listView.setAdapter(adapter);
+		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+
+			@Override
+			public void onRefresh(
+					PullToRefreshBase<ListView> refreshView) {
+				offset = 0;
+				load();
+				
+			}
+		});
+		listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+
+			@Override
+			public void onLastItemVisible() {
+				if(hasMore){
+					load();
+				}
+				
+			}
+		});
+		load();
 		setContentView(listView);
 	}
 	
@@ -37,6 +83,47 @@ public class FansListActivity extends BaseActivity{
 		// TODO Auto-generated method stub
 		return "粉丝";
 	}
+	
+	private void load(){
+		final User user = User.readUser();
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Fans request = new Fans(user.id,target_id,offset,limit) {
+					
+					@Override
+					protected void onSuccess(List<Result> results) {
+						hasMore = results.size()>=limit?true:false;
+						if(offset == 0){
+							list.clear();
+						}
+						for(Result result : results){
+							list.add(new Model(result.getId(), result.getHead_url(), result.getNick(),false));
+						}
+						offset += limit;
+						runOnUiThread(new Runnable() {
+							
+							@Override
+							public void run() {
+								adapter.notifyDataSetChanged();
+								listView.onRefreshComplete();
+								if(!hasMore){
+									listView.getRefreshableView().removeFooterView(footerView);
+								}
+							}
+						});
+						
+						
+					}
+				};
+				request.request();
+			}
+		}).start();
+		
+	}
+	
+	
 	
 	private static class Model{
 		private String id;

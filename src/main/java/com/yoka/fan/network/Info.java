@@ -20,6 +20,7 @@ public abstract class Info extends Request{
 		private int followers;
 		private int show_specials;
 		private String head_url;
+		private String nick;
 		public int getFollowers() {
 			return followers;
 		}
@@ -34,6 +35,9 @@ public abstract class Info extends Request{
 		}
 		public String getHead_url() {
 			return IMG_HOST+head_url;
+		}
+		public String getNick() {
+			return nick;
 		}
 	}
 
