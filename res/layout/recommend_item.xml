@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.yoka.fan"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:id="@+id/photo_border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             >
+
+            <com.makeramen.RoundedImageView
+                android:id="@+id/photo"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="#e7e2dc"
+                android:src="@drawable/blazers"
+                app:is_oval="true" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignBottom="@id/photo_border"
+            android:layout_toRightOf="@id/photo_border"
+            android:background="@drawable/btn_selector" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:paddingRight="18dp"
+        android:textColor="#585858"
+        android:textSize="12sp" />
+
+</LinearLayout>

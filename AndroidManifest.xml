@@ -52,13 +52,16 @@
             android:name=".ModifyActivity"></activity>
         
         <activity 
-            android:name=".DragRectActivity">
+            android:name=".DragRectActivity"></activity>
+        <activity 
+            android:name=".RecommandListActivity">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
             
         </activity>
+        
         
         
         <activity
