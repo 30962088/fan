@@ -223,8 +223,40 @@ public class Category implements Serializable {
 		public void success(Map<String, List<Tag>> result);
 	}
 	
+	public static interface findColorListener{
+		public void success(List<Color> result);
+	}
+	
 	public static void findCatsByPinyin(findCatsListener listener){
 		findCatsByPinyin(null,listener);
+	}
+	
+	public static void findColorByPinyin(findColorListener listener){
+		findColorByPinyin(null,listener);
+	}
+	
+	public static void findColorByPinyin(final String pinyin,final findColorListener listener){
+		if (listener != null) {
+			read(new OperatorListener() {
+
+				@Override
+				public void success(Category category) {
+					if (TextUtils.isEmpty(pinyin)) {
+						listener.success(category.colors);
+					}else{
+						List<Color> result = new ArrayList<Category.Color>();
+						for(Color color:category.colors){
+							if(color.zh.indexOf(pinyin) != -1){
+								result.add(color);
+							}
+						}
+						listener.success(result);
+					}
+					
+
+				}
+			});
+		}
 	}
 
 	public static void findCatsByPinyin(final String pinyin,

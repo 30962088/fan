@@ -1,5 +1,6 @@
 package com.yoka.fan;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class SelectCategoryActivity extends Activity implements OnClickListener,TextWatcher{
+	
+	public static final String PARAM_MODEL = "PARAM_MODEL";
 	
 	private ListView listView;
 	
@@ -101,7 +104,7 @@ public class SelectCategoryActivity extends Activity implements OnClickListener,
 		for(String key : map.keySet()){
 			List<Model> models = new ArrayList<SelectCategoryActivity.Model>();
 			for(Tag tag : map.get(key)){
-				models.add(new Model(tag.getTag_en(), tag.getTag_zh()));
+				models.add(new Model(tag.getTag_en(),tag.getTag_zh()));
 			}
 			list.add(new ListModel(key, models));
 		}
@@ -123,12 +126,18 @@ public class SelectCategoryActivity extends Activity implements OnClickListener,
 		
 	}
 	
-	private static class Model{
+	public static class Model implements Serializable{
 		private String id;
 		private String name;
-		public Model(String id, String name) {
-			this.id = id;
+		public Model(String id,String name) {
+			this.id = name;
 			this.name = name;
+		}
+		public String getId() {
+			return id;
+		}
+		public String getName() {
+			return name;
 		}
 	}
 	
@@ -202,11 +211,11 @@ public class SelectCategoryActivity extends Activity implements OnClickListener,
 		
 	}
 	
-	private static class GridAdapter extends BaseAdapter{
+	public static class GridAdapter extends BaseAdapter{
 		
 		private List<Model> models;
 		
-		private Context context ;
+		private Context context;
 		
 		public GridAdapter(Context context, List<Model> models) {
 			this.context = context;

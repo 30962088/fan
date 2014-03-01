@@ -6,6 +6,10 @@ import java.security.NoSuchAlgorithmException;
 
 import android.content.Context;
 import android.os.Handler;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -38,6 +42,27 @@ public class Utils {
 		return imageLoader;
 	}
 
+	public static void setGridViewHeightBasedOnChildren(GridView gridView) {
+		BaseAdapter listAdapter = (BaseAdapter) gridView.getAdapter();
+		if (listAdapter == null) {
+			return;
+		}
+		int totalHeight = 0;
+		int count = listAdapter.getCount();
+		View listItem = listAdapter.getView(0, null, gridView);
+		listItem.measure(0, 0); // 计算子项View 的宽高
+		totalHeight = listItem.getMeasuredHeight(); // 统计所有子项的总高度
+		int yu = count % 4;
+		ViewGroup.LayoutParams params = gridView.getLayoutParams();
+		if (yu > 0) {
+			params.height = (count - yu) / 4 * (totalHeight + 10)
+					+ totalHeight;
+		} else {
+			params.height = count / 4 * totalHeight + (count / 4 - 1) * 10;
+		}
+		gridView.setLayoutParams(params);
+	}
+	
 	/**
 	 * Use md5 encoded code value
 	 * 
