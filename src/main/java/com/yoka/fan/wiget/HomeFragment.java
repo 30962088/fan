@@ -46,12 +46,13 @@ public class HomeFragment extends Fragment{
 			fragment.setArguments(args);
 			pages.add(new Page("关注", fragment, false));
 		}
-		FragmentPagerAdapter adapter = new CommonPagerAdapter(getChildFragmentManager(),pages);
+		CommonPagerAdapter adapter = new CommonPagerAdapter(getChildFragmentManager(),pages);
 		
 		
 
         ViewPager pager = (ViewPager)view.findViewById(R.id.pager);
         pager.setAdapter(adapter);
+        pager.setOffscreenPageLimit(3);
         
         
 

@@ -5,11 +5,15 @@ import java.util.List;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.SparseArray;
 import android.view.ViewGroup;
 
-public class CommonPagerAdapter extends FragmentPagerAdapter{
+public class CommonPagerAdapter extends FragmentStatePagerAdapter{
 
 	private List<Page> pages;
+	
+
 	
 	public CommonPagerAdapter(FragmentManager fm,List<Page> pages) {
 		super(fm);
@@ -43,7 +47,8 @@ public class CommonPagerAdapter extends FragmentPagerAdapter{
 		// TODO Auto-generated method stub
 		return pages.get(position).name;
 	}
-
+	
+	
 	@Override
 	public Fragment getItem(int position) {
 		// TODO Auto-generated method stub

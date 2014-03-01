@@ -140,7 +140,7 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 				setArguments(arguments);
 			}},false));
 		}};
-		FragmentPagerAdapter adapter = new CommonPagerAdapter(getChildFragmentManager(),pages);
+		CommonPagerAdapter adapter = new CommonPagerAdapter(getChildFragmentManager(),pages);
 		
 		
 
