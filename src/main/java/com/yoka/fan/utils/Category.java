@@ -226,6 +226,9 @@ public class Category implements Serializable {
 	public static interface findColorListener{
 		public void success(List<Color> result);
 	}
+	public static interface findBrandListener{
+		public void success(List<Brand> result);
+	}
 	
 	public static void findCatsByPinyin(findCatsListener listener){
 		findCatsByPinyin(null,listener);
@@ -248,6 +251,32 @@ public class Category implements Serializable {
 						for(Color color:category.colors){
 							if(color.zh.indexOf(pinyin) != -1){
 								result.add(color);
+							}
+						}
+						listener.success(result);
+					}
+					
+
+				}
+			});
+		}
+	}
+	public static void findBrandByPinyin(findBrandListener listener){
+		findBrandByPinyin(null,listener);
+	}
+	public static void findBrandByPinyin(final String pinyin,final findBrandListener listener){
+		if (listener != null) {
+			read(new OperatorListener() {
+
+				@Override
+				public void success(Category category) {
+					if (TextUtils.isEmpty(pinyin)) {
+						listener.success(category.brands);
+					}else{
+						List<Brand> result = new ArrayList<Category.Brand>();
+						for(Brand brand:category.brands){
+							if(brand.name.indexOf(pinyin) != -1 || brand.en_name.indexOf(pinyin) != -1 || brand.py_first.indexOf(pinyin) != -1){
+								result.add(brand);
 							}
 						}
 						listener.success(result);
