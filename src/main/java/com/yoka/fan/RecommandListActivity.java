@@ -3,21 +3,19 @@ package com.yoka.fan;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.viewpagerindicator.CirclePageIndicator;
-import com.yoka.fan.network.Fans;
 import com.yoka.fan.network.Info.Result;
+import com.yoka.fan.network.Follow;
+import com.yoka.fan.network.Recommand;
+import com.yoka.fan.network.Request.Status;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.CommonPagerAdapter;
 import com.yoka.fan.wiget.CommonPagerAdapter.Page;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -26,15 +24,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ExpandableListView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-public class RecommandListActivity extends BaseActivity{
+public class RecommandListActivity extends BaseActivity2 implements OnClickListener{
 	
-	private List<Model> list;
+	private List<Model> list = new ArrayList<RecommandListActivity.Model>();
+	
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -42,21 +39,52 @@ public class RecommandListActivity extends BaseActivity{
 		
 		setContentView(R.layout.recommand_layout);
 		
-		list = new ArrayList<Model>();
 		
-		for(int i = 0;i<21;i++){
-			list.add(new Model(""+i, "http://tp4.sinaimg.cn/2129028663/180/5684393877/1", "威廉", true));
-		}
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Recommand request = new Recommand(){
+
+					@Override
+					public void onSuccess(List<Result> array) {
+						for(Result result : array){
+							list.add(new Model(result.getId(), result.getHead_url(), result.getNick(), true));
+						}
+//						for(int i = 0;i<0;i++){
+//							list.add(new Model(""+i, "http://tp4.sinaimg.cn/2129028663/180/5684393877/1", "的撒旦撒旦撒旦撒旦撒的撒的撒的撒爱的撒旦", true));
+//						}
+						initView();
+						
+					}
+				};
+				request.request();
+				
+			}
+		}).start();
 		
-		ViewPager viewPager = ((ViewPager)findViewById(R.id.pager));
-		viewPager.setAdapter(getAdapter(list));
-		((CirclePageIndicator)findViewById(R.id.indicator)).setViewPager(viewPager);
+		
+	}
+	
+	private void initView(){
+		runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				ViewPager viewPager = ((ViewPager)findViewById(R.id.pager));
+				viewPager.setAdapter(getAdapter(list));
+				((CirclePageIndicator)findViewById(R.id.indicator)).setViewPager(viewPager);
+				View saveBtn = findViewById(R.id.save_btn);
+				saveBtn.setVisibility(View.VISIBLE);
+				saveBtn.setOnClickListener(RecommandListActivity.this);
+			}
+		});
 	}
 	
 	@Override
 	protected String getActionBarTitle() {
 		// TODO Auto-generated method stub
-		return "选择关注人";
+		return "推荐关注";
 	}
 	
 	public static class RecommandFragement extends Fragment{
@@ -100,10 +128,18 @@ public class RecommandListActivity extends BaseActivity{
 					pages.add(new Page(""+i, fragment, false));
 				}
 				models = new ArrayList<RecommandListActivity.Model>();
-				
 			}
 			models.add(list.get(i));
 		}
+		if(models != null){
+			RecommandFragement fragment = new RecommandFragement();
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("list", models);
+			fragment.setArguments(bundle);
+			pages.add(new Page(""+list.size(), fragment, false));
+		}
+		
+		
 		return new CommonPagerAdapter(getSupportFragmentManager(), pages);
 	}
 	
@@ -197,6 +233,52 @@ public class RecommandListActivity extends BaseActivity{
 		}
 		
 		
+		
+	}
+
+	private void onSave(){
+		final List<String> targetlist = new ArrayList<String>();
+		for(Model model : list){
+			if(model.selected){
+				targetlist.add(model.id);
+			}
+		}
+		final User user = User.readUser();
+		if(targetlist.size() == 0){
+			finish();
+		}
+		new AsyncTask<Void,Void, Status>() {
+
+			@Override
+			protected com.yoka.fan.network.Request.Status doInBackground(
+					Void... params) {
+				Follow follow = new Follow(user.id, targetlist, user.access_token);
+				follow.request();
+				return follow.getStatus();
+			}
+			
+			@Override
+			protected void onPostExecute(
+					com.yoka.fan.network.Request.Status result) {
+				
+				finish();
+				
+			}
+			
+		}.execute();
+		
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.save_btn:
+			onSave();
+			break;
+
+		default:
+			break;
+		}
 		
 	}
 

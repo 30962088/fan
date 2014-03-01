@@ -6,6 +6,7 @@ import java.util.List;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.yoka.fan.MainActivity;
 import com.yoka.fan.R;
+import com.yoka.fan.utils.User;
 import com.yoka.fan.wiget.CommonPagerAdapter.Page;
 
 import android.app.Activity;
@@ -31,11 +32,20 @@ public class HomeFragment extends Fragment{
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onViewCreated(view, savedInstanceState);
+		
 		List<CommonPagerAdapter.Page> pages = new ArrayList<CommonPagerAdapter.Page>(){{
-			add(new Page("推荐", new GetTopNewListFragment(),true));
-			add(new Page("最新", new GetTopNewListFragment(),true));
-			add(new Page("关注", new GetTopNewListFragment(),true));
+			add(new Page("推荐", new GetTopNewListFragment(),false));
+			add(new Page("最新", new CollRecommandListFragment(),false));
 		}};
+		User user = User.readUser();
+		if(user != null){
+			Fragment fragment = new CollFollowListFragment();
+			Bundle args = new Bundle();
+			args.putString(CollFollowListFragment.PARAM_USER_ID, user.id);
+			args.putString(CollFollowListFragment.PARAM_USER_ACCESS_TOKEN, user.access_token);
+			fragment.setArguments(args);
+			pages.add(new Page("关注", fragment, false));
+		}
 		FragmentPagerAdapter adapter = new CommonPagerAdapter(getChildFragmentManager(),pages);
 		
 		

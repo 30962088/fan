@@ -62,7 +62,7 @@ public class SidingMenuFragment extends Fragment implements OnClickListener{
 		case R.id.zone:
 			ZoneFragment fragment = new ZoneFragment();
 			Bundle arguments =  new Bundle();
-			arguments.putString("target_id", User.readUser().id);
+			arguments.putString(ZoneActivity.PARAM_TARGET_ID, User.readUser().id);
 			fragment.setArguments(arguments);
 			switchFragment(fragment);
 			break;

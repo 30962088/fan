@@ -13,6 +13,7 @@ import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Request.Status;
 import com.yoka.fan.network.UnLike;
 import com.yoka.fan.utils.DisplayUtils;
+import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.SharePopupWindow.Share;
 
@@ -104,7 +105,9 @@ public class CommonListAdapter extends BaseAdapter{
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(context, ZoneActivity.class);
-				intent.putExtra("target_id", ""+model.getId());
+//				intent.putExtra("target_id", ""+model.getId());
+				intent.putExtra(ZoneActivity.PARAM_TARGET_ID, ""+User.readUser().id);
+				intent.putExtra(ZoneActivity.PARAM_NAME, User.readUser().nickname);
 				context.startActivity(intent);
 				
 			}

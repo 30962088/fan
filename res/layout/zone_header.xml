@@ -108,6 +108,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/follow_btn"
             android:layout_width="64dp"
             android:layout_height="26dp"
             android:background="@drawable/btn_border"

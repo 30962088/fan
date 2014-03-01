@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f6f6f6"
-    android:orientation="vertical" >
+    android:orientation="vertical" xmlns:app1="http://schemas.android.com/apk/res/com.yoka.fan">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,11 +25,13 @@
             android:layout_marginBottom="22dp"
             app:fillColor="#3a8ad3"
             app:pageColor="#c8c7cc"
-            app:radius="3.5dp" />
+            app:radius="3.5dp"
+            app1:snap="true" />
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/login_btn"
+        android:id="@+id/save_btn"
+        android:visibility="gone"
         android:layout_width="67dp"
         android:layout_height="27dp"
         android:layout_gravity="center_horizontal"

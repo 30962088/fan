@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.FansListActivity;
 import com.yoka.fan.MainActivity;
 import com.yoka.fan.R;
+import com.yoka.fan.ZoneActivity;
 import com.yoka.fan.network.Fans;
 import com.yoka.fan.network.Info;
 import com.yoka.fan.network.Info.Result;
@@ -41,9 +42,13 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 	
 	private ImageView photoView;
 	
+	private View followBtn;
+	
 	private String target_id;
 	
 	private ImageLoader imageLoader;
+	
+	private String name;
 	
 	
 	@Override
@@ -52,6 +57,7 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 		if(User.readUser() == null){
 			getActivity().finish();
 		}
+		name = getArguments().getString(ZoneActivity.PARAM_NAME);
 		imageLoader = Utils.getImageLoader(getActivity());
 	}
 	
@@ -69,6 +75,14 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 		focusView = (TextView) view.findViewById(R.id.focus);
 		fansView = (TextView) view.findViewById(R.id.fans);
 		photoView = (ImageView)view.findViewById(R.id.photo);
+		followBtn = view.findViewById(R.id.follow_btn);
+		followBtn.setOnClickListener(this);
+		if(name == null){
+			followBtn.setVisibility(View.GONE);
+		}else{
+			followBtn.setVisibility(View.VISIBLE);
+			
+		}
 		view.findViewById(R.id.fans_btn).setOnClickListener(this);
 		initView();
 		
@@ -77,7 +91,7 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 	
 	private void initView() {
 		final User user = User.readUser();
-		target_id = getArguments().getString("target_id");
+		target_id = getArguments().getString(ZoneActivity.PARAM_TARGET_ID);
 		new Thread(new Runnable() {
 			
 			@Override
@@ -119,10 +133,10 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 		arguments.putString("user_id", user.id);
 		arguments.putString("access_token", user.access_token);
 		List<CommonPagerAdapter.Page> pages = new ArrayList<CommonPagerAdapter.Page>(){{
-			add(new Page("我的搭配",new CollListFragment(){{
+			add(new Page(name == null ? "我的搭配" : "TA的搭配" ,new CollListFragment(){{
 				setArguments(arguments);
 			}},false));
-			add(new Page("我的喜欢",new CollListFragment(){{
+			add(new Page(name == null ? "我的喜欢" : "TA的喜欢",new CollListFragment(){{
 				setArguments(arguments);
 			}},false));
 		}};
@@ -175,7 +189,8 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 			intent.putExtra("target_id", target_id);
 			startActivity(intent);
 			break;
-
+		case R.id.follow_btn:
+			break;
 		default:
 			break;
 		}

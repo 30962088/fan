@@ -1,43 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="44dp" 
-    android:background="@color/blue"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp">
-    
-    <ImageView 
+    android:layout_height="44dp"
+    android:background="@color/blue" >
+
+    <RelativeLayout
         android:id="@+id/actionbar_nav"
-        android:src="@drawable/nav"
-        android:layout_width="21.5dp"
-        android:layout_height="15dp"
-        style="@style/actionbarLeft"/>
-    
-    <ImageView 
-        android:id="@+id/actionbar_dot"
-        android:src="@drawable/new_dot"
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:layout_marginTop="-4dp"
-        android:layout_marginRight="-4dp"
-        android:layout_alignTop="@id/actionbar_nav"
-        android:layout_alignRight="@id/actionbar_nav"/>
-    
-    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" >
+
+        <ImageView
+            android:id="@+id/nav_icon"
+            style="@style/actionbarLeft"
+            android:layout_width="21.5dp"
+            android:layout_height="15dp"
+            android:src="@drawable/nav" />
+
+        <ImageView
+            android:id="@+id/actionbar_dot"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_alignRight="@id/nav_icon"
+            android:layout_alignTop="@id/nav_icon"
+            android:layout_marginRight="-4dp"
+            android:layout_marginTop="-4dp"
+            android:src="@drawable/new_dot" />
+    </RelativeLayout>
+
+    <TextView
         android:id="@+id/actionbar_title"
+        style="@style/actionbarTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/actionbarTitle"
-        android:text="潮流搭配"/>
+        android:text="潮流搭配" />
 
-    
-    <ImageView 
-        android:id="@+id/actionbar_camera"
-        android:src="@drawable/camera"
-        android:layout_alignParentRight="true"
-        android:layout_width="21.5dp"
-        android:layout_centerVertical="true"
-        android:layout_height="20dp"/>
-    
-    
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" 
+        android:layout_alignParentRight="true">
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/actionbar_setting"
+            android:layout_width="61.5dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            >
+
+            <ImageView
+                
+                android:layout_width="21.5dp"
+                android:layout_height="20dp"
+                android:src="@drawable/setting" />
+            
+            
+        </RelativeLayout>
+        
+        <RelativeLayout
+            android:id="@+id/actionbar_camera"
+            android:layout_width="61.5dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            >
+
+            <ImageView
+                
+                android:layout_width="21.5dp"
+                android:layout_height="20dp"
+                android:src="@drawable/camera" />
+            
+            
+        </RelativeLayout>
+        
+        
+    </FrameLayout>
+
 </RelativeLayout>

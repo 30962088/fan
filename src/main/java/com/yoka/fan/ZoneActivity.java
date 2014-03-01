@@ -6,6 +6,11 @@ import android.os.Bundle;
 
 public class ZoneActivity extends BaseActivity{
 
+	
+	public static final String PARAM_NAME = "PARAM_NAME";
+	
+	public static final String PARAM_TARGET_ID = "PARAM_TARGET_ID";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -21,8 +26,12 @@ public class ZoneActivity extends BaseActivity{
 	
 	@Override
 	protected String getActionBarTitle() {
+		String title = getIntent().getStringExtra(PARAM_NAME);
+		if(title == null){
+			title = "我的空间";
+		}
 		
-		return "我的空间";
+		return title;
 	}
 
 }
