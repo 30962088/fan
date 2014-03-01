@@ -1,6 +1,7 @@
 package com.yoka.fan.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -13,9 +14,12 @@ public class Dirctionary {
 	
 	private static File userObjectFile;
 	
+	private static File cateObjectFile;
+	
 	public static void init(Context context){
 		initPicture(context);
 		initUserObjectFile(context);
+		initCateObjectFile(context);
 	}
 	
 	public static File getPictureDir() {
@@ -27,8 +31,24 @@ public class Dirctionary {
 		userObjectFile = new File(android.os.Environment.getExternalStorageDirectory(),"user.class");
 	}
 	
+	private static void initCateObjectFile(Context context){
+		cateObjectFile = new File(android.os.Environment.getExternalStorageDirectory(),"cat.class");
+	}
+	
 	public static File getUserObjectFile() {
 		return userObjectFile;
+	}
+	
+	public static File getCateObjectFile() {
+		if(!cateObjectFile.exists()){
+			try {
+				cateObjectFile.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return cateObjectFile;
 	}
 	
 	private static void initPicture(Context context){

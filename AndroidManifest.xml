@@ -43,11 +43,16 @@
         <activity 
             android:name=".FansListActivity">
             
+        </activity>
+        <activity 
+            android:name=".SelectCategoryActivity">
+            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
             
         </activity>
+        
         <activity 
             android:name=".ModifyActivity"></activity>
         
