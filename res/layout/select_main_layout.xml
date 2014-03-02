@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#000"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" >
+
+        <LinearLayout
+            android:id="@+id/base_prev"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical" >
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="16dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/arrow_left_selector" />
+
+            <TextView
+                android:id="@+id/prev_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="返回"
+                android:textColor="@color/arrow_text_color_selector"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/base_next"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:gravity="center_vertical" >
+
+            <TextView
+                android:id="@+id/next_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="完成"
+                android:textColor="@color/arrow_text_color_selector"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/arrow_right_selector" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#000"
+        android:gravity="center">
+			
+            <com.yoka.fan.wiget.LinkedView
+                android:id="@+id/linked_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </com.yoka.fan.wiget.LinkedView>
+       
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#000"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:textSize="12sp" />
+
+</LinearLayout>

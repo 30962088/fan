@@ -122,7 +122,8 @@ public class Category implements Serializable {
 	}
 	
 	public static void sync(final OperatorListener listener) {
-		new Thread(new Runnable() {
+		
+		Thread thread = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -137,7 +138,9 @@ public class Category implements Serializable {
 				}
 				
 			}
-		}).start();
+		});
+		thread.setPriority(Thread.MIN_PRIORITY);
+		thread.start();
 		
 	}
 

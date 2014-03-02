@@ -28,7 +28,7 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class SelectCategoryActivity extends BaseSelectActivity implements OnClickListener,TextWatcher{
+public class SelectCategoryActivity extends BaseSelectActivity implements TextWatcher{
 	
 	public static final String PARAM_MODEL = "PARAM_MODEL";
 	
@@ -37,6 +37,7 @@ public class SelectCategoryActivity extends BaseSelectActivity implements OnClic
 	private SearchInput inputView;
 	
 
+	private Model model;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,25 +106,14 @@ public class SelectCategoryActivity extends BaseSelectActivity implements OnClic
 		return list;
 	}
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.prev:
-			finish();
-			break;
-		case R.id.next:
-			
-			break;
-		default:
-			break;
-		}
-		
-	}
+	
 	
 	public static class Model implements Serializable{
 		public static final int TYPE_COLOR = 0;
 		public static final int TYPE_BRAND = 1;
 		public static final int TYPE_TAG = 2;
+		public static final int TYPE_LINK = 3;
+		public static final int TYPE_PRICE = 4;
 		private String id;
 		private String name;
 		private int type;
@@ -156,7 +146,7 @@ public class SelectCategoryActivity extends BaseSelectActivity implements OnClic
 		
 	}
 	
-	private static class ListAdapter extends BaseAdapter{
+	private class ListAdapter extends BaseAdapter{
 
 		private List<ListModel> list;
 		
@@ -206,8 +196,11 @@ public class SelectCategoryActivity extends BaseSelectActivity implements OnClic
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
+					SelectCategoryActivity.this.model = model.list.get(position);
 					editText.setText("");
-					editText.append(model.list.get(position).name);
+					editText.append(SelectCategoryActivity.this.model.name);
+					setNextEnable(true);
+					
 					
 				}
 			});
@@ -215,7 +208,7 @@ public class SelectCategoryActivity extends BaseSelectActivity implements OnClic
 			return convertView;
 		}
 		
-		public static class ViewHolder{
+		public class ViewHolder{
 			private TextView textView;
 			private GridView gridView;
 			public ViewHolder(View view) {
@@ -285,11 +278,7 @@ public class SelectCategoryActivity extends BaseSelectActivity implements OnClic
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		if(s.toString().length() == 0){
-			setNextEnable(false);
-		}else{
-			setNextEnable(true);
-		}
+		setNextEnable(false);
 		Category.findCatsByPinyin(s.toString(),new findCatsListener() {
 			
 			@Override
@@ -320,9 +309,9 @@ public class SelectCategoryActivity extends BaseSelectActivity implements OnClic
 
 	@Override
 	protected void onNextClick() {
-		String result = inputView.getSearchInput().getText().toString();
+
 		ArrayList<Model> models = new ArrayList<SelectCategoryActivity.Model>();
-		models.add(new Model("", result, Model.TYPE_TAG));
+		models.add(model);
 		Intent intent = new Intent(this,SelectBrandActivity.class);
 		Bundle bundle = getIntent().getExtras();
 		if(bundle == null){

@@ -2,6 +2,8 @@ package com.yoka.fan.wiget;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.R;
 import com.yoka.fan.utils.DisplayUtils;
@@ -17,9 +19,11 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -36,6 +40,17 @@ public class LinkedView extends RelativeLayout {
 	private ImageLoader imageLoader;
 
 	private LinkModel linkModel;
+
+	public static interface onImageClickListener {
+		public void onClick(float left, float top);
+	}
+
+	private onImageClickListener onImageClickListener;
+
+	public void setOnImageClickListener(
+			onImageClickListener onImageClickListener) {
+		this.onImageClickListener = onImageClickListener;
+	}
 
 	public LinkedView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -55,17 +70,32 @@ public class LinkedView extends RelativeLayout {
 	private void init(final Context context) {
 		this.context = context;
 		imageView = new BackgroundImageView(context);
+		imageView.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+
+				if (event.getAction() == MotionEvent.ACTION_UP) {
+					if (onImageClickListener != null) {
+						float[] b = imageView.getBitmapBound();
+						float left = (event.getX() - b[0]) / b[2];
+						float top = (event.getY() - b[1]) / b[3];
+						onImageClickListener.onClick(left, top);
+					}
+				}
+				return true;
+			}
+		});
 		addView(imageView);
 		imageView.setOndrawListener(new OnViewdrawListener() {
 
 			@Override
 			public void ondraw(float[] bounds) {
-				if(linkModel.isShowLink()){
+				if (linkModel.isShowLink() && linkModel.getLinkList() != null) {
 					for (Link link : linkModel.getLinkList()) {
 						addView(new TagView(context, link, bounds));
 					}
 				}
-				
 
 			}
 		});
@@ -77,7 +107,6 @@ public class LinkedView extends RelativeLayout {
 		changeImageSize();
 		removeAllTag();
 		imageLoader.displayImage(model.getUrl(), imageView);
-
 	}
 
 	private void changeImageSize() {
@@ -101,7 +130,7 @@ public class LinkedView extends RelativeLayout {
 		}
 	}
 
-	private static class TagView extends TextView implements OnClickListener{
+	private static class TagView extends TextView implements OnClickListener {
 
 		private Link link;
 
@@ -112,7 +141,8 @@ public class LinkedView extends RelativeLayout {
 			setOnClickListener(this);
 			setTextColor(Color.WHITE);
 			setGravity(Gravity.CENTER);
-			setTextSize(DisplayUtils.Dp2Px(context, 9));
+			setVisibility(View.INVISIBLE);
+			// setTextSize(DisplayUtils.Dp2Px(context, 9));
 			if (link.getLeft() < 0.5) {
 				setBackgroundResource(R.drawable.tag);
 			} else {
@@ -151,6 +181,15 @@ public class LinkedView extends RelativeLayout {
 
 								setLayoutParams(params);
 
+								postDelayed(new Runnable() {
+
+									@Override
+									public void run() {
+										setVisibility(View.VISIBLE);
+
+									}
+								}, 50);
+
 							}
 						});
 			}
@@ -159,29 +198,32 @@ public class LinkedView extends RelativeLayout {
 
 		@Override
 		public void onClick(View v) {
-			new BuyPopupWindow(getContext(), new ArrayList<BuyPopupWindow.GoodsItem>(){{
-				for(int i = 0;i<5;i++){
-					GoodsItem item =  new GoodsItem();
-					item.img = "http://image.iask.sina.com.cn/cidian/21/90/13715390212009-07-151006466.jpg";
-					item.name ="goods";
-					item.price = 323.11f;
-					item.typeResId = R.drawable.blazers;
-					add(item);
-				}
-				GoodsItem item1 =  new GoodsItem();
-				item1.title = "编辑推荐";
-				add(item1);
-				for(int i = 0;i<10;i++){
-					GoodsItem item =  new GoodsItem();
-					item.img = "http://image.iask.sina.com.cn/cidian/21/90/13715390212009-07-151006466.jpg";
-					item.name ="goods";
-					item.price = 323.11f;
-					item.typeResId = R.drawable.blazers;
-					add(item);
-				}
-			
-			}});
-			
+			new BuyPopupWindow(getContext(),
+					new ArrayList<BuyPopupWindow.GoodsItem>() {
+						{
+							for (int i = 0; i < 5; i++) {
+								GoodsItem item = new GoodsItem();
+								item.img = "http://image.iask.sina.com.cn/cidian/21/90/13715390212009-07-151006466.jpg";
+								item.name = "goods";
+								item.price = 323.11f;
+								item.typeResId = R.drawable.blazers;
+								add(item);
+							}
+							GoodsItem item1 = new GoodsItem();
+							item1.title = "编辑推荐";
+							add(item1);
+							for (int i = 0; i < 10; i++) {
+								GoodsItem item = new GoodsItem();
+								item.img = "http://image.iask.sina.com.cn/cidian/21/90/13715390212009-07-151006466.jpg";
+								item.name = "goods";
+								item.price = 323.11f;
+								item.typeResId = R.drawable.blazers;
+								add(item);
+							}
+
+						}
+					});
+
 		}
 
 	}
@@ -206,37 +248,39 @@ public class LinkedView extends RelativeLayout {
 		@Override
 		protected void onMeasure(final int widthMeasureSpec,
 				int heightMeasureSpec) {
-			final Drawable d = this.getDrawable();
 
-			int minHeight = DisplayUtils.Dp2Px(getContext(), 220);
-			
-			if (d != null) {
-				// ceil not round - avoid thin vertical gaps along the
-				// left/right edges
-				final int width = MeasureSpec.getSize(widthMeasureSpec);
-				int height = (int) Math.ceil(width
-						* (float) d.getIntrinsicHeight()
-						/ d.getIntrinsicWidth());
-				if(height < minHeight){
-					height = minHeight;
-				}
-				this.setMeasuredDimension(width, height);
-			} else {
-				if(heightMeasureSpec < minHeight){
-					heightMeasureSpec = minHeight;
-				}
-				super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-			}
+			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+			// final Drawable d = this.getDrawable();
+			//
+			// int minHeight = DisplayUtils.Dp2Px(getContext(), 220);
+			//
+			// if (d != null) {
+			// // ceil not round - avoid thin vertical gaps along the
+			// // left/right edges
+			// final int width = MeasureSpec.getSize(widthMeasureSpec);
+			// int height = (int) Math.ceil(width
+			// * (float) d.getIntrinsicHeight()
+			// / d.getIntrinsicWidth());
+			// if(height < minHeight){
+			// height = minHeight;
+			// }
+			// this.setMeasuredDimension(width, height);
+			// } else {
+			// if(heightMeasureSpec < minHeight){
+			// heightMeasureSpec = minHeight;
+			// }
+			// super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+			// }
 		}
 
 		private void init() {
 			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
 			setLayoutParams(params);
 
-			setScaleType(ScaleType.FIT_CENTER);
+			setScaleType(ScaleType.FIT_XY);
+			setAdjustViewBounds(true);
 
 		}
 

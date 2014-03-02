@@ -52,7 +52,7 @@ public class SelectColorActivity extends BaseSelectActivity implements
 				.getSerializableExtra(PARAM_SELECTED_LIST);
 		((GridView) findViewById(R.id.select_list))
 				.setAdapter(new SelectCategoryActivity.GridAdapter(this, models));
-
+		setNextEnable(false);
 		gridView = (GridView) findViewById(R.id.gridview);
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -253,8 +253,8 @@ public class SelectColorActivity extends BaseSelectActivity implements
 	protected void onNextClick() {
 		String color = inputView.getSearchInput().getText().toString();
 		ArrayList<SelectCategoryActivity.Model> list = new ArrayList<SelectCategoryActivity.Model>(models);
-		list.add(new SelectCategoryActivity.Model("", color,SelectCategoryActivity.Model.TYPE_COLOR));
-		Intent intent = new Intent(this,SelectColorActivity.class);
+		list.add(new SelectCategoryActivity.Model(color, color,SelectCategoryActivity.Model.TYPE_COLOR));
+		Intent intent = new Intent(this,SelectLinkActivity.class);
 		Bundle bundle = getIntent().getExtras();
 		if(bundle == null){
 			bundle = new Bundle();

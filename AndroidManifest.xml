@@ -45,7 +45,7 @@
             
         </activity>
         <activity 
-            android:name=".SelectCategoryActivity">
+            android:name=".SelectCategoryActivity" android:windowSoftInputMode="adjustPan">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,7 +54,7 @@
         </activity>
         
         <activity 
-            android:name=".SelectBrandActivity">
+            android:name=".SelectBrandActivity" android:windowSoftInputMode="adjustPan">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,7 +63,25 @@
         </activity>
         
         <activity 
-            android:name=".SelectColorActivity">
+            android:name=".SelectColorActivity" android:windowSoftInputMode="adjustPan">
+            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+            
+        </activity>
+        
+        <activity 
+            android:name=".SelectLinkActivity" android:windowSoftInputMode="adjustPan">
+            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+            
+        </activity>
+        
+        <activity 
+            android:name=".SelectMainActivity">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

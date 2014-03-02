@@ -64,7 +64,7 @@ public abstract class BaseSelectActivity extends FragmentActivity{
 			}
 		});
 		
-//		Utils.getImageLoader(this).displayImage(getIntent().getStringExtra(PARAM_IMG_PATH), (ImageView)findViewById(R.id.base_img));
+		Utils.getImageLoader(this).displayImage(getIntent().getStringExtra(PARAM_IMG_PATH), (ImageView)findViewById(R.id.base_img));
 		
 		
 	}

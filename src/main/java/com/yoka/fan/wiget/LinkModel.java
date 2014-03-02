@@ -12,7 +12,7 @@ public class LinkModel{
 	
 	private List<Link> linkList;
 	
-	private boolean showLink = false;
+	private boolean showLink = true;
 		
 	public LinkModel(String url,int width,int height, List<Link> linkList) {
 		this.width = width;
@@ -30,7 +30,7 @@ public class LinkModel{
 	}
 
 	public String getUrl() {
-		return "http://e.hiphotos.baidu.com/image/w%3D1366%3Bcrop%3D0%2C0%2C1366%2C768/sign=90d5b862cebf6c81f73728eb8a088a56/77094b36acaf2eddaf9b15e38f1001e939019355.jpg";
+		return url;
 	}
 	
 	public List<Link> getLinkList() {
@@ -38,11 +38,11 @@ public class LinkModel{
 	}
 	
 	public int getWidth() {
-		return 300;
+		return width;
 	}
 	
 	public int getHeight() {
-		return 500;
+		return height;
 	}
 	
 	public static class Link {

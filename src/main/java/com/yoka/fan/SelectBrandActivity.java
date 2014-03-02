@@ -89,7 +89,7 @@ public class SelectBrandActivity extends BaseSelectActivity implements TextWatch
 	public static List<Model> toList(List<Brand> brands){
 		List<Model> models = new ArrayList<Model>();
 		for(Brand brand : brands){
-			models.add(new Model(brand.get_id(),brand.getName(),Model.TYPE_BRAND));
+			models.add(new Model(brand.getName(),brand.getName(),Model.TYPE_BRAND));
 		}
 		return models;
 	}
