@@ -9,6 +9,7 @@ import com.yoka.fan.wiget.HomeFragment;
 import com.yoka.fan.wiget.SettingFragment;
 import com.yoka.fan.wiget.ZoneFragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,8 @@ import android.widget.TextView;
 public class SidingMenuFragment extends Fragment implements OnClickListener{
 	
 	private ImageLoader imageLoader;
+	
+	private View zoneBtn;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,8 +45,11 @@ public class SidingMenuFragment extends Fragment implements OnClickListener{
 		
 		view.findViewById(R.id.login_btn).setOnClickListener(this);
 		view.findViewById(R.id.setting).setOnClickListener(this);
-		view.findViewById(R.id.home).setOnClickListener(this);
+		zoneBtn = view.findViewById(R.id.home);
+		zoneBtn.setOnClickListener(this);
 		view.findViewById(R.id.zone).setOnClickListener(this);
+		view.findViewById(R.id.camera_btn).setOnClickListener(this);
+		view.findViewById(R.id.user_btn).setOnClickListener(this);
 	}
 
 	@Override
@@ -53,18 +59,32 @@ public class SidingMenuFragment extends Fragment implements OnClickListener{
 			Intent intent = new Intent(getActivity(),LoginActivity.class);
 			startActivity(intent);
 			break;
+		case R.id.user_btn:
+			zoneBtn.performClick();
+			break;
 		case R.id.setting:
 			switchFragment(new SettingFragment());
 			break;
 		case R.id.home:
 			switchFragment(new HomeFragment());
 			break;
+		case R.id.camera_btn:
+			Activity activity = getActivity();
+			if(activity instanceof MainActivity){
+				((MainActivity)activity).openShare();
+			}
+			break;
 		case R.id.zone:
-			ZoneFragment fragment = new ZoneFragment();
-			Bundle arguments =  new Bundle();
-			arguments.putString(ZoneActivity.PARAM_TARGET_ID, User.readUser().id);
-			fragment.setArguments(arguments);
-			switchFragment(fragment);
+			if(User.readUser() == null){
+				startActivity(new Intent(getActivity(),LoginActivity.class));
+			}else{
+				ZoneFragment fragment = new ZoneFragment();
+				Bundle arguments =  new Bundle();
+				arguments.putString(ZoneActivity.PARAM_TARGET_ID, User.readUser().id);
+				fragment.setArguments(arguments);
+				switchFragment(fragment);
+			}
+			
 			break;
 		default:
 			break;

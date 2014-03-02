@@ -61,6 +61,7 @@
 
             <com.yoka.fan.wiget.LinkedView
                 android:id="@+id/linked"
+                android:minHeight="200dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"/>
