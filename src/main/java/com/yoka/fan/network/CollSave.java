@@ -11,6 +11,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
+import com.yoka.fan.utils.Constant;
+
 public class CollSave extends Request{
 
 	public static class Link implements Serializable{ 
@@ -79,7 +81,7 @@ public class CollSave extends Request{
 	
 	private String user_id;
 	
-	private String uuid;
+	private String uuid = Constant.uuid;
 	
 	public CollSave(Map<String, Link> link_goods, String access_token,
 			String description, File uploadimg, int width, int height,
@@ -140,6 +142,7 @@ public class CollSave extends Request{
 		params.add(new BasicNameValuePair("width", ""+width));
 		params.add(new BasicNameValuePair("height", ""+height));
 		params.add(new BasicNameValuePair("user_id", user_id));
+		params.add(new BasicNameValuePair("uuid", uuid));
 		return params;
 	}
 

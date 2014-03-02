@@ -32,6 +32,10 @@ public class SelectMainActivity extends Activity{
 	
 	public static final String PARAM_LEFT = "PARAM_LEFT";
 	
+	public static final String PARAM_WIDTH = "PARAM_WIDTH";
+	
+	public static final String PARAM_HEIGHT = "PARAM_HEIGHT";
+	
 	private LinkedView linkedView;
 	
 	private TextView countView;
@@ -170,6 +174,8 @@ public class SelectMainActivity extends Activity{
 				Intent intent = new Intent(SelectMainActivity.this,SelectConfirmActivity.class);
 				intent.putExtra(SelectConfirmActivity.PARAM_RESULT, results);
 				intent.putExtra(BaseSelectActivity.PARAM_IMG_PATH, url);
+				intent.putExtra(PARAM_WIDTH, width);
+				intent.putExtra(PARAM_HEIGHT, height);
 				startActivity(intent);
 				
 			}
