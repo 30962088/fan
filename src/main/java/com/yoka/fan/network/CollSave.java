@@ -1,6 +1,7 @@
 package com.yoka.fan.network;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ import org.json.JSONObject;
 
 public class CollSave extends Request{
 
-	public static class Link{
+	public static class Link implements Serializable{ 
 		private String brand;
 		private String color;
 		private String left;

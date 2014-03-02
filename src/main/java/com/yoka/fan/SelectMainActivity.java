@@ -1,5 +1,6 @@
 package com.yoka.fan;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +35,9 @@ public class SelectMainActivity extends Activity{
 	
 	private TextView countView;
 	
-	private List<Result> results = new ArrayList<Result>();
+	private ArrayList<Result> results = new ArrayList<Result>();
 	
-	private String url = "http://image.tianjimedia.com/uploadImages/2013/066/6ESK43UU4FNK.jpg";
+	private String url = "http://bz.anyouhui.com/downPic.php?ul=anyouhui14388050c9cf4a5b9cc1080x960.jpg&p=143887";
 	
 	private int width;
 	
@@ -44,12 +45,18 @@ public class SelectMainActivity extends Activity{
 	
 	private ImageLoader imageLoader;
 	
-	public static class Result{
+	public static class Result implements Serializable{
 		private Link link;
 		private String name;
 		public Result(Link link,String name) {
 			this.link = link;
 			this.name = name;
+		}
+		public String getName() {
+			return name;
+		}
+		public Link getLink() {
+			return link;
 		}
 		public static Result toResult(List<Model> list,float left,float top){
 			String type_en = null,color = null,url = null,brand = null,type = null;
@@ -148,7 +155,10 @@ public class SelectMainActivity extends Activity{
 			@Override
 			public void onClick(View v) {
 				
-				
+				Intent intent = new Intent(SelectMainActivity.this,SelectConfirmActivity.class);
+				intent.putExtra(SelectConfirmActivity.PARAM_RESULT, results);
+				intent.putExtra(BaseSelectActivity.PARAM_IMG_PATH, url);
+				startActivity(intent);
 				
 			}
 		});
