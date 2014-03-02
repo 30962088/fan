@@ -1,19 +1,29 @@
 package com.yoka.fan;
 
+import java.io.File;
+
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
+import com.yoka.fan.utils.Dirctionary;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.wiget.HomeFragment;
+import com.yoka.fan.wiget.PhotoSelectPopupWindow;
 import com.yoka.fan.wiget.SettingFragment;
 import com.yoka.fan.wiget.ZoneFragment;
+import com.yoka.fan.wiget.PhotoSelectPopupWindow.OnItemClickListener;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-public class MainActivity extends SlidingFragmentActivity implements OnClickListener{
+public class MainActivity extends SlidingFragmentActivity implements
+		OnClickListener {
 
 	private Fragment mContent;
 
@@ -43,6 +53,7 @@ public class MainActivity extends SlidingFragmentActivity implements OnClickList
 		setContentView(R.layout.main_layout);
 		mTitleView = (TextView) findViewById(R.id.actionbar_title);
 		actionbarCarema = findViewById(R.id.actionbar_camera);
+		actionbarCarema.setOnClickListener(this);
 		actionbarSetting = findViewById(R.id.actionbar_setting);
 		actionbarSetting.setOnClickListener(this);
 		initSlidingMenu();
@@ -126,7 +137,80 @@ public class MainActivity extends SlidingFragmentActivity implements OnClickList
 		case R.id.actionbar_setting:
 			switchContent(new SettingFragment());
 			break;
+		case R.id.actionbar_camera:
+			openShare();
+			break;
+		default:
+			break;
+		}
 
+	}
+
+	private Uri cameraPic;
+	
+	private static final int ACTION_REQUEST_CAMERA = 1;
+	
+	private static final int ACTION_REQUEST_GALLERY = 2;
+	
+	private static final int ACTION_REQUEST_SELECTION =3;
+	
+	public void openShare() {
+		new PhotoSelectPopupWindow(this, new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(int id) {
+				switch (id) {
+				case R.id.take_photo:
+					Intent getCameraImage = new Intent(
+							"android.media.action.IMAGE_CAPTURE");
+					cameraPic = Uri.fromFile(Dirctionary.creatPicture());
+					getCameraImage.putExtra(MediaStore.EXTRA_OUTPUT, cameraPic);
+					startActivityForResult(getCameraImage,
+							ACTION_REQUEST_CAMERA);
+					break;
+				case R.id.read_photo:
+					Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+					intent.setType("image/*");
+
+					Intent chooser = Intent.createChooser(intent, "从本地相册读取");
+					startActivityForResult(chooser, ACTION_REQUEST_GALLERY);
+					break;
+				default:
+					break;
+				}
+			}
+		});
+	}
+	
+	private void onSelectSuccess(Uri uri){
+		Intent intent = new Intent(this, SelectPicActivity.class);
+		intent.setData(uri);
+		startActivityForResult(intent, ACTION_REQUEST_SELECTION);
+	}
+	
+	@Override
+	public void onActivityResult(int reqCode, int resultCode, Intent data){
+		
+		super.onActivityResult(reqCode, resultCode, data);  
+		
+		switch (reqCode) {
+		case ACTION_REQUEST_GALLERY:
+			if (resultCode == Activity.RESULT_OK) {        
+				onSelectSuccess(data.getData());
+			}
+			break;
+		case ACTION_REQUEST_CAMERA:
+			if (resultCode == Activity.RESULT_OK) {        
+				onSelectSuccess(cameraPic);
+			}
+			break;
+		case ACTION_REQUEST_SELECTION:
+			if (resultCode == Activity.RESULT_OK) {
+				Intent intent = new Intent(this,SelectMainActivity.class);
+				intent.setData(data.getData());
+				startActivity(intent);
+			}
+			break;
 		default:
 			break;
 		}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#000"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp" >
+    </RelativeLayout>
+
+    <FrameLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="1">
+	    <com.yoka.fan.wiget.TouchView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/dragRect" />
+	</FrameLayout >
+    
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:background="#000">
+        
+        <TextView 
+            android:id="@+id/cancel_btn"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:textSize="16sp"
+            android:textColor="#3b8ad3"
+            android:text="取消"
+            android:gravity="center"/>
+        
+        <TextView 
+            android:id="@+id/select_btn"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:textSize="16sp"
+            android:textColor="#3b8ad3"
+            android:text="选取"
+            android:layout_alignParentRight="true"
+            android:gravity="center"/>
+        
+        
+    </RelativeLayout>
+
+</LinearLayout>

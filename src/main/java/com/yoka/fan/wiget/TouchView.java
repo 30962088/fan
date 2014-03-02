@@ -328,14 +328,14 @@ public class TouchView extends ImageView {
 		private void drawCircle() {
 			if (rectWidth > 0 && rectHeight > 0 && rectType > 0) {
 				int x1 = (getWidth() - rectWidth) / 2;
-				int y1 = (getHeight() - rectHeight) / 2;
+				int y1 = Math.max((getHeight() - rectHeight) / 2, 0);
 				int x2 = x1 + rectWidth;
 				int y2 = y1 + rectHeight;
-				rectBounds = new int[] { x1, y1, x2 - x1, y2 - y1 };
+				rectBounds = new int[] { x1, y1, x2 - x1, Math.min(y2-y1, getHeight())  };
 				if (rectType == TYPE_RECYCLE) {
 					maskCanvas.drawOval(new RectF(x1, y1, x2, y2), clearPaint);
 				} else {
-					maskCanvas.drawOval(new RectF(x1, y1, x2, y2), clearPaint);
+					maskCanvas.drawRect(new RectF(x1, y1, x2, y2), clearPaint);
 				}
 
 			}

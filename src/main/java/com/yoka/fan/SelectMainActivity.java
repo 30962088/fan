@@ -18,6 +18,7 @@ import com.yoka.fan.wiget.LinkedView.onImageClickListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,7 +38,7 @@ public class SelectMainActivity extends Activity{
 	
 	private ArrayList<Result> results = new ArrayList<Result>();
 	
-	private String url = "http://bz.anyouhui.com/downPic.php?ul=anyouhui14388050c9cf4a5b9cc1080x960.jpg&p=143887";
+	private String url;
 	
 	private int width;
 	
@@ -104,6 +105,7 @@ public class SelectMainActivity extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		url = getIntent().getDataString();
 		imageLoader = Utils.getImageLoader(this);
 		setContentView(R.layout.select_main_layout);
 		linkedView = (LinkedView) findViewById(R.id.linked_view);
@@ -122,6 +124,8 @@ public class SelectMainActivity extends Activity{
 				
 			}
 		});
+		
+		
 		imageLoader.loadImage(url, new ImageLoadingListener() {
 			
 			@Override
@@ -147,6 +151,14 @@ public class SelectMainActivity extends Activity{
 			@Override
 			public void onLoadingCancelled(String imageUri, View view) {
 				// TODO Auto-generated method stub
+				
+			}
+		});
+		findViewById(R.id.base_prev).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				finish();
 				
 			}
 		});

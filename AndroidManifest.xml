@@ -112,6 +112,15 @@
             
         </activity>
         
+        <activity 
+            android:name=".SelectPicActivity">
+            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+            
+        </activity>
+        
         
         
         <activity

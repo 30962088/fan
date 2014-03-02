@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.utils.Dirctionary;
 import com.yoka.fan.utils.DisplayUtils;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.DragRectView;
 import com.yoka.fan.wiget.TouchView;
 
 import android.app.Activity;
@@ -20,8 +21,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.ImageView;
 
-public class DragRectActivity extends Activity implements OnClickListener{
+public class SelectPicActivity extends Activity implements OnClickListener{
 
 	private TouchView dragRectView;
 	
@@ -31,7 +33,7 @@ public class DragRectActivity extends Activity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = this;
-		setContentView(R.layout.drag_rect_layout);
+		setContentView(R.layout.select_pic_layout);
 		findViewById(R.id.cancel_btn).setOnClickListener(this);
 		findViewById(R.id.select_btn).setOnClickListener(this);
 		dragRectView = (TouchView) findViewById(R.id.dragRect);
@@ -44,10 +46,11 @@ public class DragRectActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onGlobalLayout() {
-				int size = dragRectView.getWidth()-DisplayUtils.Dp2Px(context, 30);
-				dragRectView.setRectWidth(size);
-				dragRectView.setRectHeight(size);
-				dragRectView.setRectType(TouchView.TYPE_RECYCLE);
+				int width = dragRectView.getWidth()-DisplayUtils.Dp2Px(context, 10)*2;
+				int height = width/3*4;
+				dragRectView.setRectWidth(width);
+				dragRectView.setRectHeight(height);
+				dragRectView.setRectType(TouchView.TYPE_RECT);
 				dragRectView.drawRect();
 				
 				
