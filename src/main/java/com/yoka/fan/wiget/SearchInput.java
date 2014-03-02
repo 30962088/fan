@@ -3,6 +3,7 @@ package com.yoka.fan.wiget;
 import com.yoka.fan.R;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -18,26 +19,43 @@ public class SearchInput extends FrameLayout implements TextWatcher,OnClickListe
 	
 	private View clearBtn;
 	
+	private String hint;
 	
 	
 	public SearchInput(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
+		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SearchInput, defStyle, 0);
+		hint = a.getString(R.styleable.SearchInput_search_hint);
+		a.recycle();
 		init();
 	}
+	
+	
+
+	
 
 	public SearchInput(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init();
 	}
 
+
+
+
+
 	public SearchInput(Context context) {
 		super(context);
 		init();
 	}
 
+
+
+
+
 	private void init(){
 		LayoutInflater.from(getContext()).inflate(R.layout.search_input, this);
 		searchInput = (EditText) findViewById(R.id.input);
+		searchInput.setHint(hint);
 		searchInput.addTextChangedListener(this);
 		clearBtn = findViewById(R.id.clear);
 		clearBtn.setOnClickListener(this);
@@ -81,6 +99,10 @@ public class SearchInput extends FrameLayout implements TextWatcher,OnClickListe
 			break;
 		}
 		
+	}
+	
+	public EditText getSearchInput() {
+		return searchInput;
 	}
 	
 	
