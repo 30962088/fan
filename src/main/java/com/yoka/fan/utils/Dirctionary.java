@@ -16,6 +16,8 @@ public class Dirctionary {
 	
 	private static File cateObjectFile;
 	
+	private static File relationObjectFile;
+	
 	public static void init(Context context){
 		initPicture(context);
 		initUserObjectFile(context);
@@ -35,6 +37,11 @@ public class Dirctionary {
 		cateObjectFile = new File(android.os.Environment.getExternalStorageDirectory(),"cat.class");
 	}
 	
+	private static void initRelationObjectFile(Context context){
+		relationObjectFile = new File(android.os.Environment.getExternalStorageDirectory(),"relation.class");
+	}
+	
+	
 	public static File getUserObjectFile() {
 		return userObjectFile;
 	}
@@ -49,6 +56,10 @@ public class Dirctionary {
 			}
 		}
 		return cateObjectFile;
+	}
+	
+	public static File getRelationObjectFile(){
+		return relationObjectFile;
 	}
 	
 	private static void initPicture(Context context){
