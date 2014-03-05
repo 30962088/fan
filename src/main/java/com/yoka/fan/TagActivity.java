@@ -60,7 +60,7 @@ public class TagActivity extends BaseActivity{
 
 		@Override
 		protected List<ListItemData> load(int skip,int limit) {
-			Tag request = new Tag(tag,"",skip,limit);
+			Tag request = new Tag(tag,skip,limit);
 			request.request();
 			return request.getListData();
 		}

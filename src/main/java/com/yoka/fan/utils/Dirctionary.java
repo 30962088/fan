@@ -22,6 +22,7 @@ public class Dirctionary {
 		initPicture(context);
 		initUserObjectFile(context);
 		initCateObjectFile(context);
+		initRelationObjectFile(context);
 	}
 	
 	public static File getPictureDir() {

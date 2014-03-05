@@ -20,9 +20,8 @@ public class Tag extends Request{
 	
 	private String access_token = User.readUser().access_token;
 	
-	private String tags;
+	private String tag;
 	
-	private String tag_type;
 	
 	private int refresh = REFRESH_NO_CACHE;
 	
@@ -34,10 +33,9 @@ public class Tag extends Request{
 	private List<ListItemData> listData;
 	
 	
-	public Tag(String tags, String tag_type, int skip,int limit) {
+	public Tag(String tag,int skip,int limit) {
 		super();
-		this.tags = tags;
-		this.tag_type = tag_type;
+		this.tag = tag;
 		this.limit = limit;
 		this.skip = skip;
 	}
@@ -93,8 +91,7 @@ public class Tag extends Request{
 		params.add(new BasicNameValuePair("limit",""+limit));
 		params.add(new BasicNameValuePair("refresh",""+refresh));
 		params.add(new BasicNameValuePair("skip",""+skip));
-		params.add(new BasicNameValuePair("tag_type",tag_type));
-		params.add(new BasicNameValuePair("tags",tags));
+		params.add(new BasicNameValuePair("tags","{\"风格\":\""+tag+"\"}"));
 		return params;
 	}
 

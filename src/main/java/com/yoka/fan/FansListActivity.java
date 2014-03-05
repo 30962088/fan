@@ -9,12 +9,19 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.network.Fans;
+import com.yoka.fan.network.Follow;
+import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Info.Result;
+import com.yoka.fan.network.Request.Status;
+import com.yoka.fan.utils.Relation;
+import com.yoka.fan.utils.Relation.OperatorListener;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -184,18 +191,63 @@ public class FansListActivity extends BaseActivity{
 			holder.imageview.setImageResource(R.drawable.photo_default);
 			imageLoader.displayImage(model.photo, holder.imageview);
 			holder.nameView.setText(model.name);
-			holder.btnView.setSelected(model.selected);
-			holder.btnView.setText(model.selected ? "已关注" : "关注");
-			holder.btnView.setOnClickListener(new OnClickListener() {
+			
+			final TextView _btnView = holder.btnView;
+			final User user = User.readUser();
+			Relation.findFans(user, model.id ,new OperatorListener<Boolean>() {
 				
 				@Override
-				public void onClick(View v) {
-					boolean selected = model.selected;
-					selected = !selected;
-					model.selected = selected;
-					notifyDataSetChanged();
+				public void success(Boolean result) {
+					new Handler(context.getMainLooper()).post(new Runnable() {
+						
+						@Override
+						public void run() {
+							_btnView.setSelected(model.selected);
+							_btnView.setText(model.selected ? "已关注" : "关注");
+							_btnView.setOnClickListener(new OnClickListener() {
+								
+								@Override
+								public void onClick(View v) {
+									boolean selected = model.selected;
+									selected = !selected;
+									_btnView.setText(model.selected ? "已关注" : "关注");
+									notifyDataSetChanged();
+									new AsyncTask<Void, Void, Status>(){
+
+										@Override
+										protected com.yoka.fan.network.Request.Status doInBackground(
+												Void... params) {
+											Follow follow = new Follow(user.id, model.id, user.access_token);
+											follow.request();
+											return follow.getStatus();
+										}
+										
+										protected void onPostExecute(Request.Status result) {
+											if(result == Request.Status.SUCCESS){
+												Relation.addFans(user, model.id);
+											}else{
+												model.selected = !model.selected;
+												_btnView.setText(model.selected ? "已关注" : "关注");
+												notifyDataSetChanged();
+											}
+										};
+										
+									}.execute();
+									
+									
+									
+									
+								}
+							});
+							
+						}
+					});
+					
+					
 				}
 			});
+			
+			
 			
 			
 			return convertView;

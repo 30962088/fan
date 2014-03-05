@@ -35,7 +35,7 @@ public class Relation {
 		public void success(T result);
 	}
 	
-	public static void read(User user,final OperatorListener<Relation> listener) {
+	public synchronized static void read(User user,final OperatorListener<Relation> listener) {
 		if (instance != null) {
 			if (listener != null) {
 				listener.success(instance);
@@ -64,7 +64,7 @@ public class Relation {
 
 	}
 	
-	public static void sync(final User user,final OperatorListener<Relation> listener) {
+	public synchronized static void sync(final User user,final OperatorListener<Relation> listener) {
 		
 		Thread thread = new Thread(new Runnable() {
 
@@ -90,8 +90,8 @@ public class Relation {
 		thread.start();
 	}
 
-	private static void save(final Relation relation) {
-
+	private synchronized static void save(final Relation relation) {
+		instance = relation;
 		Thread thread = new Thread(new Runnable() {
 
 			@Override
@@ -114,7 +114,7 @@ public class Relation {
 
 	}
 	
-	private static Relation readFile(){
+	private synchronized static Relation readFile(){
 		Relation relation = null;
 		ObjectInputStream oi = null;
 		try {
@@ -139,7 +139,7 @@ public class Relation {
 		return relation;
 	}
 	
-	public static void findFans(User user,final String id,final OperatorListener<Boolean> listener){
+	public synchronized static void findFans(User user,final String id,final OperatorListener<Boolean> listener){
 		read(user,new OperatorListener<Relation>() {
 
 			@Override
@@ -154,7 +154,7 @@ public class Relation {
 		});
 	}
 	
-	public static void findFollower(User user,final String id,final OperatorListener<Boolean> listener){
+	public synchronized static void findFollower(User user,final String id,final OperatorListener<Boolean> listener){
 		read(user,new OperatorListener<Relation>() {
 
 			@Override
@@ -165,6 +165,18 @@ public class Relation {
 				}
 			}
 			
+			
+		});
+	}
+	
+	public synchronized static void addFans(User user, final String id){
+		read(user,  new OperatorListener<Relation>() {
+
+			@Override
+			public void success(Relation result) {
+				result.fans.add(id);
+				save(result);
+			}
 			
 		});
 	}
