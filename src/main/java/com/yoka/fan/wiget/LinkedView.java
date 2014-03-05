@@ -20,6 +20,7 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -40,6 +41,8 @@ public class LinkedView extends RelativeLayout {
 	private ImageLoader imageLoader;
 
 	private LinkModel linkModel;
+	
+	private RelativeLayout tagContainer;
 
 	public static interface onImageClickListener {
 		public void onClick(float left, float top);
@@ -69,6 +72,7 @@ public class LinkedView extends RelativeLayout {
 
 	private void init(final Context context) {
 		this.context = context;
+		
 		imageView = new BackgroundImageView(context);
 		imageView.setOnTouchListener(new OnTouchListener() {
 
@@ -87,14 +91,18 @@ public class LinkedView extends RelativeLayout {
 			}
 		});
 		addView(imageView);
+		tagContainer = new RelativeLayout(context);
+		tagContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+		addView(tagContainer);
 		imageView.setOndrawListener(new OnViewdrawListener() {
 
 			@Override
 			public void ondraw(float[] bounds) {
 				if (linkModel.isShowLink() && linkModel.getLinkList() != null) {
 					for (Link link : linkModel.getLinkList()) {
-						addView(new TagView(context, link, bounds));
+						tagContainer.addView(new TagView(context, link, bounds));
 					}
+//					tagContainer.setVisibility(View.VISIBLE);
 				}
 
 			}
@@ -104,8 +112,10 @@ public class LinkedView extends RelativeLayout {
 
 	public void load(LinkModel model) {
 		this.linkModel = model;
+//		tagContainer.setVisibility(View.INVISIBLE);
+		tagContainer.removeAllViews();
 		changeImageSize();
-		removeAllTag();
+		imageView.setImageBitmap(null);
 		imageLoader.displayImage(model.getUrl(), imageView);
 	}
 
@@ -121,14 +131,6 @@ public class LinkedView extends RelativeLayout {
 
 	}
 
-	private void removeAllTag() {
-		for (int i = 0; i < getChildCount(); i++) {
-			View view = getChildAt(i);
-			if (view instanceof TagView) {
-				removeView(view);
-			}
-		}
-	}
 
 	private static class TagView extends TextView implements OnClickListener {
 
@@ -142,6 +144,8 @@ public class LinkedView extends RelativeLayout {
 			setTextColor(Color.WHITE);
 			setGravity(Gravity.CENTER);
 			setVisibility(View.INVISIBLE);
+			setSingleLine(true);
+			setEllipsize(TruncateAt.END);
 			// setTextSize(DisplayUtils.Dp2Px(context, 9));
 			if (link.getLeft() < 0.5) {
 				setBackgroundResource(R.drawable.tag);
@@ -304,7 +308,7 @@ public class LinkedView extends RelativeLayout {
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			if (ondrawListener != null && getDrawable() != null) {
+			if (ondrawListener != null && ((BitmapDrawable)getDrawable()).getBitmap() != null) {
 				ondrawListener.ondraw(getBitmapBound());
 			}
 

@@ -19,6 +19,7 @@ public abstract class Info extends Request{
 		private int follows;
 		private int followers;
 		private int show_specials;
+		private int show_count;
 		private String head_url;
 		private String nick;
 		public int getFollowers() {
@@ -36,8 +37,14 @@ public abstract class Info extends Request{
 		public String getHead_url() {
 			return IMG_HOST+head_url;
 		}
+		public String getHeadUrl() {
+			return head_url;
+		}
 		public String getNick() {
 			return nick;
+		}
+		public int getShow_count() {
+			return show_count;
 		}
 	}
 
@@ -106,5 +113,6 @@ public abstract class Info extends Request{
 		params.add(new BasicNameValuePair("uuid", uuid));
 		return params;
 	}
+	
 
 }

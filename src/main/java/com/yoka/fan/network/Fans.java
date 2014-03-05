@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -38,8 +40,15 @@ public abstract class Fans extends Request{
 
 	@Override
 	public void onSuccess(String data) {
-		Map<String, Result> map = (Map<String, Result>)new Gson().fromJson(data, new TypeToken<Map<String, Result>>(){}.getType());
-		onSuccess((List<Info.Result>)map.values());
+		try {
+			@SuppressWarnings("unchecked")
+			Map<String, Result> map = (Map<String, Result>)new Gson().fromJson(new JSONObject(data).getString("list"), new TypeToken<Map<String, Result>>(){}.getType());
+			onSuccess(new ArrayList<Result>(map.values()));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 	}
 

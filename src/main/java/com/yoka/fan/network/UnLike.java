@@ -33,7 +33,7 @@ public class UnLike extends Request{
 	@Override
 	public String getURL() {
 		// TODO Auto-generated method stub
-		return HOST+"coll/like";
+		return HOST+"coll/unlike";
 	}
 
 	@Override

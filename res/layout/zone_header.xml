@@ -23,12 +23,12 @@
                 android:layout_height="60dp"
                 app:is_oval="true" />
 
-            <ImageView
+            <!-- <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/vip" />
+                android:src="@drawable/vip" /> -->
         </RelativeLayout>
 
         <LinearLayout

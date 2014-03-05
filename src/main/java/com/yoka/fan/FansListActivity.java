@@ -6,7 +6,6 @@ import java.util.List;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.network.Fans;
@@ -21,7 +20,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -99,7 +97,7 @@ public class FansListActivity extends BaseActivity{
 							list.clear();
 						}
 						for(Result result : results){
-							list.add(new Model(result.getId(), result.getHead_url(), result.getNick(),false));
+							list.add(new Model(result.getId(), result.getHeadUrl(), result.getNick(),false));
 						}
 						offset += limit;
 						runOnUiThread(new Runnable() {
@@ -183,6 +181,7 @@ public class FansListActivity extends BaseActivity{
 			}else{
 				holder = (ViewHolder) convertView.getTag();
 			}
+			holder.imageview.setImageResource(R.drawable.photo_default);
 			imageLoader.displayImage(model.photo, holder.imageview);
 			holder.nameView.setText(model.name);
 			holder.btnView.setSelected(model.selected);

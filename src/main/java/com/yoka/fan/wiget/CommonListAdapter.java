@@ -79,7 +79,7 @@ public class CommonListAdapter extends BaseAdapter{
 		}else{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		
+		holder.mPhotoView.setImageBitmap(null);
 		holder.mLinkedView.load(model.getLinkModel());
 		if(model.getPhoto() == null){
 			holder.mPhotoView.setVisibility(View.GONE);
@@ -105,9 +105,10 @@ public class CommonListAdapter extends BaseAdapter{
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(context, ZoneActivity.class);
-//				intent.putExtra("target_id", ""+model.getId());
-				intent.putExtra(ZoneActivity.PARAM_TARGET_ID, ""+User.readUser().id);
-				intent.putExtra(ZoneActivity.PARAM_NAME, User.readUser().nickname);
+				intent.putExtra(ZoneActivity.PARAM_TARGET_ID, ""+model.getUser_id());
+				intent.putExtra(ZoneActivity.PARAM_NAME, ""+model.getName());
+//				intent.putExtra(ZoneActivity.PARAM_TARGET_ID, ""+User.readUser().id);
+//				intent.putExtra(ZoneActivity.PARAM_NAME, User.readUser().nickname);
 				context.startActivity(intent);
 				
 			}
@@ -148,13 +149,17 @@ public class CommonListAdapter extends BaseAdapter{
 			public void onClick(View v) {
 				final boolean isStared= !model.isStared();
 				model.setStared(isStared);
-				notifyDataSetChanged();
+				int count = model.getStar();
 				Request request = null;
 				if(isStared){
+					count++;
 					request = new Like(model.getId());
 				}else{
+					count--;
 					request = new UnLike(model.getId());
 				}
+				model.setStar(count);
+				notifyDataSetChanged();
 				
 				final Request req = request;
 				
@@ -169,6 +174,13 @@ public class CommonListAdapter extends BaseAdapter{
 					
 					protected void onPostExecute(Request.Status result) {
 						if(result == Request.Status.ERROR){
+							int count = model.getStar();
+							if(isStared){
+								count --;
+							}else{
+								count ++;
+							}
+							model.setStar(count);
 							model.setStared(!isStared);
 							notifyDataSetChanged();
 						}

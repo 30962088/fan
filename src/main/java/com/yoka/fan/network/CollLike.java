@@ -79,7 +79,7 @@ public class CollLike extends Request{
 	@Override
 	public String getURL() {
 		// TODO Auto-generated method stub
-		return HOST+"coll/colls";
+		return HOST+"coll/likes";
 	}
 
 	@Override

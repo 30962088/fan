@@ -90,6 +90,8 @@ public class ListItemData {
 		model.setPhoto(owner_face);
 		model.setStar(likes);
 		model.setTags(tags);
+		model.setUser_id(owner_id);
+		model.setDescr(description);
 		return model;
 	}
 	

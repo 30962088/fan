@@ -118,9 +118,10 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 	}
 	
 	private void initUserView(Result result){
-		matchView.setText(""+result.getShow_specials());
+		matchView.setText(""+result.getShow_count());
 		fansView.setText(""+result.getFollowers());
 		focusView.setText(""+result.getFollows());
+		photoView.setImageResource(R.drawable.photo_default);
 		imageLoader.displayImage(result.getHead_url(), photoView);
 		initPage(result.getId());
 	}
@@ -136,7 +137,7 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 			add(new Page(name == null ? "我的搭配" : "TA的搭配" ,new CollListFragment(){{
 				setArguments(arguments);
 			}},false));
-			add(new Page(name == null ? "我的喜欢" : "TA的喜欢",new CollListFragment(){{
+			add(new Page(name == null ? "我的喜欢" : "TA的喜欢",new CollLikeListFragment(){{
 				setArguments(arguments);
 			}},false));
 		}};

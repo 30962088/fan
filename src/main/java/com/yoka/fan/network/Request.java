@@ -37,9 +37,9 @@ public abstract class Request implements Response{
 	
 	public static final int REFRESH_READ_CACHE = 0;
 	
-	public static String HOST = "http://songaimin.fan.yoka.com/api/";
+	public static String HOST = "http://fan.yoka.com/api/";
 	
-	public static String IMG_HOST = "http://192.168.57.85/fanimage/";
+	public static String IMG_HOST = "http://fanp1.yokacdn.com/";
 	
 	public static enum Status{
 		SUCCESS,ERROR,SERVER_ERROR,DATA_ERROR

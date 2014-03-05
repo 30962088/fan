@@ -8,6 +8,8 @@ public class CommonListModel {
 	
 	private String name;
 	
+	private String user_id;
+	
 	private String photo;
 	
 	private String datetime;
@@ -120,6 +122,13 @@ public class CommonListModel {
 	
 	public String getId() {
 		return id;
+	}
+	
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
+	}
+	public String getUser_id() {
+		return user_id;
 	}
 	
 	
