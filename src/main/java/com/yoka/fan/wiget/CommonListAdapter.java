@@ -15,6 +15,7 @@ import com.yoka.fan.network.UnLike;
 import com.yoka.fan.utils.DisplayUtils;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.LinkedView.onImageClickListener;
 import com.yoka.fan.wiget.SharePopupWindow.Share;
 
 import android.content.Context;
@@ -43,6 +44,8 @@ public class CommonListAdapter extends BaseAdapter{
 	private List<CommonListModel> list;
 	
 	private ImageLoader imageLoader;
+	
+
 	
 	public CommonListAdapter(Context context, List<CommonListModel> list) {
 		this.context = context;
@@ -80,7 +83,17 @@ public class CommonListAdapter extends BaseAdapter{
 			holder = (ViewHolder) convertView.getTag();
 		}
 		holder.mPhotoView.setImageBitmap(null);
-		holder.mLinkedView.load(model.getLinkModel());
+		
+		if(model.isShowLinked()){
+			holder.mLinkedView.load(model.getLinkModel());
+		}else{
+			LinkModel linkModel = model.getLinkModel();
+			holder.mLinkedView.load(new LinkModel(linkModel.getUrl(), linkModel.getWidth(), linkModel.getHeight(), null));
+		}
+		
+		
+		
+		
 		if(model.getPhoto() == null){
 			holder.mPhotoView.setVisibility(View.GONE);
 		}else{
@@ -133,18 +146,20 @@ public class CommonListAdapter extends BaseAdapter{
 				
 			}
 		});
-		holder.mLinkedView.setOnClickListener(new OnClickListener() {
+		final LinkedView mLinkedView = holder.mLinkedView;
+		holder.mLinkedView.setOnImageClickListener(new onImageClickListener() {
 			
 			@Override
-			public void onClick(View v) {
-				LinkModel linkModel = model.getLinkModel();
-				if(!linkModel.isShowLink()){
-					linkModel.setShowLink(true);
-					notifyDataSetChanged();
+			public void onClick(float left, float top) {
+				if(!model.isShowLinked()){
+					model.setShowLinked(true);
+					mLinkedView.load(model.getLinkModel());
 				}
 				
 			}
 		});
+		final TextView mStarCount = holder.mStarCount;
+		final View mStarBtn = holder.mStarBtn;
 		holder.mStarBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -161,7 +176,9 @@ public class CommonListAdapter extends BaseAdapter{
 					request = new UnLike(model.getId());
 				}
 				model.setStar(count);
-				notifyDataSetChanged();
+				mStarBtn.setSelected(model.isStared());
+				mStarCount.setText(""+model.getStar());
+//				notifyDataSetChanged();
 				
 				final Request req = request;
 				
@@ -184,7 +201,9 @@ public class CommonListAdapter extends BaseAdapter{
 							}
 							model.setStar(count);
 							model.setStared(!isStared);
-							notifyDataSetChanged();
+							mStarBtn.setSelected(model.isStared());
+							mStarCount.setText(""+model.getStar());
+//							notifyDataSetChanged();
 						}
 					};
 				}.execute(model.getId());

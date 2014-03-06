@@ -20,6 +20,8 @@ public class CommonListModel {
 	
 	private int comment;
 	
+	private boolean showLinked = false;
+	
 	private LinkModel linkModel;
 	
 	private List<String> Tags;
@@ -131,6 +133,13 @@ public class CommonListModel {
 		return user_id;
 	}
 	
+
+	public void setShowLinked(boolean showLinked) {
+		this.showLinked = showLinked;
+	}
 	
+	public boolean isShowLinked() {
+		return showLinked;
+	}
 	
 }

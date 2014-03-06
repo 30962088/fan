@@ -101,7 +101,7 @@ public class LinkedView extends RelativeLayout {
 
 			@Override
 			public void ondraw(float[] bounds) {
-				if (linkModel.isShowLink() && linkModel.getLinkList() != null) {
+				if (linkModel.getLinkList() != null) {
 					for (Link link : linkModel.getLinkList()) {
 						tagContainer.addView(new TagView(context, link, bounds));
 					}
