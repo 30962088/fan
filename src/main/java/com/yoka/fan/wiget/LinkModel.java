@@ -2,6 +2,8 @@ package com.yoka.fan.wiget;
 
 import java.util.List;
 
+import android.content.Context;
+
 public class LinkModel{
 	
 	private String url;
@@ -41,9 +43,18 @@ public class LinkModel{
 		return width;
 	}
 	
+	public int getWidth(Context context) {
+		return (int) (width*context.getResources().getDisplayMetrics().density);
+	}
+	
 	public int getHeight() {
 		return height;
 	}
+	
+	public int getHeight(Context context) {
+		return (int) (height*context.getResources().getDisplayMetrics().density);
+	}
+	
 	
 	public static class Link {
 		

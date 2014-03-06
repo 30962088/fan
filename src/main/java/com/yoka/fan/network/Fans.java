@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import com.yoka.fan.network.Info.Result;
 import com.yoka.fan.utils.Constant;
 
-public abstract class Fans extends Request{
+public  class Fans extends Request{
 
 	private String user_id;
 	
@@ -26,7 +26,7 @@ public abstract class Fans extends Request{
 	
 	private String uuid = Constant.uuid;
 	
-	
+	private List<Result> results;
 	
 	public Fans(String user_id, String target_id, int skip, int limit) {
 		super();
@@ -36,14 +36,16 @@ public abstract class Fans extends Request{
 		this.limit = limit;
 	}
 	
-	protected abstract void onSuccess(List<Result> list);
+	public List<Result> getResults() {
+		return results;
+	}
 
 	@Override
 	public void onSuccess(String data) {
 		try {
 			@SuppressWarnings("unchecked")
 			Map<String, Result> map = (Map<String, Result>)new Gson().fromJson(new JSONObject(data).getString("list"), new TypeToken<Map<String, Result>>(){}.getType());
-			onSuccess(new ArrayList<Result>(map.values()));
+			results = new ArrayList<Result>(map.values());
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

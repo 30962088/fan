@@ -117,7 +117,9 @@ public class CommonListAdapter extends BaseAdapter{
 			
 			@Override
 			public void onClick(View v) {
-				context.startActivity(new Intent(context, CommentActivity.class));
+				Intent intent = new Intent(context, CommentActivity.class);
+				intent.putExtra(CommentActivity.PARAM_COLL_ID,model.getId());
+				context.startActivity(intent);
 				
 			}
 		});

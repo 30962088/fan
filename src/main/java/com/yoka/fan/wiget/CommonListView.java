@@ -35,7 +35,7 @@ public abstract class CommonListView extends PullToRefreshListView{
 	
 	
 	
-	private static int limit = 4;
+	private static int limit = 20;
 	
 	private int offset = 0;
 

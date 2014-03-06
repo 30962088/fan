@@ -61,6 +61,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/follow_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
@@ -111,10 +112,10 @@
             android:id="@+id/follow_btn"
             android:layout_width="64dp"
             android:layout_height="26dp"
-            android:background="@drawable/btn_border"
+            android:background="@drawable/btn_border_selector"
             android:gravity="center"
             android:text="关注"
-            android:textColor="#ee4c9c" />
+            android:textColor="@color/btn_color_selector" />
     </LinearLayout>
 
     <LinearLayout

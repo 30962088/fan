@@ -3,12 +3,22 @@ package com.yoka.fan;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yoka.fan.network.CommentList;
+import com.yoka.fan.network.CreateComment;
+import com.yoka.fan.network.Request;
+import com.yoka.fan.network.CommentList.Result;
+import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.SharePopupWindow.Share;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,29 +36,68 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class CommentActivity extends BaseActivity{
+public class CommentActivity extends BaseActivity implements OnClickListener{
 
+	public static final String PARAM_COLL_ID = "PARAM_COLL_ID";
+	
+	private String collId;
+	
+	private int offset = 0;
+	
+	private int limit = 20;
+	
+	private User user;
+	
+	private boolean hasMore;
+	
+	private ListViewAdapter adapter;
+	
+	private List<Comment> list;
+	
+	private PullToRefreshListView listView;
+	
+	private View footerView;
+	
+	private EditText commentView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		user = User.readUser();
+		collId = getIntent().getStringExtra(PARAM_COLL_ID);
 		setContentView(R.layout.comment_layout);
 		
 		
-		ListView gridView = (ListView) findViewById(R.id.listview);
-		ListViewAdapter adapter = new ListViewAdapter(new ArrayList<CommentActivity.Comment>(){{
-			for(int i = 0;i<30;i++){
-				Comment comment = new Comment();
-				comment.comment = "呵呵，你好啊";
-				comment.datetime = "3年前";
-				comment.name = "威廉萌";
-				comment.photo = "http://tp4.sinaimg.cn/2129028663/180/5684393877/1";
-				add(comment);
-			}
-		}},this);
-		final EditText commentView = (EditText) findViewById(R.id.comment);
+		listView = (PullToRefreshListView) findViewById(R.id.listview);
+		list = new ArrayList<CommentActivity.Comment>();
+		ListViewAdapter adapter = new ListViewAdapter(list, this);
+		commentView = (EditText) findViewById(R.id.comment);
 		final View publishView = findViewById(R.id.publish);
-        gridView.setAdapter(adapter);
+		publishView.setOnClickListener(this);
+		footerView = LayoutInflater.from(this).inflate( R.layout.footer_loading, null);
+		listView.getRefreshableView().addFooterView(footerView);
+		listView.setAdapter(adapter);
+		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+
+			@Override
+			public void onRefresh(
+					PullToRefreshBase<ListView> refreshView) {
+				offset = 0;
+				load();
+				
+			}
+		});
+		listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
+
+			@Override
+			public void onLastItemVisible() {
+				if(hasMore){
+					load();
+				}
+				
+			}
+		});
+		load();
         findViewById(R.id.comment_layout).setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -59,17 +108,7 @@ public class CommentActivity extends BaseActivity{
 				
 			}
 		});
-        gridView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				InputMethodManager imm = (InputMethodManager)getSystemService(
-					      Context.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(commentView.getWindowToken(), 0);
-				
-			}
-		});
+        
         commentView.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -100,11 +139,59 @@ public class CommentActivity extends BaseActivity{
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 	}
 	
+	private void load(){
+		new AsyncTask<Void, Void, List<CommentList.Result>>() {
+
+			@Override
+			protected List<Result> doInBackground(Void... params) {
+				CommentList request = new CommentList(user.id, user.access_token, collId, offset, limit);
+				request.request();
+				return request.getResults();
+			}
+			
+			protected void onPostExecute(java.util.List<CommentList.Result> results) {
+				if(results != null){
+					hasMore = results.size()>=limit?true:false;
+					if(offset == 0){
+						list.clear();
+					}
+					for(Result result : results){
+						list.add(new Comment(result.getU_thumb(), result.getU_nick(), result.getDateFormater(), result.getTxt()));
+					}
+					offset += limit;
+					runOnUiThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							adapter.notifyDataSetChanged();
+							listView.onRefreshComplete();
+							if(!hasMore){
+								listView.getRefreshableView().removeFooterView(footerView);
+							}
+						}
+					});
+				}
+				
+			};
+			
+		}.execute();
+		
+	}
+	
 	private static class Comment{
 		public String photo;
 		public String name;
 		public String datetime;
 		public String comment;
+		public Comment(String photo, String name, String datetime,
+				String comment) {
+			super();
+			this.photo = photo;
+			this.name = name;
+			this.datetime = datetime;
+			this.comment = comment;
+		}
+		
 		
 	}
 	
@@ -185,6 +272,41 @@ public class CommentActivity extends BaseActivity{
 	protected String getActionBarTitle() {
 		// TODO Auto-generated method stub
 		return "评论";
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.publish:
+			onPublish();
+			break;
+
+		default:
+			break;
+		}
+		
+	}
+
+	private void onPublish() {
+		final String content = commentView.getText().toString();
+		new AsyncTask<Void, Void, Request.Status>(){
+
+			@Override
+			protected com.yoka.fan.network.Request.Status doInBackground(
+					Void... params) {
+				CreateComment request = new CreateComment(user.id, user.access_token, collId, content, 1);
+				request.request();
+				return request.getStatus();
+			}
+			
+			protected void onPostExecute(com.yoka.fan.network.Request.Status result) {
+				
+			};
+			
+		}.execute();
+		
+		
+		
 	}
 	
 }

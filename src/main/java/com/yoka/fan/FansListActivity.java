@@ -10,6 +10,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.network.Fans;
 import com.yoka.fan.network.Follow;
+import com.yoka.fan.network.GetFollower;
 import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Info.Result;
 import com.yoka.fan.network.Request.Status;
@@ -33,6 +34,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class FansListActivity extends BaseActivity{
+	
+	public static final String PARAM_TYPE = "PARAM_TYPE";
+	
+	public static final String PARAM_FANS = "PARAM_FANS";
+	
+	public static final String PARAM_FOLLOWS = "PARAM_FOLLOWS";
+	
+	public static final String PARAM_TARGET_ID = "PARAM_TARGET_ID";
 
 	private FansListAdapter adapter;
 	
@@ -50,10 +59,13 @@ public class FansListActivity extends BaseActivity{
 	
 	private View footerView;
 	
+	private String type;
+	
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		target_id = getIntent().getStringExtra("target_id");
+		type = getIntent().getStringExtra(PARAM_TYPE);
+		target_id = getIntent().getStringExtra(PARAM_TARGET_ID);
 		listView = new PullToRefreshListView(this);
 		list = new ArrayList<FansListActivity.Model>();
 		adapter = new FansListAdapter(this, list);
@@ -86,8 +98,11 @@ public class FansListActivity extends BaseActivity{
 	
 	@Override
 	protected String getActionBarTitle() {
-		// TODO Auto-generated method stub
-		return "粉丝";
+		String title = "粉丝";
+		if(PARAM_FOLLOWS.equals(type)){
+			title = "关注";
+		}
+		return title;
 	}
 	
 	private void load(){
@@ -96,34 +111,41 @@ public class FansListActivity extends BaseActivity{
 			
 			@Override
 			public void run() {
-				Fans request = new Fans(user.id,target_id,offset,limit) {
-					
-					@Override
-					protected void onSuccess(List<Result> results) {
-						hasMore = results.size()>=limit?true:false;
-						if(offset == 0){
-							list.clear();
-						}
-						for(Result result : results){
-							list.add(new Model(result.getId(), result.getHeadUrl(), result.getNick(),false));
-						}
-						offset += limit;
-						runOnUiThread(new Runnable() {
-							
-							@Override
-							public void run() {
-								adapter.notifyDataSetChanged();
-								listView.onRefreshComplete();
-								if(!hasMore){
-									listView.getRefreshableView().removeFooterView(footerView);
-								}
-							}
-						});
-						
-						
-					}
-				};
+				Request request = null;
+				if(PARAM_FANS.equals(type)){
+					request = new Fans(user.id,target_id,offset,limit);
+				}else if(PARAM_FOLLOWS.equals(type)){
+					request = new GetFollower(user.id,target_id,offset,limit);
+				}
 				request.request();
+				if(request.getStatus() == Status.SUCCESS){
+					List<Result> results = null;
+					if(request instanceof Fans){
+						results = ((Fans)request).getResults();
+					}else if(request instanceof GetFollower){
+						results = ((GetFollower)request).getList();
+					}
+					hasMore = results.size()>=limit?true:false;
+					if(offset == 0){
+						list.clear();
+					}
+					for(Result result : results){
+						list.add(new Model(result.getId(), result.getHeadUrl(), result.getNick(),false));
+					}
+					offset += limit;
+					runOnUiThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							adapter.notifyDataSetChanged();
+							listView.onRefreshComplete();
+							if(!hasMore){
+								listView.getRefreshableView().removeFooterView(footerView);
+							}
+						}
+					});
+				}
+				
 			}
 		}).start();
 		
@@ -197,7 +219,7 @@ public class FansListActivity extends BaseActivity{
 			final User user = User.readUser();
 			_btnView.setSelected(model.selected);
 			_btnView.setText(model.selected ? "已关注" : "关注");
-			Relation.findFans(user, model.id ,new OperatorListener<Boolean>() {
+			Relation.findFollower(user, model.id ,new OperatorListener<Boolean>() {
 				
 				@Override
 				public void success(final Boolean result) {
@@ -233,9 +255,9 @@ public class FansListActivity extends BaseActivity{
 										protected void onPostExecute(Request.Status result) {
 											if(result == Request.Status.SUCCESS){
 												if(selected){
-													Relation.addFans(user, model.id);
+													Relation.addFollow(user, model.id);
 												}else{
-													Relation.removeFans(user, model.id);
+													Relation.removeFollow(user, model.id);
 												}
 												
 											}else{

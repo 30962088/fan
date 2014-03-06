@@ -170,24 +170,24 @@ public class Relation implements Serializable{
 		});
 	}
 	
-	public synchronized static void addFans(User user, final String id){
+	public synchronized static void addFollow(User user, final String id){
 		read(user,  new OperatorListener<Relation>() {
 
 			@Override
 			public void success(Relation result) {
-				result.fans.add(id);
+				result.followers.add(id);
 				save(result);
 			}
 			
 		});
 	}
 	
-	public synchronized static void removeFans(User user,final String id){
+	public synchronized static void removeFollow(User user,final String id){
 		read(user,  new OperatorListener<Relation>() {
 
 			@Override
 			public void success(Relation result) {
-				result.fans.remove(id);
+				result.followers.remove(id);
 				save(result);
 			}
 		});

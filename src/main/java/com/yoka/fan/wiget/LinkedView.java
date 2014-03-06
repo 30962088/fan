@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.commons.lang3.StringUtils;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yoka.fan.MainActivity;
 import com.yoka.fan.R;
 import com.yoka.fan.utils.DisplayUtils;
 import com.yoka.fan.utils.Utils;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
@@ -72,8 +74,9 @@ public class LinkedView extends RelativeLayout {
 
 	private void init(final Context context) {
 		this.context = context;
-		
+		setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 		imageView = new BackgroundImageView(context);
+//		imageView.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
 		imageView.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -108,6 +111,7 @@ public class LinkedView extends RelativeLayout {
 			}
 		});
 		imageLoader = Utils.getImageLoader(context);
+		
 	}
 
 	public void load(LinkModel model) {
@@ -120,11 +124,11 @@ public class LinkedView extends RelativeLayout {
 	}
 
 	private void changeImageSize() {
-		int width = linkModel.getWidth(), height = linkModel.getHeight();
+		int width = linkModel.getWidth(context), height = linkModel.getHeight(context);
 		if (width > 0 && height > 0 && imageView instanceof BackgroundImageView) {
 			RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imageView
 					.getLayoutParams();
-			params.width = width;
+			params.width = LayoutParams.MATCH_PARENT;
 			params.height = height;
 			imageView.setLayoutParams(params);
 		}
@@ -283,8 +287,8 @@ public class LinkedView extends RelativeLayout {
 
 			setLayoutParams(params);
 
-			setScaleType(ScaleType.FIT_XY);
-			setAdjustViewBounds(true);
+			setScaleType(ScaleType.CENTER_CROP);
+//			setAdjustViewBounds(true);
 
 		}
 

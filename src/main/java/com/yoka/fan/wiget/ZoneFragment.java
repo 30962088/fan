@@ -12,14 +12,20 @@ import com.yoka.fan.MainActivity;
 import com.yoka.fan.R;
 import com.yoka.fan.ZoneActivity;
 import com.yoka.fan.network.Fans;
+import com.yoka.fan.network.Follow;
 import com.yoka.fan.network.Info;
+import com.yoka.fan.network.Request;
+import com.yoka.fan.network.UnFollow;
 import com.yoka.fan.network.Info.Result;
+import com.yoka.fan.utils.Relation;
+import com.yoka.fan.utils.Relation.OperatorListener;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.CommonPagerAdapter.Page;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -42,7 +48,7 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 	
 	private ImageView photoView;
 	
-	private View followBtn;
+	private TextView followBtn;
 	
 	private String target_id;
 	
@@ -50,6 +56,7 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 	
 	private String name;
 	
+	private User user;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,8 +64,10 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 		if(User.readUser() == null){
 			getActivity().finish();
 		}
+		target_id = getArguments().getString(ZoneActivity.PARAM_TARGET_ID);
 		name = getArguments().getString(ZoneActivity.PARAM_NAME);
 		imageLoader = Utils.getImageLoader(getActivity());
+		user = User.readUser();
 	}
 	
 	@Override
@@ -71,11 +80,12 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onViewCreated(view, savedInstanceState);
+		
 		matchView = (TextView) view.findViewById(R.id.match);
 		focusView = (TextView) view.findViewById(R.id.focus);
 		fansView = (TextView) view.findViewById(R.id.fans);
 		photoView = (ImageView)view.findViewById(R.id.photo);
-		followBtn = view.findViewById(R.id.follow_btn);
+		followBtn = (TextView) view.findViewById(R.id.follow_btn);
 		followBtn.setOnClickListener(this);
 		if(name == null){
 			followBtn.setVisibility(View.GONE);
@@ -84,6 +94,19 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 			
 		}
 		view.findViewById(R.id.fans_btn).setOnClickListener(this);
+		view.findViewById(R.id.follow_list).setOnClickListener(this);
+		User user = User.readUser();
+		Relation.findFollower(user, target_id, new OperatorListener<Boolean>() {
+			
+			@Override
+			public void success(Boolean result) {
+				if(result){
+					followBtn.setSelected(true);
+					followBtn.setText("已关注");
+				}
+				
+			}
+		});
 		initView();
 		
 	}
@@ -91,7 +114,7 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 	
 	private void initView() {
 		final User user = User.readUser();
-		target_id = getArguments().getString(ZoneActivity.PARAM_TARGET_ID);
+		
 		new Thread(new Runnable() {
 			
 			@Override
@@ -127,7 +150,7 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 	}
 
 	private void initPage(String target_id){
-		User user = User.readUser();
+		
 		View view = getView();
 		final Bundle arguments = new Bundle();
 		arguments.putString("target_id", target_id);
@@ -187,14 +210,60 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 		switch (v.getId()) {
 		case R.id.fans_btn:
 			Intent intent = new Intent(getActivity(), FansListActivity.class);
-			intent.putExtra("target_id", target_id);
+			intent.putExtra(FansListActivity.PARAM_TARGET_ID, target_id);
+			intent.putExtra(FansListActivity.PARAM_TYPE, FansListActivity.PARAM_FANS);
 			startActivity(intent);
 			break;
+		case R.id.follow_list:
+			Intent intent1 = new Intent(getActivity(), FansListActivity.class);
+			intent1.putExtra(FansListActivity.PARAM_TARGET_ID, target_id);
+			intent1.putExtra(FansListActivity.PARAM_TYPE, FansListActivity.PARAM_FOLLOWS);
+			startActivity(intent1);
+			break;
 		case R.id.follow_btn:
+			onFollowClick();
 			break;
 		default:
 			break;
 		}
+		
+	}
+
+	private void onFollowClick() {
+		
+		followBtn.setSelected(!followBtn.isSelected());
+		followBtn.setText(followBtn.isSelected()?"已关注":"关注");
+		new AsyncTask<Void, Void, Request.Status>() {
+
+			@Override
+			protected com.yoka.fan.network.Request.Status doInBackground(
+					Void... params) {
+				Request request = null;
+				if(followBtn.isSelected()){
+					request = new Follow(user.id, target_id, user.access_token);
+				}else{
+					request = new UnFollow(user.id, target_id, user.access_token);
+				}
+				request.request();
+				return request.getStatus();
+			}
+			@Override
+			protected void onPostExecute(
+					com.yoka.fan.network.Request.Status result) {
+				if(Request.Status.SUCCESS == result){
+					if(followBtn.isSelected()){
+						Relation.addFollow(user, target_id);
+					}else{
+						Relation.removeFollow(user, target_id);
+					}
+				}else{
+					followBtn.setSelected(!followBtn.isSelected());
+					followBtn.setText(followBtn.isSelected()?"已关注":"关注");
+				}
+			}
+		}.execute();
+		
+		
 		
 	}
 	
