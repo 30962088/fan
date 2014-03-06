@@ -13,6 +13,7 @@ import com.yoka.fan.network.Follow;
 import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Info.Result;
 import com.yoka.fan.network.Request.Status;
+import com.yoka.fan.network.UnFollow;
 import com.yoka.fan.utils.Relation;
 import com.yoka.fan.utils.Relation.OperatorListener;
 import com.yoka.fan.utils.User;
@@ -194,41 +195,51 @@ public class FansListActivity extends BaseActivity{
 			
 			final TextView _btnView = holder.btnView;
 			final User user = User.readUser();
+			_btnView.setSelected(model.selected);
+			_btnView.setText(model.selected ? "已关注" : "关注");
 			Relation.findFans(user, model.id ,new OperatorListener<Boolean>() {
 				
 				@Override
-				public void success(Boolean result) {
+				public void success(final Boolean result) {
 					new Handler(context.getMainLooper()).post(new Runnable() {
 						
 						@Override
 						public void run() {
+							model.selected = result;
 							_btnView.setSelected(model.selected);
 							_btnView.setText(model.selected ? "已关注" : "关注");
 							_btnView.setOnClickListener(new OnClickListener() {
 								
 								@Override
 								public void onClick(View v) {
-									boolean selected = model.selected;
-									selected = !selected;
-									_btnView.setText(model.selected ? "已关注" : "关注");
-									notifyDataSetChanged();
+									final boolean selected = !model.selected;
+									_btnView.setSelected(selected);
+									_btnView.setText(selected ? "已关注" : "关注");
 									new AsyncTask<Void, Void, Status>(){
 
 										@Override
 										protected com.yoka.fan.network.Request.Status doInBackground(
 												Void... params) {
-											Follow follow = new Follow(user.id, model.id, user.access_token);
-											follow.request();
-											return follow.getStatus();
+											Request request = null;
+											if(selected){
+												request = new Follow(user.id, model.id, user.access_token);
+											}else{
+												request = new UnFollow(user.id, model.id, user.access_token);
+											}
+											request.request();
+											return request.getStatus();
 										}
 										
 										protected void onPostExecute(Request.Status result) {
 											if(result == Request.Status.SUCCESS){
-												Relation.addFans(user, model.id);
+												if(selected){
+													Relation.addFans(user, model.id);
+												}else{
+													Relation.removeFans(user, model.id);
+												}
+												
 											}else{
 												model.selected = !model.selected;
-												_btnView.setText(model.selected ? "已关注" : "关注");
-												notifyDataSetChanged();
 											}
 										};
 										

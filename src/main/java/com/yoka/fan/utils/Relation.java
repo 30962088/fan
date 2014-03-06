@@ -5,13 +5,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.yoka.fan.network.GetFans;
 import com.yoka.fan.network.GetFollower;
 import com.yoka.fan.network.Request.Status;
 
-public class Relation {
+public class Relation implements Serializable{
 
 	private ArrayList<String> followers;
 
@@ -119,7 +120,7 @@ public class Relation {
 		ObjectInputStream oi = null;
 		try {
 			FileInputStream fi = new FileInputStream(
-					Dirctionary.getCateObjectFile());
+					Dirctionary.getRelationObjectFile());
 			oi = new ObjectInputStream(fi);
 			relation = (Relation) oi.readObject();
 		} catch (Exception e) {
@@ -178,6 +179,17 @@ public class Relation {
 				save(result);
 			}
 			
+		});
+	}
+	
+	public synchronized static void removeFans(User user,final String id){
+		read(user,  new OperatorListener<Relation>() {
+
+			@Override
+			public void success(Relation result) {
+				result.fans.remove(id);
+				save(result);
+			}
 		});
 	}
 

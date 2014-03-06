@@ -5,6 +5,7 @@ import java.io.File;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.yoka.fan.utils.Dirctionary;
+import com.yoka.fan.utils.Relation;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.wiget.HomeFragment;
 import com.yoka.fan.wiget.PhotoSelectPopupWindow;
@@ -125,6 +126,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	public void login(User user) {
 		if (user != null) {
 			menuFragment.login(user);
+			Relation.sync(user, null);
 		} else {
 			menuFragment.logout();
 		}
