@@ -76,7 +76,7 @@ public class LinkedView extends RelativeLayout {
 		this.context = context;
 		setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 		imageView = new BackgroundImageView(context);
-//		imageView.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
+		imageView.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 		imageView.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -118,7 +118,7 @@ public class LinkedView extends RelativeLayout {
 		this.linkModel = model;
 //		tagContainer.setVisibility(View.INVISIBLE);
 		tagContainer.removeAllViews();
-		changeImageSize();
+//		changeImageSize();
 		imageView.setImageBitmap(null);
 		imageLoader.displayImage(model.getUrl(), imageView);
 	}
@@ -129,7 +129,7 @@ public class LinkedView extends RelativeLayout {
 			RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imageView
 					.getLayoutParams();
 			params.width = LayoutParams.MATCH_PARENT;
-			params.height = height;
+			params.height = LayoutParams.WRAP_CONTENT;
 			imageView.setLayoutParams(params);
 		}
 
@@ -257,6 +257,10 @@ public class LinkedView extends RelativeLayout {
 		protected void onMeasure(final int widthMeasureSpec,
 				int heightMeasureSpec) {
 
+			int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
+		    int parentHeight =parentWidth/3*4;
+		    this.setMeasuredDimension(parentWidth, parentHeight);
+//		    this.setLayoutParams(new *ParentLayoutType*.LayoutParams(parentWidth/2,parentHeight));
 			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 			// final Drawable d = this.getDrawable();
 			//
@@ -287,7 +291,7 @@ public class LinkedView extends RelativeLayout {
 
 			setLayoutParams(params);
 
-			setScaleType(ScaleType.CENTER_CROP);
+			setScaleType(ScaleType.FIT_CENTER);
 //			setAdjustViewBounds(true);
 
 		}
@@ -312,7 +316,7 @@ public class LinkedView extends RelativeLayout {
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			if (ondrawListener != null && ((BitmapDrawable)getDrawable()).getBitmap() != null) {
+			if (ondrawListener != null && getDrawable() != null && ((BitmapDrawable)getDrawable()).getBitmap() != null) {
 				ondrawListener.ondraw(getBitmapBound());
 			}
 

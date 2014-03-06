@@ -34,8 +34,9 @@ public class HomeFragment extends Fragment{
 		super.onViewCreated(view, savedInstanceState);
 		
 		List<CommonPagerAdapter.Page> pages = new ArrayList<CommonPagerAdapter.Page>(){{
-			add(new Page("推荐", new GetTopNewListFragment(),false));
-			add(new Page("最新", new CollRecommandListFragment(),false));
+			add(new Page("推荐", new CollRecommandListFragment(),false));
+			
+			add(new Page("最新", new GetTopNewListFragment(),false));
 		}};
 		User user = User.readUser();
 		if(user != null){

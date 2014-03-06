@@ -23,12 +23,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
@@ -78,11 +80,21 @@ public class CommonListAdapter extends BaseAdapter{
 		if(convertView == null){
 			convertView = LayoutInflater.from(context).inflate(R.layout.list_item_layout,null);
 			holder = new ViewHolder(convertView);
+			WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+			Display display = wm.getDefaultDisplay();
+			int width = display.getWidth()-DisplayUtils.Dp2Px(context, 95);  // deprecated
+			int height = width/3*4;
+			
+			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, height);
+			
+			holder.mLinkedView.setLayoutParams(layoutParams);
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder) convertView.getTag();
 		}
 		holder.mPhotoView.setImageBitmap(null);
+		
+		
 		
 		if(model.isShowLinked()){
 			holder.mLinkedView.load(model.getLinkModel());

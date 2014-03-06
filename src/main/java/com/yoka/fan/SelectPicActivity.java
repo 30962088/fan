@@ -46,8 +46,9 @@ public class SelectPicActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onGlobalLayout() {
-				int width = dragRectView.getWidth()-DisplayUtils.Dp2Px(context, 10)*2;
-				int height = width/3*4;
+				int height = dragRectView.getHeight();
+				int width = height/4*3;
+				
 				dragRectView.setRectWidth(width);
 				dragRectView.setRectHeight(height);
 				dragRectView.setRectType(TouchView.TYPE_RECT);

@@ -80,7 +80,7 @@ public class CollFollow extends Request{
 	@Override
 	public String getURL() {
 		// TODO Auto-generated method stub
-		return HOST+"coll/recommend";
+		return HOST+"coll/follow_user_colls";
 	}
 
 	@Override

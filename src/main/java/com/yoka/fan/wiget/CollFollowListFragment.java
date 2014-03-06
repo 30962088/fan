@@ -73,7 +73,7 @@ public class CollFollowListFragment extends Fragment{
 
 		@Override
 		protected List<ListItemData> load(int offset, int limit) {
-			CollFollow request = new CollFollow( offset, limit,user_id,access_token);
+			CollFollow request = new CollFollow( offset, limit,access_token,user_id);
 			request.request();
 			return request.getListData();
 		}
