@@ -33,7 +33,7 @@ public class CollLikeListFragment extends Fragment{
 	}
 	
 	
-	public static class CollListView extends CommonListView{
+	public class CollListView extends CommonListView{
 
 		private String user_id;
 		
@@ -59,7 +59,17 @@ public class CollLikeListFragment extends Fragment{
 			CollLike request = new CollLike(offset, limit, user_id, target_id, access_token);
 			request.request();
 			return request.getListData();
-		}		
+		}
+
+
+
+		@Override
+		public String getEmptyTip() {
+			// TODO Auto-generated method stub
+			return "您喜欢的人还没有任何搭配信息";
+		}
+		
+		
 	}
 	
 }

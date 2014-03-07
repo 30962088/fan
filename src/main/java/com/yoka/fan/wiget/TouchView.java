@@ -194,7 +194,6 @@ public class TouchView extends ImageView {
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		Log.d("zzm", "aa:" + (event.getAction() & MotionEvent.ACTION_MASK));
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
 		case MotionEvent.ACTION_DOWN:
 			mode = DRAG;

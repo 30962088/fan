@@ -63,6 +63,12 @@ public class CollRecommandListFragment extends Fragment{
 			return request.getListData();
 		}
 
+		@Override
+		public String getEmptyTip() {
+			// TODO Auto-generated method stub
+			return "没有任何推荐搭配";
+		}
+
 		
 		
 	}

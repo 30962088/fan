@@ -240,7 +240,6 @@ public class DragRectView extends ImageView {
     		
     		int delta = Math.max(Math.abs(endX-startX),Math.abs(endY-startY)) ;
         	if(startX > endX){
-        		Log.d("zzm", "endX："+endX+",startX："+startX+",delta:"+delta);
         		endX = startX-delta;
         	}else{
         		endX = startX+delta;

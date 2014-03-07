@@ -132,7 +132,6 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 			
 			@Override
 			public void onWeiboException(WeiboException arg0) {
-				Log.d("zzm", "exception:"+arg0);
 				
 			}
 			
@@ -155,7 +154,6 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 			
 			@Override
 			public void onCancel() {
-				Log.d("zzm", "cancel");
 				
 			}
 		});

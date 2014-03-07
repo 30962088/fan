@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.yoka.fan"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
     android:background="#ffffff">
 
     <LinearLayout
@@ -119,9 +118,10 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/bottom_panel"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_marginTop="94dp"
         android:orientation="vertical" >
 
         <com.yoka.fan.wiget.TabPageIndicator
@@ -141,4 +141,4 @@
             android:layout_weight="1" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

@@ -78,6 +78,12 @@ public class CollFollowListFragment extends Fragment{
 			return request.getListData();
 		}
 
+		@Override
+		public String getEmptyTip() {
+			// TODO Auto-generated method stub
+			return "您目前还没有关注任何人";
+		}
+
 		
 		
 	}

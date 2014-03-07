@@ -62,6 +62,12 @@ public class GetTopNewListFragment extends Fragment{
 			return request.getListData();
 		}
 
+		@Override
+		public String getEmptyTip() {
+			// TODO Auto-generated method stub
+			return "没有最新的搭配";
+		}
+
 		
 		
 	}

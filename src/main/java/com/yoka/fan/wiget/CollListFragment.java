@@ -58,6 +58,14 @@ public class CollListFragment extends Fragment{
 			Coll request = new Coll(offset, limit, user_id, target_id, access_token);
 			request.request();
 			return request.getListData();
+		}
+
+
+
+		@Override
+		public String getEmptyTip() {
+			// TODO Auto-generated method stub
+			return "没有任何搭配信息";
 		}		
 	}
 	

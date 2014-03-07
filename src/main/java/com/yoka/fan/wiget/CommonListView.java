@@ -4,10 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.graphics.Paint.FontMetrics;
+import android.graphics.Paint.Style;
+import android.graphics.drawable.BitmapDrawable;
 
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -17,6 +28,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import com.yoka.fan.R;
 import com.yoka.fan.network.ListItemData;
+import com.yoka.fan.utils.DisplayUtils;
 
 public abstract class CommonListView extends PullToRefreshListView{
 
@@ -72,6 +84,7 @@ public abstract class CommonListView extends PullToRefreshListView{
 	
 
 	private void init(){
+		
 		mFooterLoading = inflate(getContext(), R.layout.footer_loading, null);
 		getRefreshableView().addFooterView(mFooterLoading);
 		adapter = new CommonListAdapter(getContext(), list);
@@ -96,8 +109,14 @@ public abstract class CommonListView extends PullToRefreshListView{
 				
 			}
 		});
-		
 	
+	
+	}
+	
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		// TODO Auto-generated method stub
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	}
 	
 	@Override
@@ -114,6 +133,12 @@ public abstract class CommonListView extends PullToRefreshListView{
 	private void _complete(final boolean more){
 		hasMode = more;
 		
+		if(offset == 0 && list.size() == 0){
+			setBackground(writeOnDrawable(getEmptyTip()));
+		}else{
+			setBackground(null);
+		}
+		
 		if(!more){
 			getRefreshableView().removeFooterView(mFooterLoading);
 		}
@@ -123,6 +148,7 @@ public abstract class CommonListView extends PullToRefreshListView{
 		
 	}
 	
+	public abstract String getEmptyTip();
 	
 	
 	public void load(final boolean refresh){
@@ -171,6 +197,24 @@ public abstract class CommonListView extends PullToRefreshListView{
 	
 	
 
+	private BitmapDrawable writeOnDrawable(String text){
+		int width = getWidth(),height = getHeight();
+        Bitmap bm = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+        Canvas canvas = new Canvas(bm);
+        Paint paint = new Paint(); 
+        paint.setColor(Color.parseColor("#a8a8a8")); 
+        paint.setTextSize(DisplayUtils.spToPx(getContext(), 18)); 
+        paint.setTextAlign(Align.CENTER); 
+
+        FontMetrics fontMetrics = paint.getFontMetrics(); 
+        // 计算文字高度 
+        float fontHeight = fontMetrics.bottom - fontMetrics.top; 
+        // 计算文字baseline 
+        float textBaseY = height - (height - fontHeight) / 2 - fontMetrics.bottom; 
+        canvas.drawText(text, width / 2, textBaseY, paint);
+
+        return new BitmapDrawable(bm);
+    }
 	
 	
 }

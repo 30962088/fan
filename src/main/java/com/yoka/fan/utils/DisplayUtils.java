@@ -13,4 +13,17 @@ public class DisplayUtils {
 		return (int) (px / scale + 0.5f);
 	}
 
+	public static int pxToSp(Context context, float pixelValue) {
+		float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+		int sp = (int) (pixelValue / scaledDensity + 0.5f);
+		return sp;
+	}
+
+
+	public static int spToPx(Context context, float spValue) {
+		float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+		int pixelValue = (int) (spValue * scaledDensity + 0.5f);
+		return pixelValue;
+	}
+
 }

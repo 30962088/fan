@@ -65,6 +65,12 @@ public class TagActivity extends BaseActivity{
 			return request.getListData();
 		}
 
+		@Override
+		public String getEmptyTip() {
+			// TODO Auto-generated method stub
+			return "该标签没有任何搭配";
+		}
+
 		
 		
 	}

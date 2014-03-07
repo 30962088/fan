@@ -37,7 +37,6 @@ public class ChangeHead extends Request{
 	@Override
 	public void onSuccess(String data) {
 		try {
-			Log.d("zzm",data);
 			JSONObject object  = new JSONObject(data);
 			fileUrl =  object.getString(user_id);
 		} catch (JSONException e) {
