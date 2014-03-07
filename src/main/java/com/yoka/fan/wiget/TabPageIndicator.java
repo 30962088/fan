@@ -23,15 +23,12 @@ public class TabPageIndicator extends LinearLayout{
 	
 	private OnPageChangeListener onPageChangeListener;
 	
-	private OnTabClickLisenter onTabClickLisenter;
+	
 	
 	private View viewSelected;
 	
 	private ViewPager viewPager;
 	
-	public void setOnTabClickLisenter(OnTabClickLisenter onTabClickLisenter) {
-		this.onTabClickLisenter = onTabClickLisenter;
-	}
 	
 	public void setOnPageChangeListener(
 			OnPageChangeListener onPageChangeListener) {
@@ -48,6 +45,8 @@ public class TabPageIndicator extends LinearLayout{
 		// TODO Auto-generated constructor stub
 	}
 	
+
+	
 	public void setModel(List<Page> list){
 		removeAllViews();
 		for(int i = 0;i<list.size();i++){
@@ -58,10 +57,11 @@ public class TabPageIndicator extends LinearLayout{
 				
 				@Override
 				public void onClick(View v) {
-					viewPager.setCurrentItem(pos);
-					if(onTabClickLisenter != null){
-						onTabClickLisenter.onclick(v, page.getFragment());
+					if(viewPager != null && viewPager.getCurrentItem() == pos && page.getFragment() instanceof CommonListFragment){
+						((CommonListFragment)page.getFragment()).refresh();
 					}
+					viewPager.setCurrentItem(pos);
+					
 				}
 			});
 			((TextView)view.findViewById(R.id.tab_title)).setText(page.getName());

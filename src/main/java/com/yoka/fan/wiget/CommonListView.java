@@ -6,53 +6,22 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.FontMetrics;
-import android.graphics.Paint.Style;
 import android.graphics.drawable.BitmapDrawable;
 
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.util.AttributeSet;
-import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
-
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-
-import com.yoka.fan.R;
 import com.yoka.fan.network.ListItemData;
 import com.yoka.fan.utils.DisplayUtils;
+import com.yoka.fan.wiget.BaseListView.OnLoadListener;
 
-public abstract class CommonListView extends PullToRefreshListView{
-
-	public static class Result{
-		
-		private boolean hasMore;
-		
-		private List<CommonListModel> list;
-
-		public Result(boolean hasMore, List<CommonListModel> list) {
-			super();
-			this.hasMore = hasMore;
-			this.list = list;
-		}
-	}
-	
-	
+public abstract class CommonListView extends BaseListView implements OnLoadListener{
 	
 	private static int limit = 20;
-	
-	private int offset = 0;
-
-	
-	private View mFooterLoading;
 	
 	private List<CommonListModel> list = new ArrayList<CommonListModel>();
 	
@@ -85,30 +54,10 @@ public abstract class CommonListView extends PullToRefreshListView{
 
 	private void init(){
 		
-		mFooterLoading = inflate(getContext(), R.layout.footer_loading, null);
-		getRefreshableView().addFooterView(mFooterLoading);
 		adapter = new CommonListAdapter(getContext(), list);
 		setAdapter(adapter);
-		setOnRefreshListener(new OnRefreshListener<ListView>() {
-
-			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				
-				load(true);
-				
-			}
-		});
-		
-		setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
-
-			@Override
-			public void onLastItemVisible() {
-				if(hasMode){
-					load(false);
-				}
-				
-			}
-		});
+		setOnLoadListener(this);
+		setLimit(limit);
 	
 	
 	}
@@ -120,66 +69,25 @@ public abstract class CommonListView extends PullToRefreshListView{
 	}
 	
 	@Override
-	protected void onAttachedToWindow() {
+	protected void onVisibilityChanged(View changedView, int visibility) {
 		// TODO Auto-generated method stub
-		super.onAttachedToWindow();
-		load(true);
-	}
-	
-	private boolean hasMode = false;
-
-
-	
-	private void _complete(final boolean more){
-		hasMode = more;
-		
-		if(offset == 0 && list.size() == 0){
-			setBackground(writeOnDrawable(getEmptyTip()));
-		}else{
-			setBackground(null);
-		}
-		
-		if(!more){
-			getRefreshableView().removeFooterView(mFooterLoading);
-		}
-		CommonListView.this.onRefreshComplete();
-		CommonListView.this.adapter.notifyDataSetChanged();
-		offset += limit;
+		super.onVisibilityChanged(changedView, visibility);
 		
 	}
+	
 	
 	public abstract String getEmptyTip();
 	
+	protected abstract List<ListItemData> load(int offset,int limit);
 	
-	public void load(final boolean refresh){
-		
-		if(refresh){
-			offset = 0;
-			list.clear();
-		}
-		
-		new AsyncTask<Void, Void, Result>() {
+	
 
-			@Override
-			protected Result doInBackground(Void... s) {
-				// TODO Auto-generated method stub
-				return _load(offset,limit);
-			}
-			
-			@Override
-			protected void onPostExecute(Result result) {
-				
-				list.addAll(result.list);
-				
-				_complete(result.hasMore);
-			}
-			
-		}.execute();
-		
-	}
 	
+	private int offset;
 	
-	private Result _load(int offset,int limit){
+	@Override
+	public boolean onLoad(int offset,int limit) {
+		this.offset = offset;
 		List<ListItemData> result = load(offset,limit);
 		if(result == null ){
 			result = new ArrayList<ListItemData>();
@@ -189,32 +97,24 @@ public abstract class CommonListView extends PullToRefreshListView{
 		for(ListItemData data:result){
 			model.add(data.toCommonListModel());
 		}
-		return new Result(result.size()>=limit?true:false, model);
+		if(offset == 0){
+			list.clear();
+		}
+		list.addAll(model);
+		
+		
+		return result.size()>=limit?true:false;
 	}
 	
-	
-	protected abstract List<ListItemData> load(int offset,int limit);
-	
-	
-
-	private BitmapDrawable writeOnDrawable(String text){
-		int width = getWidth(),height = getHeight();
-        Bitmap bm = Bitmap.createBitmap(width, height, Config.ARGB_8888);
-        Canvas canvas = new Canvas(bm);
-        Paint paint = new Paint(); 
-        paint.setColor(Color.parseColor("#a8a8a8")); 
-        paint.setTextSize(DisplayUtils.spToPx(getContext(), 18)); 
-        paint.setTextAlign(Align.CENTER); 
-
-        FontMetrics fontMetrics = paint.getFontMetrics(); 
-        // 计算文字高度 
-        float fontHeight = fontMetrics.bottom - fontMetrics.top; 
-        // 计算文字baseline 
-        float textBaseY = height - (height - fontHeight) / 2 - fontMetrics.bottom; 
-        canvas.drawText(text, width / 2, textBaseY, paint);
-
-        return new BitmapDrawable(bm);
-    }
-	
+	@Override
+	public void onLoadSuccess() {
+		if(offset == 0 && list.size() == 0){
+			setBackground(writeOnDrawable(getEmptyTip()));
+		}else{
+			setBackground(null);
+		}
+		adapter.notifyDataSetChanged();
+		
+	}
 	
 }

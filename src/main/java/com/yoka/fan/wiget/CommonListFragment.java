@@ -16,10 +16,13 @@ import android.view.ViewGroup.LayoutParams;
 public abstract class CommonListFragment extends Fragment{
 
 
+	private CListView view;
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		CListView view = new CListView(getActivity());
+		view = new CListView(getActivity());
 		
 		
 		view.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -67,6 +70,10 @@ public abstract class CommonListFragment extends Fragment{
 
 		
 		
+	}
+	
+	public void refresh(){
+		view.setRefreshing(true);
 	}
 	
 	protected abstract List<ListItemData> load(int offset, int limit);

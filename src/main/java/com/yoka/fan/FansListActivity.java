@@ -19,6 +19,8 @@ import com.yoka.fan.utils.Relation;
 import com.yoka.fan.utils.Relation.OperatorListener;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.BaseListView;
+import com.yoka.fan.wiget.BaseListView.OnLoadListener;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -33,7 +35,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class FansListActivity extends BaseActivity{
+public class FansListActivity extends BaseActivity implements OnLoadListener{
 	
 	public static final String PARAM_TYPE = "PARAM_TYPE";
 	
@@ -47,17 +49,11 @@ public class FansListActivity extends BaseActivity{
 	
 	private List<Model> list;
 	
-	private int offset = 0;
-	
 	private int limit = 20;
 	
-	private PullToRefreshListView listView;
+	private BaseListView listView;
 	
 	private String target_id;
-	
-	private boolean hasMore;
-	
-	private View footerView;
 	
 	private String type;
 	
@@ -66,34 +62,23 @@ public class FansListActivity extends BaseActivity{
 		super.onCreate(bundle);
 		type = getIntent().getStringExtra(PARAM_TYPE);
 		target_id = getIntent().getStringExtra(PARAM_TARGET_ID);
-		listView = new PullToRefreshListView(this);
+		listView = new BaseListView(this);
+		listView.setLimit(limit);
+		listView.setOnLoadListener(this);
 		list = new ArrayList<FansListActivity.Model>();
 		adapter = new FansListAdapter(this, list);
-		footerView = LayoutInflater.from(this).inflate( R.layout.footer_loading, null);
-		listView.getRefreshableView().addFooterView(footerView);
 		listView.setAdapter(adapter);
-		listView.setOnRefreshListener(new OnRefreshListener<ListView>() {
-
-			@Override
-			public void onRefresh(
-					PullToRefreshBase<ListView> refreshView) {
-				offset = 0;
-				load();
-				
-			}
-		});
-		listView.setOnLastItemVisibleListener(new OnLastItemVisibleListener() {
-
-			@Override
-			public void onLastItemVisible() {
-				if(hasMore){
-					load();
-				}
-				
-			}
-		});
-		load();
 		setContentView(listView);
+//		listView.setRefreshing(true);
+	}
+	
+	private boolean init = true;
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
 	}
 	
 	@Override
@@ -103,52 +88,6 @@ public class FansListActivity extends BaseActivity{
 			title = "关注";
 		}
 		return title;
-	}
-	
-	private void load(){
-		final User user = User.readUser();
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				Request request = null;
-				if(PARAM_FANS.equals(type)){
-					request = new Fans(user.id,target_id,offset,limit);
-				}else if(PARAM_FOLLOWS.equals(type)){
-					request = new GetFollower(user.id,target_id,offset,limit);
-				}
-				request.request();
-				if(request.getStatus() == Status.SUCCESS){
-					List<Result> results = null;
-					if(request instanceof Fans){
-						results = ((Fans)request).getResults();
-					}else if(request instanceof GetFollower){
-						results = ((GetFollower)request).getList();
-					}
-					hasMore = results.size()>=limit?true:false;
-					if(offset == 0){
-						list.clear();
-					}
-					for(Result result : results){
-						list.add(new Model(result.getId(), result.getHeadUrl(), result.getNick(),false));
-					}
-					offset += limit;
-					runOnUiThread(new Runnable() {
-						
-						@Override
-						public void run() {
-							adapter.notifyDataSetChanged();
-							listView.onRefreshComplete();
-							if(!hasMore){
-								listView.getRefreshableView().removeFooterView(footerView);
-							}
-						}
-					});
-				}
-				
-			}
-		}).start();
-		
 	}
 	
 	
@@ -299,6 +238,40 @@ public class FansListActivity extends BaseActivity{
 		}
 		
 		
+		
+	}
+
+	@Override
+	public boolean onLoad(final int offset, final int limit) {
+		final User user = User.readUser();
+		Request request = null;
+		if(PARAM_FANS.equals(type)){
+			request = new Fans(user.id,target_id,offset,limit);
+		}else if(PARAM_FOLLOWS.equals(type)){
+			request = new GetFollower(user.id,target_id,offset,limit);
+		}
+		request.request();
+		List<Result> results = new ArrayList<Result>();
+		if(request.getStatus() == Status.SUCCESS){
+			
+			if(request instanceof Fans){
+				results = ((Fans)request).getResults();
+			}else if(request instanceof GetFollower){
+				results = ((GetFollower)request).getList();
+			}
+			if(offset == 0){
+				list.clear();
+			}
+			for(Result result : results){
+				list.add(new Model(result.getId(), result.getHeadUrl(), result.getNick(),false));
+			}
+		}
+		return results.size()>=limit?true:false;
+	}
+
+	@Override
+	public void onLoadSuccess() {
+		adapter.notifyDataSetChanged();
 		
 	}
 
