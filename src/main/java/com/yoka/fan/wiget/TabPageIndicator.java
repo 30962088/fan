@@ -6,6 +6,7 @@ import com.yoka.fan.R;
 import com.yoka.fan.wiget.CommonPagerAdapter.Page;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
@@ -16,13 +17,21 @@ import android.widget.TextView;
 
 public class TabPageIndicator extends LinearLayout{
 
-	
+	public static interface OnTabClickLisenter{
+		public void onclick(View tab,Fragment fragment);
+	}
 	
 	private OnPageChangeListener onPageChangeListener;
+	
+	private OnTabClickLisenter onTabClickLisenter;
 	
 	private View viewSelected;
 	
 	private ViewPager viewPager;
+	
+	public void setOnTabClickLisenter(OnTabClickLisenter onTabClickLisenter) {
+		this.onTabClickLisenter = onTabClickLisenter;
+	}
 	
 	public void setOnPageChangeListener(
 			OnPageChangeListener onPageChangeListener) {
@@ -42,7 +51,7 @@ public class TabPageIndicator extends LinearLayout{
 	public void setModel(List<Page> list){
 		removeAllViews();
 		for(int i = 0;i<list.size();i++){
-			Page page = list.get(i);
+			final Page page = list.get(i);
 			View view =  LayoutInflater.from(getContext()).inflate(R.layout.page_tab,null);
 			final int pos = i;
 			view.setOnClickListener(new OnClickListener() {
@@ -50,7 +59,9 @@ public class TabPageIndicator extends LinearLayout{
 				@Override
 				public void onClick(View v) {
 					viewPager.setCurrentItem(pos);
-					
+					if(onTabClickLisenter != null){
+						onTabClickLisenter.onclick(v, page.getFragment());
+					}
 				}
 			});
 			((TextView)view.findViewById(R.id.tab_title)).setText(page.getName());

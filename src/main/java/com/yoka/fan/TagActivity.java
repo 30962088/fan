@@ -2,7 +2,6 @@ package com.yoka.fan;
 
 import java.util.List;
 
-import com.yoka.fan.network.GetTopNew;
 import com.yoka.fan.network.ListItemData;
 import com.yoka.fan.network.Tag;
 import com.yoka.fan.wiget.CommonListView;
