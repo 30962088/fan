@@ -15,12 +15,19 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
-        
     	<item name="android:windowNoTitle">true</item>
         <item name="android:editTextStyle">@style/editTextStyle</item>
+        <item name="android:listViewStyle">@style/MyListView</item>
     </style>
     
-    <style name="editTextStyle" parent="@android:style/Widget.Holo.EditText">
+    <style name="MyListView" parent="@android:style/Widget.ListView">
+       	<item name="android:fadingEdge">none</item>
+       	<item name="android:cacheColorHint">#00000000</item>
+       	<item name="android:divider">#cdcdcd</item>
+       	<item name="android:dividerHeight">1px</item>
+    </style>
+    
+    <style name="editTextStyle" parent="@android:style/Widget.EditText">
         <item name="android:textCursorDrawable">@drawable/cursor_blue</item>
         <item name="android:background">#00000000</item>
         <item name="android:textAppearance">@style/editTextAppearance</item>

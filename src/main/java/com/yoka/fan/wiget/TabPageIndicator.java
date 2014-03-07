@@ -3,9 +3,11 @@ package com.yoka.fan.wiget;
 import java.util.List;
 
 import com.yoka.fan.R;
+import com.yoka.fan.utils.DisplayUtils;
 import com.yoka.fan.wiget.CommonPagerAdapter.Page;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -50,6 +52,7 @@ public class TabPageIndicator extends LinearLayout{
 	public void setModel(List<Page> list){
 		removeAllViews();
 		for(int i = 0;i<list.size();i++){
+			
 			final Page page = list.get(i);
 			View view =  LayoutInflater.from(getContext()).inflate(R.layout.page_tab,null);
 			final int pos = i;
@@ -71,6 +74,15 @@ public class TabPageIndicator extends LinearLayout{
 			LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
 			params.weight = 1;
 			addView(view, params);
+			if(i != list.size() -1){
+				View sep = new View(getContext());
+				final int margin = DisplayUtils.Dp2Px(getContext(), 10);
+				sep.setBackgroundResource(R.drawable.divider);
+				sep.setLayoutParams(new LayoutParams(1,LayoutParams.MATCH_PARENT ){{
+					setMargins(0,margin, 0, margin);
+				}});
+				addView(sep);
+			}
 		}
 		setSelected(0);
 	}
@@ -79,10 +91,24 @@ public class TabPageIndicator extends LinearLayout{
 		if(viewSelected != null){
 			viewSelected.setSelected(false);
 		}
-		viewSelected = getChildAt(position);
+		viewSelected = getTabView(position);
 		viewSelected.setSelected(true);
 		viewSelected.findViewById(R.id.new_dot).setVisibility(View.GONE);
 		
+	}
+	
+	private View getTabView(int position){
+		
+		for(int i = 0,k=0;i<getChildCount();i++){
+			 if(getChildAt(i).getId() == R.id.tab){
+				 if(k == position){
+					 return getChildAt(i);
+				 }else{
+					 k++;
+				 }
+			 }
+		}
+		return null;
 	}
 
 	public void setViewPager(ViewPager pager){
