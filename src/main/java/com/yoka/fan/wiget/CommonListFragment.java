@@ -30,6 +30,8 @@ public abstract class CommonListFragment extends Fragment{
 	}
 	
 	
+	
+	
 	private class CListView extends CommonListView{
 
 		public CListView(Context context, AttributeSet attrs) {

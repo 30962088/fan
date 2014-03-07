@@ -4,9 +4,10 @@ import java.util.List;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
-public class CommonPagerAdapter extends FragmentStatePagerAdapter{
+public class CommonPagerAdapter extends FragmentPagerAdapter{
 
 	private List<Page> pages;
 	
@@ -40,10 +41,17 @@ public class CommonPagerAdapter extends FragmentStatePagerAdapter{
 	}
 	
 	@Override
+	public Object instantiateItem(ViewGroup container, int position) {
+		// TODO Auto-generated method stub
+		return super.instantiateItem(container, position);
+	}
+	
+	@Override
 	public CharSequence getPageTitle(int position) {
 		// TODO Auto-generated method stub
 		return pages.get(position).name;
 	}
+	
 	
 	
 	@Override
@@ -58,5 +66,10 @@ public class CommonPagerAdapter extends FragmentStatePagerAdapter{
 		return pages.size();
 	}
 	
+	@Override
+	public void destroyItem(ViewGroup container, int position, Object object) {
+		// TODO Auto-generated method stub
+//		super.destroyItem(container, position, object);
+	}
 	
 }

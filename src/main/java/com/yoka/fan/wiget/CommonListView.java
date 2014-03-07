@@ -109,9 +109,9 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 	@Override
 	public void onLoadSuccess() {
 		if(offset == 0 && list.size() == 0){
-			setBackground(writeOnDrawable(getEmptyTip()));
+			setBackgroundDrawable(writeOnDrawable(getEmptyTip()));
 		}else{
-			setBackground(null);
+			setBackgroundDrawable(null);
 		}
 		adapter.notifyDataSetChanged();
 		

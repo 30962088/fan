@@ -32,22 +32,18 @@ public class Dirctionary {
 	private static void initUserObjectFile(Context context){
 //		userObjectFile = new File(context.getCacheDir(),"user.class");
 		userObjectFile = new File(android.os.Environment.getExternalStorageDirectory(),"user.class");
+		if(!userObjectFile.exists()){
+			try {
+				userObjectFile.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private static void initCateObjectFile(Context context){
 		cateObjectFile = new File(android.os.Environment.getExternalStorageDirectory(),"cat.class");
-	}
-	
-	private static void initRelationObjectFile(Context context){
-		relationObjectFile = new File(android.os.Environment.getExternalStorageDirectory(),"relation.class");
-	}
-	
-	
-	public static File getUserObjectFile() {
-		return userObjectFile;
-	}
-	
-	public static File getCateObjectFile() {
 		if(!cateObjectFile.exists()){
 			try {
 				cateObjectFile.createNewFile();
@@ -56,6 +52,26 @@ public class Dirctionary {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private static void initRelationObjectFile(Context context){
+		relationObjectFile = new File(android.os.Environment.getExternalStorageDirectory(),"relation.class");
+		if(!relationObjectFile.exists()){
+			try {
+				relationObjectFile.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	public static File getUserObjectFile() {
+		return userObjectFile;
+	}
+	
+	public static File getCateObjectFile() {
 		return cateObjectFile;
 	}
 	

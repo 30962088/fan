@@ -11,7 +11,6 @@ import com.yoka.fan.utils.DisplayUtils;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.BuyPopupWindow.GoodsItem;
 import com.yoka.fan.wiget.LinkModel.Link;
-import com.yoka.fan.wiget.LinkedView.BackgroundImageView.OnViewdrawListener;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -116,6 +115,7 @@ public class LinkedView extends RelativeLayout {
 
 	public void load(LinkModel model) {
 		this.linkModel = model;
+		init=true;
 //		tagContainer.setVisibility(View.INVISIBLE);
 		tagContainer.removeAllViews();
 //		changeImageSize();
@@ -236,11 +236,14 @@ public class LinkedView extends RelativeLayout {
 
 	}
 
-	public static class BackgroundImageView extends ImageView {
+	private boolean init = true;
 
-		public static interface OnViewdrawListener {
-			public void ondraw(float[] bounds);
-		}
+	public static interface OnViewdrawListener {
+		public void ondraw(float[] bounds);
+	}
+	
+	public class BackgroundImageView extends ImageView {
+
 
 		private OnViewdrawListener ondrawListener;
 
@@ -312,12 +315,16 @@ public class LinkedView extends RelativeLayout {
 			return bounds;
 
 		}
+		
+		
 
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			if (ondrawListener != null && getDrawable() != null && ((BitmapDrawable)getDrawable()).getBitmap() != null) {
+			
+			if (init && ondrawListener != null && getDrawable() != null && ((BitmapDrawable)getDrawable()).getBitmap() != null) {
 				ondrawListener.ondraw(getBitmapBound());
+				init = false;
 			}
 
 		}

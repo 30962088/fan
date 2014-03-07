@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment{
 
         ViewPager pager = (ViewPager)view.findViewById(R.id.pager);
         pager.setAdapter(adapter);
-        pager.setOffscreenPageLimit(3);
+        pager.setOffscreenPageLimit(-1);
         
         
 

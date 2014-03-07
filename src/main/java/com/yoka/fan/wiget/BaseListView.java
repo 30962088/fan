@@ -74,6 +74,7 @@ public class BaseListView extends PullToRefreshListView{
 		init();
 	}
 	
+	
 	@Override
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();

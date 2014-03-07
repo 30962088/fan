@@ -63,11 +63,13 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		if(User.readUser() == null){
 			getActivity().finish();
+		}else{
+			target_id = getArguments().getString(ZoneActivity.PARAM_TARGET_ID);
+			name = getArguments().getString(ZoneActivity.PARAM_NAME);
+			imageLoader = Utils.getImageLoader(getActivity());
+			user = User.readUser();
 		}
-		target_id = getArguments().getString(ZoneActivity.PARAM_TARGET_ID);
-		name = getArguments().getString(ZoneActivity.PARAM_NAME);
-		imageLoader = Utils.getImageLoader(getActivity());
-		user = User.readUser();
+		
 	}
 	
 	@Override
@@ -80,6 +82,9 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onViewCreated(view, savedInstanceState);
+		if(User.readUser() == null){
+			return;
+		}
 		
 		matchView = (TextView) view.findViewById(R.id.match);
 		focusView = (TextView) view.findViewById(R.id.focus);
