@@ -13,11 +13,16 @@ import android.telephony.TelephonyManager;
 
 public class App extends Application{
 
+	private static App instance;
 	
+	public static App getInstance() {
+		return instance;
+	}
 	
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		instance = this;
 		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 //		Constant.uuid = tm.getDeviceId();
 //		Constant.token = Utils.getMD5(Constant.uuid + "fan.yoka.com/app");

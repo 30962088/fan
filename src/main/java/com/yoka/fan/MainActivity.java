@@ -181,7 +181,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 					break;
 				}
 			}
-		});
+		},"分享你的搭配");
 	}
 	
 	private void onSelectSuccess(Uri uri){

@@ -10,6 +10,7 @@ import com.yoka.fan.utils.Constant;
 import com.yoka.fan.utils.User;
 
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.LoadingPopup;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -65,7 +66,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener{
 		final String email = mEmailText.getText().toString();
 		final String password = mPasswordText.getText().toString();
 		if(validate(username,email,password)){
-	
+			LoadingPopup.show(this);
 			new Thread(new Runnable() {
 				
 				@Override
@@ -83,7 +84,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener{
 						};
 						
 					}.request();
-					
+					LoadingPopup.show(RegisterActivity.this);
 				}
 			}).start();
 			

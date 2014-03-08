@@ -28,6 +28,8 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.yoka.fan.App;
+import com.yoka.fan.utils.Utils;
 
 public abstract class Request implements Response{
 
@@ -143,6 +145,7 @@ public abstract class Request implements Response{
 		String msg = "";
 		if(code == 500){
 			msg = "服务器内部错误";
+			Utils.tip(App.getInstance(), msg);
 		}
 		onServerError(code,msg);
 		onError(code,msg);

@@ -40,7 +40,7 @@ public class PhotoSelectPopupWindow implements OnClickListener{
 	
 	
 	
-	public PhotoSelectPopupWindow(Context context,OnItemClickListener onItemClickListener) {
+	public PhotoSelectPopupWindow(Context context,OnItemClickListener onItemClickListener,String title) {
 		this.onItemClickListener = onItemClickListener;
 		View view = LayoutInflater.from(context).inflate(R.layout.photo_select_popup,null);
 		view.setOnClickListener(this);
@@ -48,6 +48,7 @@ public class PhotoSelectPopupWindow implements OnClickListener{
 		mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4D000000")));
 		mPopupWindow.setTouchable(true);
         mPopupWindow.setOutsideTouchable(true);
+        ((TextView)view.findViewById(R.id.title)).setText(title);
         Animation rotation = AnimationUtils.loadAnimation(context, R.anim.slide_in_from_bottom);
         
         View bottomBar = view.findViewById(R.id.popup);

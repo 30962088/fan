@@ -19,17 +19,15 @@ import com.yoka.fan.network.Register.Result;
 import com.yoka.fan.utils.Constant;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.LoadingPopup;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends BaseActivity2 implements OnClickListener {
@@ -94,6 +92,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 	private void onLogin() {
 		final String username = usernameView.getText().toString();
 		final String password = passwordView.getText().toString();
+		LoadingPopup.show(context);
 		new Thread(new Runnable() {
 			
 			@Override
@@ -119,7 +118,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 						
 					};
 				}.request();
-				
+				LoadingPopup.hide(context);
 			}
 		}).start();
 		

@@ -135,7 +135,7 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 						break;
 					}
 				}
-			});
+			},"设置头像");
 			break;
 		case R.id.login_btn:
 			onlogin();
