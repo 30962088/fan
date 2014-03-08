@@ -18,11 +18,22 @@ public class Dirctionary {
 	
 	private static File relationObjectFile;
 	
+	private static File dataDir;
+	
 	public static void init(Context context){
 		initPicture(context);
+		initDataDir(context);
 		initUserObjectFile(context);
 		initCateObjectFile(context);
 		initRelationObjectFile(context);
+		
+	}
+	
+	private static void initDataDir(Context context){
+		dataDir = new File(context.getCacheDir()+"/data");
+		if(!dataDir.exists()){
+			dataDir.mkdirs();
+		}
 	}
 	
 	public static File getPictureDir() {
@@ -31,7 +42,7 @@ public class Dirctionary {
 	
 	private static void initUserObjectFile(Context context){
 //		userObjectFile = new File(context.getCacheDir(),"user.class");
-		userObjectFile = new File(android.os.Environment.getExternalStorageDirectory(),"user.class");
+		userObjectFile = new File(dataDir,"user.class");
 		if(!userObjectFile.exists()){
 			try {
 				userObjectFile.createNewFile();
@@ -43,7 +54,7 @@ public class Dirctionary {
 	}
 	
 	private static void initCateObjectFile(Context context){
-		cateObjectFile = new File(android.os.Environment.getExternalStorageDirectory(),"cat.class");
+		cateObjectFile = new File(dataDir,"cat.class");
 		if(!cateObjectFile.exists()){
 			try {
 				cateObjectFile.createNewFile();
@@ -55,7 +66,7 @@ public class Dirctionary {
 	}
 	
 	private static void initRelationObjectFile(Context context){
-		relationObjectFile = new File(android.os.Environment.getExternalStorageDirectory(),"relation.class");
+		relationObjectFile = new File(dataDir,"relation.class");
 		if(!relationObjectFile.exists()){
 			try {
 				relationObjectFile.createNewFile();

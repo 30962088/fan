@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.CommentActivity;
+import com.yoka.fan.LoginActivity;
 import com.yoka.fan.R;
 import com.yoka.fan.TagActivity;
 import com.yoka.fan.ZoneActivity;
@@ -176,16 +177,21 @@ public class CommonListAdapter extends BaseAdapter{
 			
 			@Override
 			public void onClick(View v) {
+				User user = User.readUser();
+				if(user == null){
+					context.startActivity(new Intent(context,LoginActivity.class));
+					return;
+				}
 				final boolean isStared= !model.isStared();
 				model.setStared(isStared);
 				int count = model.getStar();
 				Request request = null;
 				if(isStared){
 					count++;
-					request = new Like(model.getId());
+					request = new Like(user.id,user.access_token,model.getId());
 				}else{
 					count--;
-					request = new UnLike(model.getId());
+					request = new UnLike(user.id,user.access_token,model.getId());
 				}
 				model.setStar(count);
 				mStarBtn.setSelected(model.isStared());

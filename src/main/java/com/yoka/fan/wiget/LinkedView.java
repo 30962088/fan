@@ -82,7 +82,7 @@ public class LinkedView extends RelativeLayout {
 			public boolean onTouch(View v, MotionEvent event) {
 
 				if (event.getAction() == MotionEvent.ACTION_UP) {
-					if (onImageClickListener != null) {
+					if (onImageClickListener != null && imageView.getDrawable() != null && ((BitmapDrawable)imageView.getDrawable()).getBitmap() != null) {
 						float[] b = imageView.getBitmapBound();
 						float left = (event.getX() - b[0]) / b[2];
 						float top = (event.getY() - b[1]) / b[3];

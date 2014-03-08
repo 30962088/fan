@@ -15,6 +15,7 @@ import com.yoka.fan.wiget.BaseListView;
 import com.yoka.fan.wiget.BaseListView.OnLoadListener;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -56,6 +57,11 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		user = User.readUser();
+		if(user == null){
+			startActivity(new Intent(this, LoginActivity.class));
+			finish();
+			return;
+		}
 		collId = getIntent().getStringExtra(PARAM_COLL_ID);
 		setContentView(R.layout.comment_layout);
 		

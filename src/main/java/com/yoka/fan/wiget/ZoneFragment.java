@@ -8,10 +8,10 @@ import java.util.Map;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.FansListActivity;
+import com.yoka.fan.LoginActivity;
 import com.yoka.fan.MainActivity;
 import com.yoka.fan.R;
 import com.yoka.fan.ZoneActivity;
-import com.yoka.fan.network.Fans;
 import com.yoka.fan.network.Follow;
 import com.yoka.fan.network.Info;
 import com.yoka.fan.network.Request;
@@ -28,7 +28,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
@@ -62,6 +61,7 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if(User.readUser() == null){
+			startActivity(new Intent(getActivity(), LoginActivity.class));
 			getActivity().finish();
 		}else{
 			target_id = getArguments().getString(ZoneActivity.PARAM_TARGET_ID);

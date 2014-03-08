@@ -7,13 +7,24 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.yoka.fan.utils.Constant;
-import com.yoka.fan.utils.User;
 
 public class Like extends Request{
 
-	private String coll_id;
 	
-	public Like(String coll_id) {
+	
+	private String user_id;
+	private String access_token;
+	private String coll_id;
+	private String uuid = Constant.uuid;
+	
+	
+	
+	
+
+	public Like(String user_id, String access_token, String coll_id) {
+		super();
+		this.user_id = user_id;
+		this.access_token = access_token;
 		this.coll_id = coll_id;
 	}
 
@@ -40,10 +51,10 @@ public class Like extends Request{
 	@Override
 	public List<NameValuePair> fillParams() {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("uuid", Constant.uuid));
-		params.add(new BasicNameValuePair("user_id", User.readUser().id));
+		params.add(new BasicNameValuePair("uuid", uuid));
+		params.add(new BasicNameValuePair("user_id", user_id));
 		params.add(new BasicNameValuePair("coll_id", coll_id));
-		params.add(new BasicNameValuePair("access_token", User.readUser().access_token));
+		params.add(new BasicNameValuePair("access_token", access_token));
 		return params;
 	}
 

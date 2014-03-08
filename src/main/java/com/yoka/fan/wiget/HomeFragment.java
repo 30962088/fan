@@ -12,7 +12,6 @@ import com.yoka.fan.wiget.CommonPagerAdapter.Page;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
@@ -37,16 +36,11 @@ public class HomeFragment extends Fragment{
 			add(new Page("推荐", new CollRecommandListFragment(),false));
 			
 			add(new Page("最新", new GetTopNewListFragment(),false));
+			
+			add(new Page("关注", new CollFollowListFragment(), false));
 		}};
-		User user = User.readUser();
-		if(user != null){
-			Fragment fragment = new CollFollowListFragment();
-			Bundle args = new Bundle();
-			args.putString(CollFollowListFragment.PARAM_USER_ID, user.id);
-			args.putString(CollFollowListFragment.PARAM_USER_ACCESS_TOKEN, user.access_token);
-			fragment.setArguments(args);
-			pages.add(new Page("关注", fragment, false));
-		}
+		
+		
 		CommonPagerAdapter adapter = new CommonPagerAdapter(getChildFragmentManager(),pages);
 		
 		
