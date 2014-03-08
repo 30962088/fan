@@ -19,6 +19,7 @@
             android:src="@drawable/nav" />
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/actionbar_dot"
             android:layout_width="8dp"
             android:layout_height="8dp"

@@ -12,10 +12,12 @@ import com.yoka.fan.utils.ChangeHead;
 import com.yoka.fan.utils.Dirctionary;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.LoadingPopup;
 import com.yoka.fan.wiget.PhotoSelectPopupWindow;
 import com.yoka.fan.wiget.PhotoSelectPopupWindow.OnItemClickListener;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -53,11 +55,13 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 	
 	private EditText jobView;
 	
+	private Context context;
+	
 	@Override
 	protected void onCreate(Bundle bundle) {
 		// TODO Auto-generated method stub
 		super.onCreate(bundle);
-		
+		context = this;
 		setContentView(R.layout.modify_layout);
 		jobView = (EditText) findViewById(R.id.job);
 		nickView = (EditText) findViewById(R.id.nick);
@@ -148,7 +152,7 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 		final String access_token = user.access_token;
 		final String job = jobView.getText().toString();
 		final String nick = nickView.getText().toString();
-		
+		LoadingPopup.show(context);
 		new Thread(new Runnable() {
 			
 			@Override
@@ -176,13 +180,18 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 						User.saveUser(user);
 						Utils.tip(ModifyActivity.this,"修改成功");
 						finish();
+						
 					};
+					
+					
 					
 					public void onError(int code, String msg) {
 						Utils.tip(ModifyActivity.this, msg);
 					};
 				};
+				
 				modify.request();
+				LoadingPopup.hide(context);
 				
 				
 			}

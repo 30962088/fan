@@ -152,6 +152,8 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 		photoView.setImageResource(R.drawable.photo_default);
 		imageLoader.displayImage(result.getHead_url(), photoView);
 		initPage(result.getId());
+		getView().findViewById(R.id.content).setVisibility(View.VISIBLE);
+		getView().findViewById(R.id.loading).setVisibility(View.GONE);
 	}
 
 	private void initPage(String target_id){
