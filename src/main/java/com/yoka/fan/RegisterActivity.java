@@ -84,7 +84,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener{
 						};
 						
 					}.request();
-					LoadingPopup.show(RegisterActivity.this);
+					LoadingPopup.hide(RegisterActivity.this);
 				}
 			}).start();
 			

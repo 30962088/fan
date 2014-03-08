@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.yoka.fan.LoginActivity;
-
+import android.net.NetworkInfo;
 /**
  * 
  * @author zhangzimeng
@@ -115,6 +116,23 @@ public class Utils {
 			}
 		});
 		
+	}
+	
+	private static ConnectivityManager connMgr;
+
+	public static boolean isMobileNetworkAvailable(Context con){
+		if(null == connMgr){
+			connMgr = (ConnectivityManager)con.getSystemService(Context.CONNECTIVITY_SERVICE);
+		}
+		NetworkInfo wifiInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		NetworkInfo mobileInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		if(wifiInfo != null && wifiInfo.isAvailable()){
+			return true;
+		}else if(mobileInfo != null && mobileInfo.isAvailable()){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 }

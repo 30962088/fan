@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -17,7 +18,9 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MIME;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
@@ -26,9 +29,12 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yoka.fan.App;
+import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 
 public abstract class Request implements Response{
@@ -38,6 +44,8 @@ public abstract class Request implements Response{
 	public static final int REFRESH_NO_CACHE = 2;
 	
 	public static final int REFRESH_READ_CACHE = 0;
+	
+	public static final int CODE_NO_DATA = 80503;
 	
 	public static String HOST = "http://fan.yoka.com/api/";
 	
@@ -58,6 +66,10 @@ public abstract class Request implements Response{
 	}
 	
 	public void request(){
+		if(!Utils.isMobileNetworkAvailable(App.getInstance())){
+			Utils.tip(App.getInstance(), "网络未连接");
+			return;
+		}
 		try{
 			DefaultHttpClient httpclient = new DefaultHttpClient();
 			HttpPost httpost = new HttpPost(getURL());
@@ -66,12 +78,11 @@ public abstract class Request implements Response{
 			if(fileMap != null){
 				MultipartEntityBuilder builder = MultipartEntityBuilder.create();        
 			    builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-			    
 			    for(String filename:fileMap.keySet()){
 			    	builder.addPart(filename, new FileBody(fileMap.get(filename)));
 			    }
 			    for(NameValuePair param : fillParams()){
-			    	builder.addTextBody(param.getName(), param.getValue());
+			    	builder.addTextBody(param.getName(), param.getValue(),ContentType.create("text/plain", MIME.UTF8_CHARSET));
 			    }
 			    requsetEntity = builder.build();
 			}else{
@@ -137,6 +148,12 @@ public abstract class Request implements Response{
 	}
 	
 	private void error(int code,String msg){
+		if(code == 10020){
+			User.saveUser(null);
+		}
+		if(ArrayUtils.indexOf(new int[]{CODE_NO_DATA}, code) == -1 ){
+			Utils.tip(App.getInstance(), msg);
+		}
 		onResultError(code, msg);
 		onError(code,msg);
 	}

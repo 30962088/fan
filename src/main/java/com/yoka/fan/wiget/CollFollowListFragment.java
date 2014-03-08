@@ -87,7 +87,7 @@ public class CollFollowListFragment extends Fragment implements OnClickListener{
 
 		@Override
 		protected List<ListItemData> load(int offset, int limit) {
-			CollFollow request = new CollFollow( offset, limit,user.access_token,user.access_token);
+			CollFollow request = new CollFollow( offset, limit,user.access_token,user.id);
 			request.request();
 			return request.getListData();
 		}

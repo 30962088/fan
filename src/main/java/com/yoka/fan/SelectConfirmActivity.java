@@ -17,6 +17,7 @@ import com.yoka.fan.network.Request.Status;
 import com.yoka.fan.utils.DisplayUtils;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.LoadingPopup;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -93,6 +94,7 @@ public class SelectConfirmActivity extends Activity implements OnClickListener{
 		}
 		final File uploadimg =  new File(Uri.parse(url).getPath());
 		final User user = User.readUser();
+		LoadingPopup.show(this);
 		new AsyncTask<Void, Void, Status>() {
 
 			@Override
@@ -106,9 +108,11 @@ public class SelectConfirmActivity extends Activity implements OnClickListener{
 			@Override
 			protected void onPostExecute(
 					com.yoka.fan.network.Request.Status result) {
+				LoadingPopup.hide(SelectConfirmActivity.this);
 				if(result == com.yoka.fan.network.Request.Status.SUCCESS){
 					finish();
 				}
+				
 				
 			}
 		}.execute();

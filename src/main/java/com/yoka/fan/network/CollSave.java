@@ -11,6 +11,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.yoka.fan.utils.Constant;
 
 public class CollSave extends Request{
@@ -135,7 +136,7 @@ public class CollSave extends Request{
 	@Override
 	public List<NameValuePair> fillParams() {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("link_goods", new JSONObject(link_goods).toString()));
+		params.add(new BasicNameValuePair("link_goods", new Gson().toJson(link_goods)));
 		params.add(new BasicNameValuePair("access_token", access_token));
 		params.add(new BasicNameValuePair("description", description));
 		params.add(new BasicNameValuePair("coll_id", coll_id));
