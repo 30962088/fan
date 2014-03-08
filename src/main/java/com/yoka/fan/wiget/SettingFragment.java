@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,7 +114,10 @@ public class SettingFragment extends Fragment implements OnClickListener{
 	public void login(User user){
 		getView().findViewById(R.id.login_frame).setVisibility(View.GONE);
 		getView().findViewById(R.id.user_frame).setVisibility(View.VISIBLE);
-		imageLoader.displayImage(user.photo, (ImageView)getView().findViewById(R.id.user_photo));
+		if(!TextUtils.isEmpty(user.photo)){
+			imageLoader.displayImage(user.photo, (ImageView)getView().findViewById(R.id.user_photo));
+		}
+		
 		((TextView)getView().findViewById(R.id.user_nickname)).setText(user.nickname);
 	}
 	

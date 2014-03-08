@@ -6,6 +6,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.HomeFragment;
+import com.yoka.fan.wiget.PhotoView;
 import com.yoka.fan.wiget.SettingFragment;
 import com.yoka.fan.wiget.ZoneFragment;
 
@@ -13,6 +14,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -105,7 +107,12 @@ public class SidingMenuFragment extends Fragment implements OnClickListener{
 	public void login(User user){
 		getView().findViewById(R.id.login_btn).setVisibility(View.GONE);
 		getView().findViewById(R.id.user_btn).setVisibility(View.VISIBLE);
-		imageLoader.displayImage(user.photo, ((ImageView)getView().findViewById(R.id.user_photo)));
+//		((PhotoView)getView().findViewById(R.id.user_photo)).setVipSize((int)getResources().getDimension(R.dimen.vip_20));
+		if(!TextUtils.isEmpty(user.photo)){
+			
+			imageLoader.displayImage(user.photo, ((ImageView)getView().findViewById(R.id.user_photo)));
+		}
+		
 		((TextView)getView().findViewById(R.id.user_name)).setText(user.nickname);
 	}
 	

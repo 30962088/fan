@@ -11,17 +11,11 @@
         android:layout_height="115dp"
         android:gravity="center" >
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/photo_bg" >
-
-            <com.makeramen.RoundedImageView
+            <com.yoka.fan.wiget.PhotoView
                 android:id="@+id/user_photo"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                app:is_oval="true" />
-        </FrameLayout>
+                android:src="@drawable/photo_default"/>
         
     </RelativeLayout>
 
@@ -85,8 +79,7 @@
                     android:layout_marginLeft="27dp"
                     android:layout_weight="1"
                     android:hint="3-16位字符"
-                    android:maxLength="16"
-                    android:password="true" >
+                    android:maxLength="16">
                 </EditText>
             </LinearLayout>
 

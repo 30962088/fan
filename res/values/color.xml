@@ -4,4 +4,5 @@
     <color name="mask">#4D000000</color>
     <color name="holo_green_light">#80000000</color>
     <color name="transparent">#00000000</color>
+    <color name="photo_border">#e2e2e2</color>
 </resources>

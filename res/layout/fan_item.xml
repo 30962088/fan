@@ -10,11 +10,10 @@
     android:background="#fff"
     android:paddingBottom="15dp">
 
-    <com.makeramen.RoundedImageView
+    <com.yoka.fan.wiget.PhotoView
         android:id="@+id/photo"
         android:layout_width="32dp"
-        android:layout_height="32dp"
-        app:is_oval="true" />
+        android:layout_height="32dp"/>
 
     <TextView
         android:id="@+id/name"

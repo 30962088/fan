@@ -16,11 +16,10 @@
             android:layout_width="60dp"
             android:layout_height="60dp" >
 
-            <com.makeramen.RoundedImageView
+            <com.yoka.fan.wiget.PhotoView
                 android:id="@+id/photo"
                 android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:is_oval="true" />
+                android:layout_height="60dp"/>
 
             <!-- <ImageView
                 android:layout_width="20dp"

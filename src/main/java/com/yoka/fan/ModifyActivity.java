@@ -21,6 +21,7 @@ import android.net.Uri;
 
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -69,7 +70,10 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 		photoView.setOnClickListener(this);
 		setSex(User.readUser().sex);
 		imageLoader = Utils.getImageLoader(this);
-		imageLoader.displayImage(User.readUser().photo,photoView);
+		if(!TextUtils.isEmpty(User.readUser().photo)){
+			imageLoader.displayImage(User.readUser().photo,photoView);
+		}
+		
 		findViewById(R.id.login_btn).setOnClickListener(this);
 	}
 	

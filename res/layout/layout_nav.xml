@@ -29,12 +29,10 @@
                     android:padding="1.5dp"
                     android:background="@drawable/photo_bg_gray">
 
-                    <com.makeramen.RoundedImageView
+                    <com.yoka.fan.wiget.PhotoView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/photo_default"
-                        app:is_oval="true" />
+                        android:src="@drawable/photo_default"/>
                     
                     
                 </FrameLayout>
@@ -71,13 +69,11 @@
                     android:padding="1.5dp"
                     android:background="@drawable/photo_bg_gray">
 
-                    <com.makeramen.RoundedImageView
+                    <com.yoka.fan.wiget.PhotoView
                         android:id="@+id/user_photo"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/photo_default"
-                        app:is_oval="true" />
+                        android:src="@drawable/photo_default"/>
                     
                     
                 </FrameLayout>

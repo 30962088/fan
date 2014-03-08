@@ -106,11 +106,11 @@
                             android:layout_marginRight="10dp"
                             android:background="@drawable/photo_bg" >
 
-                            <com.makeramen.RoundedImageView
+                            <com.yoka.fan.wiget.PhotoView
                                 android:id="@+id/user_photo"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
-                                app:is_oval="true" />
+                                android:src="@drawable/photo_default"/>
                         </FrameLayout>
 
                         <TextView

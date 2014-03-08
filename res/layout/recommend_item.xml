@@ -26,8 +26,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="#e7e2dc"
-                android:src="@drawable/blazers"
-                app:is_oval="true" />
+                app:is_oval="true"/>
         </RelativeLayout>
 
         <ImageView
