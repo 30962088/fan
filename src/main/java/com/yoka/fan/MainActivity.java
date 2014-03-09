@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends SlidingFragmentActivity implements
 		OnClickListener {
@@ -217,6 +218,24 @@ public class MainActivity extends SlidingFragmentActivity implements
 			break;
 		}
 		
+	}
+	
+	
+	private long currentBackPressedTime = 0;
+
+	private static final int BACK_PRESSED_INTERVAL = 2000;
+
+	
+	@Override
+	public void onBackPressed() {
+		// 判断时间间隔
+		if (System.currentTimeMillis() - currentBackPressedTime > BACK_PRESSED_INTERVAL) {
+			currentBackPressedTime = System.currentTimeMillis();
+			Toast.makeText(this, "再按一次返回键退出程序", Toast.LENGTH_SHORT).show();
+		} else {
+			// 退出
+			finish();
+		}
 	}
 
 }

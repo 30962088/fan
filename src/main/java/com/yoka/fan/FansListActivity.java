@@ -23,6 +23,7 @@ import com.yoka.fan.wiget.BaseListView;
 import com.yoka.fan.wiget.BaseListView.OnLoadListener;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,12 +31,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class FansListActivity extends BaseActivity implements OnLoadListener{
+public class FansListActivity extends BaseActivity implements OnLoadListener,OnItemClickListener{
 	
 	public static final String PARAM_TYPE = "PARAM_TYPE";
 	
@@ -63,6 +66,7 @@ public class FansListActivity extends BaseActivity implements OnLoadListener{
 		type = getIntent().getStringExtra(PARAM_TYPE);
 		target_id = getIntent().getStringExtra(PARAM_TARGET_ID);
 		listView = new BaseListView(this);
+		listView.setOnItemClickListener(this);
 		listView.setLimit(limit);
 		listView.setOnLoadListener(this);
 		list = new ArrayList<FansListActivity.Model>();
@@ -78,7 +82,7 @@ public class FansListActivity extends BaseActivity implements OnLoadListener{
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
+		adapter.notifyDataSetChanged();
 	}
 	
 	@Override
@@ -240,6 +244,7 @@ public class FansListActivity extends BaseActivity implements OnLoadListener{
 		
 		
 	}
+	
 
 	@Override
 	public boolean onLoad(final int offset, final int limit) {
@@ -272,6 +277,18 @@ public class FansListActivity extends BaseActivity implements OnLoadListener{
 	@Override
 	public void onLoadSuccess() {
 		adapter.notifyDataSetChanged();
+		
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Model model = list.get(position-1);
+		Intent intent = new Intent(this, ZoneActivity.class);
+		intent.putExtra(ZoneActivity.PARAM_TARGET_ID, model.id);
+		intent.putExtra(ZoneActivity.PARAM_NAME, model.name);
+		startActivity(intent);
+		 
 		
 	}
 

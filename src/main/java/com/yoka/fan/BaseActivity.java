@@ -32,7 +32,7 @@ public abstract class BaseActivity extends FragmentActivity{
 		
 		((ViewGroup)findViewById(R.id.content_view)).addView(view);
 		
-		((TextView)findViewById(R.id.actionbar_title)).setText(getActionBarTitle());
+		setWebTitle(getActionBarTitle());
 		
 		findViewById(R.id.actionbar_left).setOnClickListener(new OnClickListener() {
 			
@@ -42,9 +42,12 @@ public abstract class BaseActivity extends FragmentActivity{
 				
 			}
 		});
-		
-		
 	}
+	
+	public void setWebTitle(String title){
+		((TextView)findViewById(R.id.actionbar_title)).setText(title);
+	}
+	
 	@Override
 	public void setContentView(View view) {
 		setContentView(view,new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));

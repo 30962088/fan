@@ -84,8 +84,10 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 	}
 	
 	private void onLoginSuccess(Result result){
-		User.saveUser(result.toUser());
-		finish();
+		User user = result.toUser();
+		User.fillInfo(user);
+		User.saveUser(user);
+		startActivity(new Intent(LoginActivity.this,RecommandListActivity.class));
 		MainActivity.getInstance().login(User.readUser());
 	}
 	

@@ -47,9 +47,9 @@ public class SidingMenuFragment extends Fragment implements OnClickListener{
 		
 		view.findViewById(R.id.login_btn).setOnClickListener(this);
 		view.findViewById(R.id.setting).setOnClickListener(this);
-		zoneBtn = view.findViewById(R.id.home);
+		zoneBtn = view.findViewById(R.id.zone);
 		zoneBtn.setOnClickListener(this);
-		view.findViewById(R.id.zone).setOnClickListener(this);
+		view.findViewById(R.id.home).setOnClickListener(this);
 		view.findViewById(R.id.camera_btn).setOnClickListener(this);
 		view.findViewById(R.id.user_btn).setOnClickListener(this);
 	}

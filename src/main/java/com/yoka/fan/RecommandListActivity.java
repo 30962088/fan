@@ -8,13 +8,16 @@ import com.viewpagerindicator.CirclePageIndicator;
 import com.yoka.fan.network.Info.Result;
 import com.yoka.fan.network.Follow;
 import com.yoka.fan.network.Recommand;
+import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Request.Status;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.CommonPagerAdapter;
+import com.yoka.fan.wiget.LoadingPopup;
 import com.yoka.fan.wiget.CommonPagerAdapter.Page;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -247,6 +250,7 @@ public class RecommandListActivity extends BaseActivity2 implements OnClickListe
 		if(targetlist.size() == 0){
 			finish();
 		}
+		LoadingPopup.show(this);
 		new AsyncTask<Void,Void, Status>() {
 
 			@Override
@@ -260,13 +264,25 @@ public class RecommandListActivity extends BaseActivity2 implements OnClickListe
 			@Override
 			protected void onPostExecute(
 					com.yoka.fan.network.Request.Status result) {
+				if(result == Request.Status.SUCCESS){
+					finish();
+				}
+				LoadingPopup.hide(RecommandListActivity.this);
 				
-				finish();
 				
 			}
 			
 		}.execute();
 		
+	}
+	
+	@Override
+	public void finish() {
+		// TODO Auto-generated method stub
+//		super.finish();
+		Intent intent = new Intent(RecommandListActivity.this,MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		startActivity(intent);
 	}
 
 	@Override

@@ -12,7 +12,30 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yoka.fan.utils.Constant;
 
-public abstract class Info extends Request{
+public class Info extends Request{
+	
+	public static class OtherInfo{
+		private BaseInfo base_info;
+		public BaseInfo getBase_info() {
+			return base_info;
+		}
+	}
+	
+	public static class BaseInfo{
+		private String birthday;
+		private int sex;
+		private String job;
+		public String getBirthday() {
+			return birthday;
+		}
+		public int getSex() {
+			return sex;
+		}
+		public String getJob() {
+			return job;
+		}
+		
+	}
 	
 	public static class Result{
 		private String _id;
@@ -22,6 +45,7 @@ public abstract class Info extends Request{
 		private int show_count;
 		private String head_url;
 		private String nick;
+		private OtherInfo other_info;
 		public int getFollowers() {
 			return followers;
 		}
@@ -46,7 +70,11 @@ public abstract class Info extends Request{
 		public int getShow_count() {
 			return show_count;
 		}
+		public OtherInfo getOther_info() {
+			return other_info;
+		}
 	}
+	
 
 	private String access_token;
 	
@@ -72,12 +100,20 @@ public abstract class Info extends Request{
 	}
 	
 	
-	public abstract void onSuccess(Map<String, Result> result);
+	public void onSuccess(Map<String, Result> result){};
 
+	
+	private Map<String, Result> result;
+	
 	@Override
 	public void onSuccess(String data) {
-		onSuccess((Map<String, Result>)new Gson().fromJson(data, new TypeToken<Map<String, Result>>(){}.getType()));
+		result = (Map<String, Result>)new Gson().fromJson(data, new TypeToken<Map<String, Result>>(){}.getType());
+		onSuccess(result);
 		
+	}
+	
+	public Map<String, Result> getResult() {
+		return result;
 	}
 
 	@Override

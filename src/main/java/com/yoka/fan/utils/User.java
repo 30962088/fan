@@ -7,6 +7,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Map;
+
+import com.yoka.fan.network.Info;
+import com.yoka.fan.network.Info.BaseInfo;
+import com.yoka.fan.network.Info.Result;
 
 public class User implements Serializable{
 	public static final int MALE = 1;
@@ -50,6 +55,20 @@ public class User implements Serializable{
 		}
 		return user;
 
+	}
+	
+	public static Result getInfo(User user){
+		
+		Info info = new Info(user.access_token,user.id,user.id);
+		info.request();
+		return info.getResult().get(user.id);
+	}
+	
+	public static void fillInfo(User user){
+		Result result = getInfo(user);
+		BaseInfo baseInfo = result.getOther_info().getBase_info();
+		user.sex = baseInfo.getSex();
+		user.job = baseInfo.getJob();
 	}
 
 	public static void saveUser(User _user) {

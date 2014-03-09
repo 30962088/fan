@@ -10,32 +10,19 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.PopupWindow;
 
-public class LoadingPopup extends PopupWindow {
+public class LoadingPopup {
 
-	private View view;
+	
 
-	private LoadingPopup(Context context) {
-		view = LayoutInflater.from(context).inflate(R.layout.loading_popup,
-				null);
-		setWidth(LayoutParams.MATCH_PARENT);
-		setHeight(LayoutParams.MATCH_PARENT);
-		setContentView(view);
-	}
-
-	private void show() {
-		showAtLocation(view, Gravity.BOTTOM, 0, 0);
-	}
-
-	private static LoadingPopup popup;
+	private static PopupWindow popup;
 
 	public static void show(final Context context) {
 		new Handler(context.getMainLooper()).post(new Runnable() {
 			@Override
 			public void run() {
-				if (popup == null) {
-					popup = new LoadingPopup(context);
-				}
-				popup.show();
+				popup = new PopupWindow(LayoutInflater.from(context).inflate(R.layout.loading_popup,
+						null),LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
+				popup.showAtLocation(popup.getContentView(), Gravity.BOTTOM, 0, 0);
 			}
 
 		});
@@ -47,6 +34,7 @@ public class LoadingPopup extends PopupWindow {
 			public void run() {
 				if (popup != null) {
 					popup.dismiss();
+					popup = null;
 				}
 			}
 

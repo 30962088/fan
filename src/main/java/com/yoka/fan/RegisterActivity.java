@@ -3,21 +3,17 @@ package com.yoka.fan;
 
 
 
-import com.google.gson.Gson;
 import com.yoka.fan.network.Register;
-import com.yoka.fan.network.Register.Result;
-import com.yoka.fan.utils.Constant;
 import com.yoka.fan.utils.User;
 
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.LoadingPopup;
 
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class RegisterActivity extends BaseActivity implements OnClickListener{
@@ -77,9 +73,11 @@ public class RegisterActivity extends BaseActivity implements OnClickListener{
 						};
 						@Override
 						protected void onSuccess(Result result) {
-							User.saveUser(result.toUser());
+							User user = result.toUser();
+							User.fillInfo(user);
+							User.saveUser(user);
 							error("注册成功");
-							finish();
+							startActivity(new Intent(RegisterActivity.this,RecommandListActivity.class));
 							
 						};
 						

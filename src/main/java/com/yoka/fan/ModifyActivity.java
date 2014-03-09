@@ -64,6 +64,7 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 		context = this;
 		setContentView(R.layout.modify_layout);
 		jobView = (EditText) findViewById(R.id.job);
+		jobView.setText(User.readUser().job);
 		nickView = (EditText) findViewById(R.id.nick);
 		nickView.setText(User.readUser().nickname);
 		photoView = (ImageView) findViewById(R.id.user_photo);

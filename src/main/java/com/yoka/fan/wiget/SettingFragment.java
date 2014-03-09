@@ -54,6 +54,9 @@ public class SettingFragment extends Fragment implements OnClickListener{
 		view.findViewById(R.id.guide).setOnClickListener(this);
 		view.findViewById(R.id.login_btn).setOnClickListener(this);
 		view.findViewById(R.id.user_btn).setOnClickListener(this);
+		view.findViewById(R.id.about_us).setOnClickListener(this);
+		view.findViewById(R.id.sell1).setOnClickListener(this);
+		view.findViewById(R.id.sell2).setOnClickListener(this);
 	}
 	
 	@Override
@@ -92,11 +95,12 @@ public class SettingFragment extends Fragment implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.sell1:
+		case R.id.sell2:
+			WebViewActivity.open(getActivity(), "http://fan.yoka.com/api/html/imsellor1");
+			break;
 		case R.id.guide:
-			Intent intent = new Intent(getActivity(), WebViewActivity.class);
-			intent.putExtra(WebViewActivity.PARAM_TITLE,"用户指南");
-			intent.putExtra(WebViewActivity.PARAM_URL,"http://songaimin.fan.yoka.com/api/html/guide");
-			startActivity(intent);
+			WebViewActivity.open(getActivity(), "http://fan.yoka.com/api/html/guide");
 			break;
 		case R.id.login_btn:
 			startActivity(new Intent(getActivity(), LoginActivity.class));
@@ -104,7 +108,9 @@ public class SettingFragment extends Fragment implements OnClickListener{
 		case R.id.user_btn:
 			startActivity(new Intent(getActivity(),ModifyActivity.class));
 			break;
-			
+		case R.id.about_us:
+			WebViewActivity.open(getActivity(), "http://fan.yoka.com/api/html/imsellor2");
+			break;
 		default:
 			break;
 		}

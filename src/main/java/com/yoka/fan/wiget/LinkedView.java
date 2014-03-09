@@ -183,6 +183,10 @@ public class LinkedView extends RelativeLayout {
 
 								if (link.getLeft() < 0.5) {
 									l -= width;
+									if(l < 0){
+										setWidth(Math.max(getWidth()+l, 0));
+										l = 0;
+									}
 								}
 
 								params.setMargins(l, t, 0, 0);
