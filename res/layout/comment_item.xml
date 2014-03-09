@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical" xmlns:app="http://schemas.android.com/apk/res/com.yoka.fan"
     android:paddingBottom="15dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <LinearLayout
         android:id="@+id/header"

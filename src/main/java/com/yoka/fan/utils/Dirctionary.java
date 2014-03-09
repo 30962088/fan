@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import com.nostra13.universalimageloader.utils.StorageUtils;
+
 import android.content.Context;
 
 public class Dirctionary {
@@ -91,18 +93,8 @@ public class Dirctionary {
 	}
 	
 	private static void initPicture(Context context){
-		 File cameraFolder;
+		 File cameraFolder = new File(StorageUtils.getCacheDirectory(context),"/fan_picture");
 
-         if (android.os.Environment.getExternalStorageState().equals
-                 (android.os.Environment.MEDIA_MOUNTED)){
-        	 cameraFolder = new File(android.os.Environment.getExternalStorageDirectory(),
-                     "fan_pictures/");
-         }
-             
-         else{
-        	 cameraFolder= context.getCacheDir();
-         }
-             
          if(!cameraFolder.exists()){
         	 cameraFolder.mkdirs();
          }

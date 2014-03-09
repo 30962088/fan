@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.google.gson.Gson;
 import com.yoka.fan.utils.Constant;
 
 public class CreateComment extends Request{
@@ -24,7 +25,33 @@ public class CreateComment extends Request{
 	
 	private String goods_id = "";
 	
+	public static class Result{
+		public static class Id{
+			private String $id;
+			public String get$id() {
+				return $id;
+			}
+		}
+		private Id _id;
+		private long create_date;
+		private String txt;
+		public Result() {
+			// TODO Auto-generated constructor stub
+		}
+		public Id get_id() {
+			return _id;
+		}
+		public long getCreate_date() {
+			return create_date;
+		}
+		public String getTxt() {
+			return txt;
+		}
+		
+		
+	}
 	
+	private Result result;
 	
 	public CreateComment(String user_id, String access_token, String coll_id,
 			String content, int comment_type) {
@@ -35,11 +62,16 @@ public class CreateComment extends Request{
 		this.content = content;
 		this.comment_type = comment_type;
 	}
+	
+	
 
 	@Override
 	public void onSuccess(String data) {
-		// TODO Auto-generated method stub
-		
+		result = new Gson().fromJson(data, Result.class);
+	}
+	
+	public Result getResult() {
+		return result;
 	}
 
 	@Override

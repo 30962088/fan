@@ -1,17 +1,20 @@
 package com.yoka.fan;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.network.CommentList;
+import com.yoka.fan.network.CommentList.Result;
 import com.yoka.fan.network.CreateComment;
 import com.yoka.fan.network.Request;
-import com.yoka.fan.network.CommentList.Result;
+import com.yoka.fan.utils.RelativeDateFormat;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.BaseListView;
+import com.yoka.fan.wiget.LoadingPopup;
 import com.yoka.fan.wiget.BaseListView.OnLoadListener;
 
 import android.content.Context;
@@ -67,8 +70,9 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 		
 		
 		listView = (BaseListView) findViewById(R.id.listview);
+		listView.setOnLoadListener(this);
 		list = new ArrayList<CommentActivity.Comment>();
-		ListViewAdapter adapter = new ListViewAdapter(list, this);
+		adapter = new ListViewAdapter(list, this);
 		commentView = (EditText) findViewById(R.id.comment);
 		final View publishView = findViewById(R.id.publish);
 		publishView.setOnClickListener(this);
@@ -115,11 +119,11 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
         getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 	}
 	
-	private static class Comment{
-		public String photo;
-		public String name;
-		public String datetime;
-		public String comment;
+	public static class Comment{
+		private String photo;
+		private String name;
+		private String datetime;
+		private String comment;
 		public Comment(String photo, String name, String datetime,
 				String comment) {
 			super();
@@ -128,6 +132,19 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 			this.datetime = datetime;
 			this.comment = comment;
 		}
+		public String getPhoto() {
+			return photo;
+		}
+		public String getName() {
+			return name;
+		}
+		public String getDatetime() {
+			return datetime;
+		}
+		public String getComment() {
+			return comment;
+		}
+		
 		
 		
 	}
@@ -226,24 +243,33 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 
 	private void onPublish() {
 		final String content = commentView.getText().toString();
-		new AsyncTask<Void, Void, Request.Status>(){
+		LoadingPopup.show(this);
+		new AsyncTask<Void, Void, CreateComment>(){
 
 			@Override
-			protected com.yoka.fan.network.Request.Status doInBackground(
+			protected CreateComment doInBackground(
 					Void... params) {
 				CreateComment request = new CreateComment(user.id, user.access_token, collId, content, 1);
 				request.request();
-				return request.getStatus();
+				return request;
 			}
 			
-			protected void onPostExecute(com.yoka.fan.network.Request.Status result) {
-				
+			protected void onPostExecute(CreateComment result) {
+				if(result.getStatus() == Request.Status.SUCCESS){
+					onPublishSuccess(result.getResult());
+				}
+				LoadingPopup.hide(CommentActivity.this);
 			};
 			
 		}.execute();
 		
-		
-		
+	}
+	
+	private void onPublishSuccess(CreateComment.Result result){
+		User user = User.readUser();
+		list.add(0, new Comment(user.photo, user.nickname, RelativeDateFormat.format(new Date(result.getCreate_date())) , result.getTxt()));
+		adapter.notifyDataSetChanged();
+		commentView.setText("");
 	}
 
 	@Override
@@ -251,13 +277,14 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 		CommentList request = new CommentList(user.id, user.access_token, collId, offset, limit);
 		request.request();
 		List<CommentList.Result> results = request.getResults();
-		if(results != null){
-			if(offset == 0){
-				list.clear();
-			}
-			for(Result result : results){
-				list.add(new Comment(result.getU_thumb(), result.getU_nick(), result.getDateFormater(), result.getTxt()));
-			}
+		if(results == null){
+			results = new ArrayList<CommentList.Result>();
+		}
+		if(offset == 0){
+			list.clear();
+		}
+		for(Result result : results){
+			list.add(result.toComment());
 		}
 		return results.size()>=limit?true:false;
 	}

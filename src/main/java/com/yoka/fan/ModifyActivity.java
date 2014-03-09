@@ -5,7 +5,9 @@ package com.yoka.fan;
 import java.io.File;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.DiscCacheUtil;
 import com.nostra13.universalimageloader.core.assist.MemoryCacheUtil;
+import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.yoka.fan.network.Modify;
 
 import com.yoka.fan.utils.ChangeHead;
@@ -165,12 +167,9 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 						};
 					};
 					changeHead.request();
-					File imageFile = imageLoader.getDiscCache().get(user.photo);
-					if (imageFile.exists()) {
-					    imageFile.delete();
-					}
-					MemoryCacheUtil.removeFromCache(user.photo, imageLoader.getMemoryCache());
 					user.photo = changeHead.getFileUrl();
+					DiscCacheUtil.removeFromCache(user.photo, imageLoader.getDiscCache());
+					MemoryCacheUtil.removeFromCache(user.photo, imageLoader.getMemoryCache());
 				}
 				
 				Modify modify = new Modify(access_token, job, nick, sex, user_id){

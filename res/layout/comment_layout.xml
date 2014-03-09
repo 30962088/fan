@@ -8,9 +8,7 @@
     <com.yoka.fan.wiget.BaseListView
         android:background="#fff"
         android:clipToPadding="true"
-        android:paddingLeft="20dp"
         android:scrollbarStyle="outsideOverlay"
-        android:paddingRight="20dp"
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="0dp"

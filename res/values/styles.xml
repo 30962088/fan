@@ -5,7 +5,6 @@
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
-        
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
@@ -15,34 +14,40 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
-    	<item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+        <item name="android:windowNoTitle">true</item>
         <item name="android:editTextStyle">@style/editTextStyle</item>
         <item name="android:listViewStyle">@style/MyListView</item>
     </style>
-    
-    <style name="MyListView" parent="@android:style/Widget.ListView">
-       	<item name="android:fadingEdge">none</item>
-       	<item name="android:cacheColorHint">#00000000</item>
-       	<item name="android:divider">#cdcdcd</item>
-       	<item name="android:dividerHeight">1px</item>
+
+    <style name="AnimationActivity" mce_bogus="1" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/push_left_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/push_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/push_right_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/push_right_out</item>
     </style>
-    
+
+    <style name="MyListView" parent="@android:style/Widget.ListView">
+        <item name="android:fadingEdge">none</item>
+        <item name="android:cacheColorHint">#00000000</item>
+        <item name="android:divider">#cdcdcd</item>
+        <item name="android:dividerHeight">1px</item>
+    </style>
+
     <style name="editTextStyle" parent="@android:style/Widget.EditText">
         <item name="android:textCursorDrawable">@drawable/cursor_blue</item>
         <item name="android:background">#00000000</item>
         <item name="android:textAppearance">@style/editTextAppearance</item>
     </style>
-    
+
     <style name="editTextAppearance">
         <item name="android:textColor">#585858</item>
         <item name="android:textColorHint">#a8a8a8</item>
         <item name="android:textSize">14sp</item>
     </style>
-    
-    <style name="Widget">
-    </style>
 
-   
+    <style name="Widget"></style>
+
     <style name="actionbarTitle">
         <item name="android:layout_marginLeft">55dp</item>
         <item name="android:layout_marginRight">55dp</item>
@@ -51,23 +56,23 @@
         <item name="android:layout_centerVertical">true</item>
         <item name="android:gravity">center</item>
     </style>
-    
+
     <style name="actionbarLeft">
         <item name="android:layout_centerVertical">true</item>
     </style>
-    
+
     <style name="actionbarRight">
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_centerVertical">true</item>
     </style>
-    
+
     <style name="sideNavList">
-    	<item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">53dp</item>
         <item name="android:paddingLeft">15dp</item>
         <item name="android:paddingRight">15dp</item>
     </style>
-    
+
     <style name="sideNavListItemLeft">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -75,8 +80,7 @@
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:gravity">center_vertical</item>
     </style>
-    
-    
+
     <style name="sideNavListNewDot">
         <item name="android:layout_width">8dp</item>
         <item name="android:layout_height">8dp</item>
@@ -84,14 +88,13 @@
         <item name="android:src">@drawable/new_dot</item>
         <item name="android:visibility">gone</item>
     </style>
-    
-    
+
     <style name="sideNavListSep">
-    	<item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
         <item name="android:background">#33ffffff</item>
     </style>
-    
+
     <style name="sideNavListTextView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -104,34 +107,33 @@
         <item name="android:layout_width">8dp</item>
         <item name="android:layout_height">12.5dp</item>
         <item name="android:src">@drawable/arrow_right</item>
-        <item name="android:layout_gravity">center_vertical</item> 
+        <item name="android:layout_gravity">center_vertical</item>
     </style>
-    
+
     <style name="listItemSep">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
         <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginBottom">10dp</item> 
-        <item name="android:background">#cdcdcd</item> 
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:background">#cdcdcd</item>
     </style>
-    
+
     <style name="listItemTextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">2dp</item>
-        <item name="android:textSize">12sp</item> 
+        <item name="android:textSize">12sp</item>
         <item name="android:gravity">center</item>
-        
     </style>
-    
+
     <style name="listItemTag">
         <item name="android:gravity">center</item>
         <item name="android:paddingLeft">13dp</item>
-        <item name="android:paddingRight">13dp</item> 
-        <item name="android:textColor">#ee4c9c</item> 
+        <item name="android:paddingRight">13dp</item>
+        <item name="android:textColor">#ee4c9c</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_marginRight">3dp</item>
-        <item name="android:background">@drawable/btn_border</item> 
+        <item name="android:background">@drawable/btn_border</item>
     </style>
-    
+
 </resources>

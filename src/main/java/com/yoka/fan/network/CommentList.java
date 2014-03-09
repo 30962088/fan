@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.yoka.fan.CommentActivity.Comment;
 import com.yoka.fan.utils.Constant;
 import com.yoka.fan.utils.RelativeDateFormat;
 
@@ -60,6 +61,10 @@ public class CommentList extends Request{
 			return txt;
 		}
 		
+		
+		public Comment toComment(){
+			return new Comment(getU_thumb(), getU_nick(), getDateFormater(), getTxt());
+		}
 		
 		
 	}
