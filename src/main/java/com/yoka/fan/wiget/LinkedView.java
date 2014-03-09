@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.MainActivity;
 import com.yoka.fan.R;
+import com.yoka.fan.SelectCategoryActivity.Model;
 import com.yoka.fan.utils.DisplayUtils;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.BuyPopupWindow.GoodsItem;
@@ -42,14 +43,32 @@ public class LinkedView extends RelativeLayout {
 	private ImageLoader imageLoader;
 
 	private LinkModel linkModel;
-	
+
 	private RelativeLayout tagContainer;
+
+	private boolean closed = false;
+
+	public void setClosed(boolean closed) {
+		this.closed = closed;
+	}
 
 	public static interface onImageClickListener {
 		public void onClick(float left, float top);
 	}
 
+	public static interface onTagClickListener {
+		public void onClose(LinkModel.Link link);
+
+		public void onClick(LinkModel.Link link);
+	}
+
 	private onImageClickListener onImageClickListener;
+
+	private onTagClickListener onTagClickListener;
+
+	public void setOnTagClickListener(onTagClickListener onTagClickListener) {
+		this.onTagClickListener = onTagClickListener;
+	}
 
 	public void setOnImageClickListener(
 			onImageClickListener onImageClickListener) {
@@ -73,16 +92,21 @@ public class LinkedView extends RelativeLayout {
 
 	private void init(final Context context) {
 		this.context = context;
-		setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+		setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT));
 		imageView = new BackgroundImageView(context);
-		imageView.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+		imageView.setLayoutParams(new ViewGroup.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		imageView.setOnTouchListener(new OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 
 				if (event.getAction() == MotionEvent.ACTION_UP) {
-					if (onImageClickListener != null && imageView.getDrawable() != null && ((BitmapDrawable)imageView.getDrawable()).getBitmap() != null) {
+					if (onImageClickListener != null
+							&& imageView.getDrawable() != null
+							&& ((BitmapDrawable) imageView.getDrawable())
+									.getBitmap() != null) {
 						float[] b = imageView.getBitmapBound();
 						float left = (event.getX() - b[0]) / b[2];
 						float top = (event.getY() - b[1]) / b[3];
@@ -94,7 +118,8 @@ public class LinkedView extends RelativeLayout {
 		});
 		addView(imageView);
 		tagContainer = new RelativeLayout(context);
-		tagContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+		tagContainer.setLayoutParams(new LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		addView(tagContainer);
 		imageView.setOndrawListener(new OnViewdrawListener() {
 
@@ -102,29 +127,31 @@ public class LinkedView extends RelativeLayout {
 			public void ondraw(float[] bounds) {
 				if (linkModel.getLinkList() != null) {
 					for (Link link : linkModel.getLinkList()) {
-						tagContainer.addView(new TagView(context, link, bounds));
+						tagContainer
+								.addView(new TagView(context, link, bounds));
 					}
-//					tagContainer.setVisibility(View.VISIBLE);
+					// tagContainer.setVisibility(View.VISIBLE);
 				}
 
 			}
 		});
 		imageLoader = Utils.getImageLoader(context);
-		
+
 	}
 
 	public void load(LinkModel model) {
 		this.linkModel = model;
-		init=true;
-//		tagContainer.setVisibility(View.INVISIBLE);
+		init = true;
+		// tagContainer.setVisibility(View.INVISIBLE);
 		tagContainer.removeAllViews();
-//		changeImageSize();
+		// changeImageSize();
 		imageView.setImageBitmap(null);
 		imageLoader.displayImage(model.getUrl(), imageView);
 	}
 
 	private void changeImageSize() {
-		int width = linkModel.getWidth(context), height = linkModel.getHeight(context);
+		int width = linkModel.getWidth(context), height = linkModel
+				.getHeight(context);
 		if (width > 0 && height > 0 && imageView instanceof BackgroundImageView) {
 			RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) imageView
 					.getLayoutParams();
@@ -135,26 +162,38 @@ public class LinkedView extends RelativeLayout {
 
 	}
 
-
-	private static class TagView extends TextView implements OnClickListener {
+	private class TagView extends TextView  {
 
 		private Link link;
 
 		private float[] bounds;
+		
+		private int offset;
 
 		public TagView(Context context, final Link link, final float[] bounds) {
 			super(context);
-			setOnClickListener(this);
+			if(closed){
+				offset = (int) getResources().getDimension(R.dimen.tag_close);
+			}
 			setTextColor(Color.WHITE);
 			setGravity(Gravity.CENTER);
 			setVisibility(View.INVISIBLE);
 			setSingleLine(true);
 			setEllipsize(TruncateAt.END);
-			// setTextSize(DisplayUtils.Dp2Px(context, 9));
 			if (link.getLeft() < 0.5) {
-				setBackgroundResource(R.drawable.tag);
+				if (closed) {
+					setBackgroundResource(R.drawable.tag_close);
+				} else {
+					setBackgroundResource(R.drawable.tag);
+				}
+
 			} else {
-				setBackgroundResource(R.drawable.tag_right);
+				if (closed) {
+					setBackgroundResource(R.drawable.tag_right_close);
+				} else {
+					setBackgroundResource(R.drawable.tag_right);
+				}
+
 			}
 
 			setText(link.getName());
@@ -183,8 +222,8 @@ public class LinkedView extends RelativeLayout {
 
 								if (link.getLeft() < 0.5) {
 									l -= width;
-									if(l < 0){
-										setWidth(Math.max(getWidth()+l, 0));
+									if (l < 0) {
+										setWidth(Math.max(getWidth() + l, 0));
 										l = 0;
 									}
 								}
@@ -209,33 +248,17 @@ public class LinkedView extends RelativeLayout {
 		}
 
 		@Override
-		public void onClick(View v) {
-			new BuyPopupWindow(getContext(),
-					new ArrayList<BuyPopupWindow.GoodsItem>() {
-						{
-							for (int i = 0; i < 5; i++) {
-								GoodsItem item = new GoodsItem();
-								item.img = "http://image.iask.sina.com.cn/cidian/21/90/13715390212009-07-151006466.jpg";
-								item.name = "goods";
-								item.price = 323.11f;
-								item.typeResId = R.drawable.blazers;
-								add(item);
-							}
-							GoodsItem item1 = new GoodsItem();
-							item1.title = "编辑推荐";
-							add(item1);
-							for (int i = 0; i < 10; i++) {
-								GoodsItem item = new GoodsItem();
-								item.img = "http://image.iask.sina.com.cn/cidian/21/90/13715390212009-07-151006466.jpg";
-								item.name = "goods";
-								item.price = 323.11f;
-								item.typeResId = R.drawable.blazers;
-								add(item);
-							}
-
-						}
-					});
-
+		public boolean onTouchEvent(MotionEvent event) {
+			if(event.getAction() == MotionEvent.ACTION_UP && onTagClickListener != null){
+				if(closed){
+					if( link.getLeft() < 0.5 && event.getX()<offset || link.getLeft() >= 0.5 && event.getX()>getWidth()-offset){
+						onTagClickListener.onClose(link);
+						return true;
+					}
+				}
+				onTagClickListener.onClick(link);
+			}
+			return true;
 		}
 
 	}
@@ -245,9 +268,8 @@ public class LinkedView extends RelativeLayout {
 	public static interface OnViewdrawListener {
 		public void ondraw(float[] bounds);
 	}
-	
-	public class BackgroundImageView extends ImageView {
 
+	public class BackgroundImageView extends ImageView {
 
 		private OnViewdrawListener ondrawListener;
 
@@ -265,9 +287,10 @@ public class LinkedView extends RelativeLayout {
 				int heightMeasureSpec) {
 
 			int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
-		    int parentHeight =parentWidth/3*4;
-		    this.setMeasuredDimension(parentWidth, parentHeight);
-//		    this.setLayoutParams(new *ParentLayoutType*.LayoutParams(parentWidth/2,parentHeight));
+			int parentHeight = parentWidth / 3 * 4;
+			this.setMeasuredDimension(parentWidth, parentHeight);
+			// this.setLayoutParams(new
+			// *ParentLayoutType*.LayoutParams(parentWidth/2,parentHeight));
 			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 			// final Drawable d = this.getDrawable();
 			//
@@ -299,7 +322,7 @@ public class LinkedView extends RelativeLayout {
 			setLayoutParams(params);
 
 			setScaleType(ScaleType.FIT_CENTER);
-//			setAdjustViewBounds(true);
+			// setAdjustViewBounds(true);
 
 		}
 
@@ -319,14 +342,13 @@ public class LinkedView extends RelativeLayout {
 			return bounds;
 
 		}
-		
-		
 
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			
-			if (init && ondrawListener != null && getDrawable() != null && ((BitmapDrawable)getDrawable()).getBitmap() != null) {
+
+			if (init && ondrawListener != null && getDrawable() != null
+					&& ((BitmapDrawable) getDrawable()).getBitmap() != null) {
 				ondrawListener.ondraw(getBitmapBound());
 				init = false;
 			}

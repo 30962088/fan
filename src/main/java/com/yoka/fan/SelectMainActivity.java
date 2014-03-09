@@ -2,6 +2,7 @@ package com.yoka.fan;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -14,6 +15,7 @@ import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.LinkModel;
 import com.yoka.fan.wiget.LinkedView;
 import com.yoka.fan.wiget.LinkedView.onImageClickListener;
+import com.yoka.fan.wiget.LinkedView.onTagClickListener;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -24,7 +26,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-public class SelectMainActivity extends Activity{
+public class SelectMainActivity extends Activity implements onTagClickListener{
 
 	public static final String ACTION_COMPLETE = "ACTION_COMPLETE";
 
@@ -113,6 +115,8 @@ public class SelectMainActivity extends Activity{
 		imageLoader = Utils.getImageLoader(this);
 		setContentView(R.layout.select_main_layout);
 		linkedView = (LinkedView) findViewById(R.id.linked_view);
+		linkedView.setOnTagClickListener(this);
+		linkedView.setClosed(true);
 		countView = (TextView) findViewById(R.id.count);
 		linkedView.setOnImageClickListener(new onImageClickListener() {
 			
@@ -194,6 +198,29 @@ public class SelectMainActivity extends Activity{
 			results.add(Result.toResult(list,left,top));
 			load();
 		}
+	}
+
+
+
+	@Override
+	public void onClose(com.yoka.fan.wiget.LinkModel.Link link) {
+		for(Iterator<Result> itor = results.iterator();itor.hasNext();){
+			Result result = itor.next();
+			if(result.name == link.getName()){
+				itor.remove();
+				break;
+			}
+		}
+		load();
+		
+	}
+
+
+
+	@Override
+	public void onClick(com.yoka.fan.wiget.LinkModel.Link link) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
