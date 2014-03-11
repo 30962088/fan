@@ -51,7 +51,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 		this.context = this;
 		setContentView(R.layout.login_layout);
 		
-		mWeiboAuth = new WeiboAuth(this, Constant.APP_KEY, Constant.REDIRECT_URL, Constant.SCOPE);
+		mWeiboAuth = new WeiboAuth(this, Constant.WEIBO_APP_KEY, Constant.REDIRECT_URL, Constant.SCOPE);
 		mQQAuth = QQAuth.createInstance("222222", this);
 		mTencent = Tencent.createInstance("222222", this);
 		findViewById(R.id.login_qq_btn).setOnClickListener(this);

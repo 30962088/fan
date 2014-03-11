@@ -4,6 +4,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.LoginActivity;
 import com.yoka.fan.ModifyActivity;
 import com.yoka.fan.R;
+import com.yoka.fan.TicklingActivity;
 import com.yoka.fan.WebViewActivity;
 import com.yoka.fan.utils.CacheManager;
 import com.yoka.fan.utils.CacheManager.OnClearCacheListner;
@@ -61,6 +62,7 @@ public class SettingFragment extends Fragment implements OnClickListener {
 		view.findViewById(R.id.sell2).setOnClickListener(this);
 		view.findViewById(R.id.appraise).setOnClickListener(this);
 		view.findViewById(R.id.clear_cache).setOnClickListener(this);
+		view.findViewById(R.id.tickling).setOnClickListener(this);
 	}
 
 	@Override
@@ -153,6 +155,9 @@ public class SettingFragment extends Fragment implements OnClickListener {
 				Utils.tip(getActivity(), "没有找到应用市场");
 			}
 			
+			break;
+		case R.id.tickling:
+			startActivity(new Intent(getActivity(), TicklingActivity.class));
 			break;
 		default:
 			break;

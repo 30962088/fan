@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f6f6f6"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <EditText
+            android:layout_marginTop="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:id="@+id/advice"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:background="@drawable/table_border"
+            android:gravity="top"
+            android:hint="请留下您的建议、反馈、我们会尽快回复您，\n并有机会获得我们精心准备的礼物"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textSize="14sp" >
+
+            <requestFocus />
+        </EditText>
+        
+        <EditText
+            android:layout_marginTop="14dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@drawable/table_border"
+            android:gravity="center_vertical"
+            android:hint="您的联系方式"
+            android:textSize="14sp" >
+        </EditText>
+        
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/login_btn_group"
+        android:layout_width="match_parent"
+        android:layout_height="87dp"
+        android:layout_below="@id/login_form"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/save_btn"
+            android:layout_width="67dp"
+            android:layout_height="28dp"
+            android:background="@drawable/btn_border"
+            android:gravity="center"
+            android:text="保存"
+            android:textColor="#ee4c9c" />
+    </LinearLayout>
+
+</LinearLayout>
