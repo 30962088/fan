@@ -8,4 +8,5 @@
 	<dimen name="border_size">1.5dp</dimen>
 	<dimen name="vip_20">20dp</dimen>
 	<dimen name="tag_close">15dp</dimen>
+	<dimen name="link_textsize">8sp</dimen>
 </resources>

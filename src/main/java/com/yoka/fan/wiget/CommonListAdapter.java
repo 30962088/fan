@@ -258,7 +258,14 @@ public class CommonListAdapter extends BaseAdapter  {
 							{
 								add(new Share(
 										context.getString(R.string.weibo),
-										R.drawable.share_weibo, null));
+										R.drawable.share_weibo, new OnClickListener() {
+											
+											@Override
+											public void onClick(View v) {
+												new ShareDetailPopupWindow(context);
+												
+											}
+										}));
 								add(new Share(context
 										.getString(R.string.tencent),
 										R.drawable.share_tencent, null));

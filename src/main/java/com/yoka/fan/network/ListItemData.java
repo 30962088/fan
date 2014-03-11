@@ -87,7 +87,7 @@ public class ListItemData {
 		List<LinkModel.Link> links = new ArrayList<LinkModel.Link>();
 		for(String id : link_goods.keySet()){
 			Link link = link_goods.get(id);
-			links.add(new LinkModel.Link(id, link.brand+link.tags, link.getLeft(), link.getTop()));
+			links.add(new LinkModel.Link(id, link.brand+" "+link.tags, link.getLeft(), link.getTop()));
 		}
 		model.setLinkModel(new LinkModel(show_img.url,show_img.width,show_img.height, links));
 		model.setName(owner_name);
