@@ -1,15 +1,21 @@
 package com.yoka.fan.wiget;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.R;
+import com.yoka.fan.WebViewActivity;
+import com.yoka.fan.network.CollDetail;
+import com.yoka.fan.network.CollDetail.Goods;
+import com.yoka.fan.network.CollDetail.Result;
 import com.yoka.fan.utils.Utils;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +23,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -28,24 +36,39 @@ import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
-public class BuyPopupWindow implements OnClickListener{
+public class BuyPopupWindow implements OnClickListener,AnimationListener,OnItemClickListener{
 
 	
 	
 	private PopupWindow mPopupWindow;
 	
-	public BuyPopupWindow(Context context,final List<GoodsItem> list) {
+	private ListView listView;
+	
+	private View loadingView;
+	
+	private Context context;
+	
+	private String coll_id;
+	
+	private List<GoodsItem> list;
+	
+	public BuyPopupWindow(Context context,String coll_id) {
 		View view = LayoutInflater.from(context).inflate(R.layout.popup_buy_layout,null);
 		view.setOnClickListener(this);
 		mPopupWindow = new PopupWindow(view, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
 		mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4D000000")));
 		mPopupWindow.setTouchable(true);
         mPopupWindow.setOutsideTouchable(true);
-        ListView gridView = (ListView) view.findViewById(R.id.listview);
-       
-        ListViewAdapter adapter = new ListViewAdapter(context,list);
-        gridView.setAdapter(adapter);
+        this.context = context;
+        this.coll_id = coll_id;
+        listView = (ListView) view.findViewById(R.id.listview);
+        listView.setOnItemClickListener(this);
+        loadingView = view.findViewById(R.id.loading);
+        
+        
+        
         Animation rotation = AnimationUtils.loadAnimation(context, R.anim.zoom_center);
+        rotation.setAnimationListener(this);
         
         View bottomBar = view.findViewById(R.id.popup);
         bottomBar.setOnClickListener(this);
@@ -54,6 +77,44 @@ public class BuyPopupWindow implements OnClickListener{
         view.findViewById(R.id.close).setOnClickListener(this);
         mPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
         
+        
+	}
+	
+	private void load(final String coll_id){
+		new AsyncTask<Void, Void, List<GoodsItem>>(){
+
+			@Override
+			protected List<GoodsItem> doInBackground(Void... params) {
+				CollDetail request = new CollDetail(coll_id);
+				request.request();
+				Result result = request.getResult();
+				List<GoodsItem> list = new ArrayList<BuyPopupWindow.GoodsItem>();
+				for(Goods goods : result.getLinkGoods().values()){
+					list.add(new GoodsItem(goods.getType_url(),goods.getBrand()+goods.getTags(),goods.getPrice(),goods.getUrl(),goods.getImg(),"去购买>",null));
+				}
+				if(result.getLinkGoodsType().size() > 0){
+					list.add(new GoodsItem("编辑推荐"));
+					for(Goods goods : result.getLinkGoodsType()){
+						list.add(new GoodsItem(goods.getType_url(),goods.getBrand()+goods.getTags(),goods.getPrice(),goods.getUrl(),goods.getImg(),"相似推荐>",null));
+					}
+				}
+				
+				return list;
+			}
+			
+			protected void onPostExecute(java.util.List<GoodsItem> list) {
+				onload(list);
+			};
+			
+		}.execute();
+	}
+	
+	private void onload(final List<GoodsItem> list){
+		this.list = list;
+		ListViewAdapter adapter = new ListViewAdapter(context,list);
+        listView.setAdapter(adapter);
+        listView.setVisibility(View.VISIBLE);
+        loadingView.setVisibility(View.GONE);
 	}
 	
 
@@ -71,12 +132,32 @@ public class BuyPopupWindow implements OnClickListener{
 	}
 	
 	public static class GoodsItem{
-		public int typeResId;
-		public String name;
-		public float price;
-		public String url;
-		public String img;
-		public String title;
+		private String typeResId;
+		private String name;
+		private double price;
+		private String url;
+		private String img;
+		private String title;
+		private String link;
+		
+		public GoodsItem(String title) {
+			super();
+			this.title = title;
+		}
+		public GoodsItem(String typeResId, String name, double price, String url,
+				String img,String link, String title) {
+			super();
+			this.typeResId = typeResId;
+			this.name = name;
+			this.price = price;
+			this.url = url;
+			this.img = img;
+			this.link = link;
+			this.title = title;
+		}
+		
+		
+		
 	}
 	
 	private static class ListViewAdapter extends BaseAdapter{
@@ -130,10 +211,17 @@ public class BuyPopupWindow implements OnClickListener{
 			}else{
 				holder.goodsItemView.setVisibility(View.VISIBLE);
 				holder.titleView.setVisibility(View.GONE);
-				holder.typeView.setBackgroundResource(item.typeResId);
+				imageLoader.displayImage(item.typeResId, holder.typeView);
 				holder.nameView.setText(item.name);
+				holder.jumpView.setText(item.link);
 				holder.priceView.setText("¥"+item.price);
-				imageLoader.displayImage(item.url, holder.imgView);
+				if(item.img == null){
+					holder.imgView.setVisibility(View.GONE);
+				}else{
+					holder.imgView.setVisibility(View.VISIBLE);
+					imageLoader.displayImage(item.img, holder.imgView);
+				}
+				
 			}
 			
 			
@@ -169,6 +257,34 @@ public class BuyPopupWindow implements OnClickListener{
 		}
 		
 
+	}
+
+	@Override
+	public void onAnimationStart(Animation animation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onAnimationEnd(Animation animation) {
+		load(coll_id);
+		
+	}
+
+	@Override
+	public void onAnimationRepeat(Animation animation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		GoodsItem item = list.get(position);
+		if(item.url != null){
+			WebViewActivity.open(context, item.url);
+		}
+		
 	}
 	
 	

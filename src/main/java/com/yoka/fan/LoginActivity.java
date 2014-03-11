@@ -33,6 +33,7 @@ import android.widget.Toast;
 public class LoginActivity extends BaseActivity2 implements OnClickListener {
 
 	private QQAuth mQQAuth;
+	
 	private Tencent mTencent;
 	
 	private WeiboAuth mWeiboAuth;

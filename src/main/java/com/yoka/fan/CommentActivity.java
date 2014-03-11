@@ -249,7 +249,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 			@Override
 			protected CreateComment doInBackground(
 					Void... params) {
-				CreateComment request = new CreateComment(user.id, user.access_token, collId, content, 1);
+				CreateComment request = new CreateComment(user.id, user.access_token, collId, content);
 				request.request();
 				return request;
 			}

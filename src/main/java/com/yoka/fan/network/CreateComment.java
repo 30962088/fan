@@ -54,13 +54,13 @@ public class CreateComment extends Request{
 	private Result result;
 	
 	public CreateComment(String user_id, String access_token, String coll_id,
-			String content, int comment_type) {
+			String content) {
 		super();
 		this.user_id = user_id;
 		this.access_token = access_token;
 		this.coll_id = coll_id;
 		this.content = content;
-		this.comment_type = comment_type;
+
 	}
 	
 	

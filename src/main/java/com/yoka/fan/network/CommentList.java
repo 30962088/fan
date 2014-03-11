@@ -1,6 +1,5 @@
 package com.yoka.fan.network;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,22 +74,22 @@ public class CommentList extends Request{
 	
 	private String access_token;
 	
-	private String coll_id;
+	private String goods_id;
 	
 	private int skip;
 	
 	private int limit;
 	
-	private String goods_id = "";
-	
 	private List<Result> results;
 	
-	public CommentList(String user_id, String access_token, String coll_id,
+	private int comment_type=2;
+	
+	public CommentList(String user_id, String access_token, String goods_id,
 			int skip, int limit) {
 		super();
 		this.user_id = user_id;
 		this.access_token = access_token;
-		this.coll_id = coll_id;
+		this.goods_id = goods_id;
 		this.skip = skip;
 		this.limit = limit;
 	}
@@ -143,10 +142,10 @@ public class CommentList extends Request{
 		params.add(new BasicNameValuePair("uuid", uuid));
 		params.add(new BasicNameValuePair("user_id", user_id));
 		params.add(new BasicNameValuePair("access_token", access_token));
-		params.add(new BasicNameValuePair("coll_id", ""));
 		params.add(new BasicNameValuePair("skip", ""+skip));
 		params.add(new BasicNameValuePair("limit", ""+limit));
-		params.add(new BasicNameValuePair("goods_id", ""));
+		params.add(new BasicNameValuePair("goods_id", goods_id));
+		params.add(new BasicNameValuePair("comment_type", ""+comment_type));
 		return params;
 	}
 

@@ -14,12 +14,17 @@ public class TagActivity extends BaseActivity{
 
 	public static final String PARAM_TAG = "tag";
 	
+	public static final String PARAM_STYLE = "style";
+	
 	private String tag;
+	
+	private String style;
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		tag = getIntent().getStringExtra(PARAM_TAG);
+		style = getIntent().getStringExtra(PARAM_STYLE);
 		TagListView listView = new TagListView(this);
 		setContentView(listView);
 	}
@@ -59,7 +64,7 @@ public class TagActivity extends BaseActivity{
 
 		@Override
 		protected List<ListItemData> load(int skip,int limit) {
-			Tag request = new Tag(tag,skip,limit);
+			Tag request = new Tag(style,skip,limit);
 			request.request();
 			return request.getListData();
 		}

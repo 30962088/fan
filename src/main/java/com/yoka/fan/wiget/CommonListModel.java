@@ -1,6 +1,7 @@
 package com.yoka.fan.wiget;
 
 import java.util.List;
+import java.util.Map;
 
 public class CommonListModel {
 	
@@ -27,6 +28,8 @@ public class CommonListModel {
 	private List<String> Tags;
 	
 	private String descr;
+	
+	private Map<String,String> metaAttr;
 	
 	public CommonListModel() {
 		// TODO Auto-generated constructor stub
@@ -141,5 +144,10 @@ public class CommonListModel {
 	public boolean isShowLinked() {
 		return showLinked;
 	}
-	
+	public Map<String, String> getMetaAttr() {
+		return metaAttr;
+	}
+	public void setMetaAttr(Map<String, String> metaAttr) {
+		this.metaAttr = metaAttr;
+	}
 }

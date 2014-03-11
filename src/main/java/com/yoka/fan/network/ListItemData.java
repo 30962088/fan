@@ -35,6 +35,8 @@ public class ListItemData {
 	
 	public Img show_img;
 	
+	public Map<String, String> meta_attr;
+	
 	public static class Img{
 		public String url;
 		public int width;
@@ -61,6 +63,8 @@ public class ListItemData {
 		
 		public String en_tags;
 		
+		public String type_url;
+		
 		private static float StringToFloat(String val){
 			return Float.parseFloat(val.substring(0,val.length()-2))/100;
 		}
@@ -83,7 +87,7 @@ public class ListItemData {
 		List<LinkModel.Link> links = new ArrayList<LinkModel.Link>();
 		for(String id : link_goods.keySet()){
 			Link link = link_goods.get(id);
-			links.add(new LinkModel.Link(id, link.brand, link.getLeft(), link.getTop()));
+			links.add(new LinkModel.Link(id, link.brand+link.tags, link.getLeft(), link.getTop()));
 		}
 		model.setLinkModel(new LinkModel(show_img.url,show_img.width,show_img.height, links));
 		model.setName(owner_name);
@@ -92,6 +96,7 @@ public class ListItemData {
 		model.setTags(tags);
 		model.setUser_id(owner_id);
 		model.setDescr(description);
+		model.setMetaAttr(meta_attr);
 		return model;
 	}
 	

@@ -43,8 +43,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-public class CommonListAdapter extends BaseAdapter implements
-		onTagClickListener {
+public class CommonListAdapter extends BaseAdapter  {
 
 	private Context context;
 
@@ -94,7 +93,20 @@ public class CommonListAdapter extends BaseAdapter implements
 					width, height);
 
 			holder.mLinkedView.setLayoutParams(layoutParams);
-			holder.mLinkedView.setOnTagClickListener(this);
+			holder.mLinkedView.setOnTagClickListener(new onTagClickListener() {
+				
+				@Override
+				public void onClose(Link link) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void onClick(Link link) {
+					new BuyPopupWindow(context, model.getId());
+					
+				}
+			});
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -126,7 +138,7 @@ public class CommonListAdapter extends BaseAdapter implements
 		holder.mDatetimeView.setText(model.getDatetime());
 		holder.mStarCount.setText("" + model.getStar());
 		holder.mCommentCount.setText("" + model.getComment());
-		holder.setTags(context, model.getTags());
+		holder.setTags(context, model.getTags(),model.getMetaAttr().get("风格"));
 		holder.mStarBtn.setSelected(model.isStared());
 		holder.mPhotoView.setOnClickListener(new OnClickListener() {
 
@@ -306,7 +318,7 @@ public class CommonListAdapter extends BaseAdapter implements
 			mCommentBtn = view.findViewById(R.id.comment);
 		}
 
-		public void setTags(final Context context, List<String> tags) {
+		public void setTags(final Context context, List<String> tags,final String style) {
 			mTagContainer.removeAllViews();
 			for (final String tag : tags) {
 				TextView textView = (TextView) LayoutInflater.from(context)
@@ -323,6 +335,7 @@ public class CommonListAdapter extends BaseAdapter implements
 					public void onClick(View v) {
 						Intent intent = new Intent(context, TagActivity.class);
 						intent.putExtra(TagActivity.PARAM_TAG, tag);
+						intent.putExtra(TagActivity.PARAM_STYLE, style);
 						context.startActivity(intent);
 
 					}
@@ -378,38 +391,6 @@ public class CommonListAdapter extends BaseAdapter implements
 
 	}
 
-	@Override
-	public void onClose(Link link) {
-
-	}
-
-	@Override
-	public void onClick(Link link) {
-
-		new BuyPopupWindow(context, new ArrayList<BuyPopupWindow.GoodsItem>() {
-			{
-				for (int i = 0; i < 5; i++) {
-					GoodsItem item = new GoodsItem();
-					item.img = "http://image.iask.sina.com.cn/cidian/21/90/13715390212009-07-151006466.jpg";
-					item.name = "goods";
-					item.price = 323.11f;
-					item.typeResId = R.drawable.blazers;
-					add(item);
-				}
-				GoodsItem item1 = new GoodsItem();
-				item1.title = "编辑推荐";
-				add(item1);
-				for (int i = 0; i < 10; i++) {
-					GoodsItem item = new GoodsItem();
-					item.img = "http://image.iask.sina.com.cn/cidian/21/90/13715390212009-07-151006466.jpg";
-					item.name = "goods";
-					item.price = 323.11f;
-					item.typeResId = R.drawable.blazers;
-					add(item);
-				}
-
-			}
-		});
-	}
+	
 
 }
