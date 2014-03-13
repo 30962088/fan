@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.tencent.weibo.sdk.android.component.sso.WeiboToken;
 import com.tencent.weibo.sdk.android.model.ModelResult;
 import com.yoka.fan.network.Register.Result;
@@ -56,14 +57,46 @@ public class ThirdLogin extends Request{
 			info.data_sex = object.getString("sex");
 			return info;
 		}
+	}
+	
+	public static class WeiboTokenInfo{
+		private String access_token;
+		private String code;
+		private String description;
+		private String expires_in;
+		private String gender;
+		private String id;
+		private String location;
+		private String name;
+		private String profile_image_url;
+		private String remind_in;
+		private String screen_name;
+		
+		public static WeiboTokenInfo toInfo(Oauth2AccessToken token,JSONObject user) throws JSONException{
+			WeiboTokenInfo info = new WeiboTokenInfo();
+			info.access_token = token.getToken();
+			info.code = "";
+			info.description = user.getString("description");
+			info.expires_in =  String.valueOf(token.getExpiresTime());
+			info.gender = user.getString("gender");
+			info.id = user.getString("id");
+			info.location = user.getString("location");
+			info.name = user.getString("name");
+			info.profile_image_url = user.getString("profile_image_url");
+			info.remind_in = "";
+			info.screen_name = user.getString("screen_name");
+			return info;
+		}
 		
 	}
 	
 	public static final String TYPE_TENCENT = "tecent";
 	
+	public static final String TYPE_SINA = "sina";
+	
 	private String authType;
 	
-	private TokenInfo third_token_info;
+	private String third_token_info;
 	
 	private String uuid = Constant.uuid;
 	
@@ -71,11 +104,13 @@ public class ThirdLogin extends Request{
 	
 	private Result result;
 	
-	public ThirdLogin(String authType, TokenInfo third_token_info) {
+	public ThirdLogin(String authType, String third_token_info) {
 		super();
 		this.authType = authType;
 		this.third_token_info = third_token_info;
 	}
+	
+	
 
 	@Override
 	public void onSuccess(String data) {

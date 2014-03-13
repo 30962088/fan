@@ -9,12 +9,36 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Map;
 
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.tencent.weibo.sdk.android.component.sso.WeiboToken;
 import com.yoka.fan.network.Info;
 import com.yoka.fan.network.Info.BaseInfo;
 import com.yoka.fan.network.Info.Result;
 
 public class User implements Serializable{
+	
+	public static class SINAToken implements Serializable{
+		public String uid;
+		public String accessToken;
+		public String refreshToken;
+		public long expiresTime;
+		public static SINAToken toToken(Oauth2AccessToken token){
+			SINAToken t = new SINAToken();
+			t.uid = token.getUid();
+			t.accessToken = token.getToken();
+			t.refreshToken = token.getRefreshToken();
+			t.expiresTime = token.getExpiresTime();
+			return t;
+		}
+		public Oauth2AccessToken toOauth2AccessToken(){
+			Oauth2AccessToken token = new Oauth2AccessToken(accessToken,"");
+			token.setUid(uid);
+			token.setExpiresTime(expiresTime);
+			token.setRefreshToken(refreshToken);
+			return token;
+		}
+	}
+	
 	public static final int MALE = 1;
 
 	public static final int FEMALE = 2;
@@ -32,6 +56,8 @@ public class User implements Serializable{
 	public int sex;
 	
 	public WeiboToken qweibo;
+	
+	public SINAToken weibo;
 	
 	private static User user;
 	

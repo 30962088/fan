@@ -1,7 +1,9 @@
 package com.yoka.fan;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuth;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -12,9 +14,10 @@ import com.yoka.fan.network.Login;
 import com.yoka.fan.network.Register.Result;
 import com.yoka.fan.network.ThirdLogin;
 import com.yoka.fan.network.ThirdLogin.TokenInfo;
+import com.yoka.fan.network.ThirdLogin.WeiboTokenInfo;
 import com.yoka.fan.utils.Constant;
-import com.yoka.fan.utils.ShareUtils.OnLoginListener;
 import com.yoka.fan.utils.ShareUtils.OperateListener;
+import com.yoka.fan.utils.ShareUtils.Weibo;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.utils.ShareUtils.TWeibo;
@@ -121,42 +124,62 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 
 	}
 
-	private void onWeiboLogin() {
-		mWeiboAuth.anthorize(new WeiboAuthListener() {
-			
+	private void onWeiboLogin2(final Oauth2AccessToken token) {
+		Weibo weibo = new Weibo(context);
+		weibo.getUser(token, new OperateListener<JSONObject>() {
+
 			@Override
-			public void onWeiboException(WeiboException arg0) {
-				// TODO Auto-generated method stub
-				
+			public void onSuccess(final JSONObject user) {
+
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						
+						try {
+							ThirdLogin request = new ThirdLogin(
+									ThirdLogin.TYPE_SINA, new Gson()
+											.toJson(WeiboTokenInfo.toInfo(token,
+													user)));
+							request.request();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+				}).start();
+
 			}
-			
+
 			@Override
-			public void onComplete(Bundle values) {
-				// 从 Bundle 中解析 Token
-				Oauth2AccessToken mAccessToken = Oauth2AccessToken.parseAccessToken(values);
-	            if (mAccessToken.isSessionValid()) {
-	                
-	                // 保存 Token 到 SharedPreferences
-//	                AccessTokenKeeper.writeAccessToken(WBAuthActivity.this, mAccessToken);
-	                
-	            } else {
-	                // 当您注册的应用程序签名不正确时，就会收到 Code，请确保签名正确
-	                String code = values.getString("code");
-	                String message = "签名失败";
-	                if (!TextUtils.isEmpty(code)) {
-	                    message = message + "\nObtained the code: " + code;
-	                }
-	                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-	            }
-				
-			}
-			
-			@Override
-			public void onCancel() {
+			public void onError(String msg) {
 				// TODO Auto-generated method stub
 				
 			}
 		});
+	}
+
+	private void onWeiboLogin() {
+		Weibo weibo = new Weibo(context);
+		User user = User.readUser();
+		if (user == null || user.weibo == null) {
+			weibo.login(new OperateListener<Oauth2AccessToken>() {
+
+				@Override
+				public void onSuccess(Oauth2AccessToken t) {
+					onWeiboLogin2(t);
+
+				}
+
+				@Override
+				public void onError(String msg) {
+					// TODO Auto-generated method stub
+
+				}
+			});
+		}
+
 	}
 
 	private void onQWeiboLogin2(final WeiboToken t) {
@@ -172,7 +195,8 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 						ThirdLogin request;
 						try {
 							request = new ThirdLogin(ThirdLogin.TYPE_TENCENT,
-									TokenInfo.toInfo(result, t));
+									new Gson().toJson(TokenInfo.toInfo(result,
+											t)));
 							request.request();
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -183,33 +207,34 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 				}).start();
 
 			}
+
+			@Override
+			public void onError(String msg) {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 	}
 
 	private void onQWeiboLogin() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				User user = User.readUser();
-				final TWeibo weibo = new TWeibo(context);
-				if (user == null || user.qweibo == null) {
-					weibo.login(new OnLoginListener<WeiboToken>() {
+		User user = User.readUser();
+		final TWeibo weibo = new TWeibo(context);
+		if (user == null || user.qweibo == null) {
+			weibo.login(new OperateListener<WeiboToken>() {
 
-						@Override
-						public void onSuccess(final WeiboToken t) {
-							onQWeiboLogin2(t);
-						}
-
-						@Override
-						public void onError(String msg) {
-
-						}
-					});
-				}else{
-					onQWeiboLogin2(user.qweibo);
+				@Override
+				public void onSuccess(final WeiboToken t) {
+					onQWeiboLogin2(t);
 				}
-			}
-		}).start();
+
+				@Override
+				public void onError(String msg) {
+
+				}
+			});
+		} else {
+			onQWeiboLogin2(user.qweibo);
+		}
 
 	}
 
