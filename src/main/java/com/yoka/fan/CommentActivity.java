@@ -120,17 +120,22 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 	}
 	
 	public static class Comment{
+		private String user_id;
 		private String photo;
 		private String name;
 		private String datetime;
 		private String comment;
-		public Comment(String photo, String name, String datetime,
+		public Comment(String user_id,String photo, String name, String datetime,
 				String comment) {
 			super();
+			this.user_id = user_id;
 			this.photo = photo;
 			this.name = name;
 			this.datetime = datetime;
 			this.comment = comment;
+		}
+		public String getUser_id() {
+			return user_id;
 		}
 		public String getPhoto() {
 			return photo;
@@ -184,7 +189,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Comment comment = list.get(position);
+			final Comment comment = list.get(position);
 			
 			ViewHolder holder = null;
 			if(convertView == null){
@@ -196,6 +201,17 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 			}
 			
 			imageLoader.displayImage(comment.photo, holder.photoView);
+			holder.photoView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, ZoneActivity.class);
+					intent.putExtra(ZoneActivity.PARAM_NAME, comment.getName());
+					intent.putExtra(ZoneActivity.PARAM_TARGET_ID, comment.getUser_id());
+					context.startActivity(intent);
+					
+				}
+			});
 			holder.datetimeView.setText(comment.datetime);
 			holder.nameView.setText(comment.name);
 			holder.commentView.setText(comment.comment);
@@ -267,7 +283,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 	
 	private void onPublishSuccess(CreateComment.Result result){
 		User user = User.readUser();
-		list.add(0, new Comment(user.photo, user.nickname, RelativeDateFormat.format(new Date(result.getCreate_date())) , result.getTxt()));
+		list.add(0, new Comment(user.id,user.photo, user.nickname, RelativeDateFormat.format(new Date(result.getCreate_date())) , result.getTxt()));
 		adapter.notifyDataSetChanged();
 		commentView.setText("");
 	}

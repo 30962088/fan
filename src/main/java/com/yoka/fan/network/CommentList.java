@@ -32,6 +32,12 @@ public class CommentList extends Request{
 		
 		private String txt;
 		
+		private String uid;
+		
+		public String getUid() {
+			return uid;
+		}
+		
 		public String get_id() {
 			return _id;
 		}
@@ -62,7 +68,7 @@ public class CommentList extends Request{
 		
 		
 		public Comment toComment(){
-			return new Comment(getU_thumb(), getU_nick(), getDateFormater(), getTxt());
+			return new Comment(uid,getU_thumb(), getU_nick(), getDateFormater(), getTxt());
 		}
 		
 		

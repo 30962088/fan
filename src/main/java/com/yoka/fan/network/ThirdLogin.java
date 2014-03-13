@@ -14,6 +14,7 @@ import com.tencent.weibo.sdk.android.component.sso.WeiboToken;
 import com.tencent.weibo.sdk.android.model.ModelResult;
 import com.yoka.fan.network.Register.Result;
 import com.yoka.fan.utils.Constant;
+import com.yoka.fan.utils.User.SINAToken;
 
 public class ThirdLogin extends Request{
 
@@ -72,18 +73,18 @@ public class ThirdLogin extends Request{
 		private String remind_in;
 		private String screen_name;
 		
-		public static WeiboTokenInfo toInfo(Oauth2AccessToken token,JSONObject user) throws JSONException{
+		public static WeiboTokenInfo toInfo(SINAToken token,JSONObject user) throws JSONException{
 			WeiboTokenInfo info = new WeiboTokenInfo();
-			info.access_token = token.getToken();
+			info.access_token = token.accessToken;
 			info.code = "";
 			info.description = user.getString("description");
-			info.expires_in =  String.valueOf(token.getExpiresTime());
+			info.expires_in =  String.valueOf(token.expires_in);
 			info.gender = user.getString("gender");
 			info.id = user.getString("id");
 			info.location = user.getString("location");
 			info.name = user.getString("name");
 			info.profile_image_url = user.getString("profile_image_url");
-			info.remind_in = "";
+			info.remind_in = String.valueOf(token.remind_in);
 			info.screen_name = user.getString("screen_name");
 			return info;
 		}

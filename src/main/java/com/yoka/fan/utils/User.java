@@ -20,21 +20,12 @@ public class User implements Serializable{
 	public static class SINAToken implements Serializable{
 		public String uid;
 		public String accessToken;
-		public String refreshToken;
-		public long expiresTime;
-		public static SINAToken toToken(Oauth2AccessToken token){
-			SINAToken t = new SINAToken();
-			t.uid = token.getUid();
-			t.accessToken = token.getToken();
-			t.refreshToken = token.getRefreshToken();
-			t.expiresTime = token.getExpiresTime();
-			return t;
-		}
+		public String expires_in;
+		public String remind_in;
+		
 		public Oauth2AccessToken toOauth2AccessToken(){
-			Oauth2AccessToken token = new Oauth2AccessToken(accessToken,"");
+			Oauth2AccessToken token = new Oauth2AccessToken(accessToken,String.valueOf(expires_in));
 			token.setUid(uid);
-			token.setExpiresTime(expiresTime);
-			token.setRefreshToken(refreshToken);
 			return token;
 		}
 	}

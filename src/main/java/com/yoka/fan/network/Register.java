@@ -46,7 +46,10 @@ public abstract class Register extends Request{
 		}
 		
 		public User toUser(){
-			User user = new User();
+			User user = User.readUser();
+			if(user == null){
+				user = new User();
+			}
 			user.id = user_id;
 			user.nickname = nick;
 			user.photo = head_url;

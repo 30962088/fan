@@ -1,5 +1,7 @@
 package com.yoka.fan;
 
+import java.net.Authenticator.RequestorType;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,6 +13,7 @@ import com.sina.weibo.sdk.exception.WeiboException;
 import com.tencent.weibo.sdk.android.component.sso.WeiboToken;
 import com.tencent.weibo.sdk.android.model.ModelResult;
 import com.yoka.fan.network.Login;
+import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Register.Result;
 import com.yoka.fan.network.ThirdLogin;
 import com.yoka.fan.network.ThirdLogin.TokenInfo;
@@ -21,6 +24,7 @@ import com.yoka.fan.utils.ShareUtils.Weibo;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.utils.ShareUtils.TWeibo;
+import com.yoka.fan.utils.User.SINAToken;
 import com.yoka.fan.wiget.LoadingPopup;
 
 import android.content.Context;
@@ -80,13 +84,22 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 
 	}
 
-	private void onLoginSuccess(Result result) {
+	private void onLoginSuccess(final Result result) {
+
 		User user = result.toUser();
 		User.fillInfo(user);
 		User.saveUser(user);
-		startActivity(new Intent(LoginActivity.this,
-				RecommandListActivity.class));
-		MainActivity.getInstance().login(User.readUser());
+		runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				startActivity(new Intent(LoginActivity.this,
+						RecommandListActivity.class));
+				MainActivity.getInstance().login(User.readUser());
+
+			}
+		});
+
 	}
 
 	private void onLogin() {
@@ -101,14 +114,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 
 					@Override
 					protected void onSuccess(final Result result) {
-						runOnUiThread(new Runnable() {
-
-							@Override
-							public void run() {
-								onLoginSuccess(result);
-
-							}
-						});
+						onLoginSuccess(result);
 
 					}
 
@@ -124,99 +130,103 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 
 	}
 
-	private void onWeiboLogin2(final Oauth2AccessToken token) {
+	private void onThirdLogin(final ThirdLogin login) {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				login.request();
+				if (login.getStatus() == Request.Status.SUCCESS) {
+					onLoginSuccess(login.getResult());
+				}
+				LoadingPopup.hide(context);
+			}
+		}).start();
+	}
+
+	private void onWeiboLogin2(final SINAToken token) {
 		Weibo weibo = new Weibo(context);
 		weibo.getUser(token, new OperateListener<JSONObject>() {
 
 			@Override
 			public void onSuccess(final JSONObject user) {
-
-				new Thread(new Runnable() {
-
-					@Override
-					public void run() {
-						
-						try {
-							ThirdLogin request = new ThirdLogin(
-									ThirdLogin.TYPE_SINA, new Gson()
-											.toJson(WeiboTokenInfo.toInfo(token,
-													user)));
-							request.request();
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-					}
-				}).start();
+				try {
+					ThirdLogin request = new ThirdLogin(ThirdLogin.TYPE_SINA,
+							new Gson().toJson(WeiboTokenInfo
+									.toInfo(token, user)));
+					onThirdLogin(request);
+				} catch (JSONException e1) {
+					LoadingPopup.hide(context);
+					e1.printStackTrace();
+				}
 
 			}
 
 			@Override
 			public void onError(String msg) {
-				// TODO Auto-generated method stub
-				
+				LoadingPopup.hide(context);
+
 			}
 		});
 	}
 
 	private void onWeiboLogin() {
+		LoadingPopup.show(context);
 		Weibo weibo = new Weibo(context);
 		User user = User.readUser();
-		if (user == null || user.weibo == null) {
-			weibo.login(new OperateListener<Oauth2AccessToken>() {
+		if (user == null || user.weibo == null
+				|| !user.weibo.toOauth2AccessToken().isSessionValid()) {
+			weibo.login(new OperateListener<SINAToken>() {
 
 				@Override
-				public void onSuccess(Oauth2AccessToken t) {
+				public void onSuccess(SINAToken t) {
 					onWeiboLogin2(t);
 
 				}
 
 				@Override
 				public void onError(String msg) {
-					// TODO Auto-generated method stub
+					LoadingPopup.hide(context);
 
 				}
 			});
+		} else {
+			onWeiboLogin2(user.weibo);
 		}
 
 	}
 
 	private void onQWeiboLogin2(final WeiboToken t) {
+
 		TWeibo weibo = new TWeibo(context);
 		weibo.getUserInfo(t.accessToken, new OperateListener<ModelResult>() {
 
 			@Override
 			public void onSuccess(final ModelResult result) {
-				new Thread(new Runnable() {
 
-					@Override
-					public void run() {
-						ThirdLogin request;
-						try {
-							request = new ThirdLogin(ThirdLogin.TYPE_TENCENT,
-									new Gson().toJson(TokenInfo.toInfo(result,
-											t)));
-							request.request();
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-					}
-				}).start();
+				try {
+					ThirdLogin request = new ThirdLogin(
+							ThirdLogin.TYPE_TENCENT, new Gson()
+									.toJson(TokenInfo.toInfo(result, t)));
+					onThirdLogin(request);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 
 			@Override
 			public void onError(String msg) {
-				// TODO Auto-generated method stub
-				
+				LoadingPopup.hide(context);
+
 			}
 		});
+
 	}
 
 	private void onQWeiboLogin() {
+		LoadingPopup.show(context);
 		User user = User.readUser();
 		final TWeibo weibo = new TWeibo(context);
 		if (user == null || user.qweibo == null) {
@@ -229,7 +239,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 
 				@Override
 				public void onError(String msg) {
-
+					LoadingPopup.hide(context);
 				}
 			});
 		} else {

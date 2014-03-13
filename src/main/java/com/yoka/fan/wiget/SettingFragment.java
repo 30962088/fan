@@ -2,6 +2,7 @@ package com.yoka.fan.wiget;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.LoginActivity;
+import com.yoka.fan.MainActivity;
 import com.yoka.fan.ModifyActivity;
 import com.yoka.fan.R;
 import com.yoka.fan.TicklingActivity;
@@ -63,6 +64,7 @@ public class SettingFragment extends Fragment implements OnClickListener {
 		view.findViewById(R.id.appraise).setOnClickListener(this);
 		view.findViewById(R.id.clear_cache).setOnClickListener(this);
 		view.findViewById(R.id.tickling).setOnClickListener(this);
+		view.findViewById(R.id.quit).setOnClickListener(this);
 	}
 
 	@Override
@@ -75,7 +77,7 @@ public class SettingFragment extends Fragment implements OnClickListener {
 		if (user != null) {
 			login(user);
 		} else {
-			logout(user);
+			logout();
 		}
 
 	}
@@ -159,6 +161,25 @@ public class SettingFragment extends Fragment implements OnClickListener {
 		case R.id.tickling:
 			startActivity(new Intent(getActivity(), TicklingActivity.class));
 			break;
+		case R.id.quit:
+			ConfirmDialog.open(getActivity(), "确认", "确定要退出登录吗？", new ConfirmDialog.OnClickListener() {
+				
+				@Override
+				public void onPositiveClick() {
+					User.saveUser(null);
+					MainActivity.getInstance().login(null);
+					onResume();
+					Utils.tip(getActivity(), "成功退出登录");
+				}
+				
+				@Override
+				public void onNegativeClick() {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			
+			break;
 		default:
 			break;
 		}
@@ -168,6 +189,7 @@ public class SettingFragment extends Fragment implements OnClickListener {
 	public void login(User user) {
 		getView().findViewById(R.id.login_frame).setVisibility(View.GONE);
 		getView().findViewById(R.id.user_frame).setVisibility(View.VISIBLE);
+		getView().findViewById(R.id.quit).setVisibility(View.VISIBLE);
 		if (!TextUtils.isEmpty(user.photo)) {
 			imageLoader.displayImage(user.photo, (ImageView) getView()
 					.findViewById(R.id.user_photo));
@@ -177,9 +199,11 @@ public class SettingFragment extends Fragment implements OnClickListener {
 				.setText(user.nickname);
 	}
 
-	public void logout(User user) {
+	public void logout() {
+		
 		getView().findViewById(R.id.login_frame).setVisibility(View.VISIBLE);
 		getView().findViewById(R.id.user_frame).setVisibility(View.GONE);
+		getView().findViewById(R.id.quit).setVisibility(View.GONE);
 	}
 
 }

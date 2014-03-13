@@ -55,7 +55,7 @@ public class BuyPopupWindow implements OnClickListener,AnimationListener,OnItemC
 	public BuyPopupWindow(Context context,String coll_id) {
 		View view = LayoutInflater.from(context).inflate(R.layout.popup_buy_layout,null);
 		view.setOnClickListener(this);
-		mPopupWindow = new PopupWindow(view, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
+		mPopupWindow = new PopupWindow(view, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, true);
 		mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4D000000")));
 		mPopupWindow.setTouchable(true);
         mPopupWindow.setOutsideTouchable(true);
@@ -67,7 +67,7 @@ public class BuyPopupWindow implements OnClickListener,AnimationListener,OnItemC
         
         
         
-        Animation rotation = AnimationUtils.loadAnimation(context, R.anim.zoom_center);
+        Animation rotation = AnimationUtils.loadAnimation(context, R.anim.slide_in_from_top);
         rotation.setAnimationListener(this);
         
         View bottomBar = view.findViewById(R.id.popup);
@@ -89,15 +89,19 @@ public class BuyPopupWindow implements OnClickListener,AnimationListener,OnItemC
 				request.request();
 				Result result = request.getResult();
 				List<GoodsItem> list = new ArrayList<BuyPopupWindow.GoodsItem>();
-				for(Goods goods : result.getLinkGoods().values()){
-					list.add(new GoodsItem(goods.getType_url(),goods.getBrand()+goods.getTags(),goods.getPrice(),goods.getUrl(),goods.getImg(),"去购买>",null));
-				}
-				if(result.getLinkGoodsType().size() > 0){
-					list.add(new GoodsItem("编辑推荐"));
-					for(Goods goods : result.getLinkGoodsType()){
-						list.add(new GoodsItem(goods.getType_url(),goods.getBrand()+goods.getTags(),goods.getPrice(),goods.getUrl(),goods.getImg(),"相似推荐>",null));
+				if(result != null){
+					
+					for(Goods goods : result.getLinkGoods().values()){
+						list.add(new GoodsItem(goods.getType_url(),goods.getBrand()+goods.getTags(),goods.getPrice(),goods.getUrl(),goods.getImg(),"去购买>",null));
+					}
+					if(result.getLinkGoodsType().size() > 0){
+						list.add(new GoodsItem("编辑推荐"));
+						for(Goods goods : result.getLinkGoodsType()){
+							list.add(new GoodsItem(goods.getType_url(),goods.getBrand()+goods.getTags(),goods.getPrice(),goods.getUrl(),goods.getImg(),"相似推荐>",null));
+						}
 					}
 				}
+				
 				
 				return list;
 			}

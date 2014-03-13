@@ -1,11 +1,12 @@
 package com.yoka.fan.wiget;
 
-import java.util.List;
-import java.util.zip.Inflater;
+
 
 import com.yoka.fan.R;
+import com.yoka.fan.utils.Utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Editable;
@@ -15,22 +16,21 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
 public class ShareDetailPopupWindow implements OnClickListener,TextWatcher{
 
+	public static interface OnOperateLisener{
+		public void onsubmit(String photo,String content);
+	}
+	
+	
 	
 	
 	private PopupWindow mPopupWindow;
@@ -43,7 +43,13 @@ public class ShareDetailPopupWindow implements OnClickListener,TextWatcher{
 	
 	private int limit = 110;
 	
-	public ShareDetailPopupWindow(Context context) {
+	private OnOperateLisener onOperateLisener;
+	
+	private String photo;
+	
+	
+	public ShareDetailPopupWindow(Context context,String photo,String content) {
+		this.photo = photo;
 		View view = LayoutInflater.from(context).inflate(R.layout.share_detail_layout,null);
 		view.setOnClickListener(this);
 		mPopupWindow = new PopupWindow(view, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, true);
@@ -57,18 +63,28 @@ public class ShareDetailPopupWindow implements OnClickListener,TextWatcher{
         contentText = (EditText) view.findViewById(R.id.content);
         contentText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(limit) });
         contentText.addTextChangedListener(this);
+        
         countText = (TextView) view.findViewById(R.id.count);
         countText.setText(""+limit);
         thumnail = (ImageView) view.findViewById(R.id.thumbnail);
-        
+        Utils.getImageLoader(context).displayImage(photo, thumnail);
         popup.setOnClickListener(this);
         popup.startAnimation(rotation);
         view.findViewById(R.id.layout).setOnClickListener(this);
         view.findViewById(R.id.cancel).setOnClickListener(this);
+        view.findViewById(R.id.send).setOnClickListener(this);
         mPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-        
+        contentText.setText(content);
 	}
 	
+	public void setOnOperateLisener(OnOperateLisener onOperateLisener) {
+		this.onOperateLisener = onOperateLisener;
+	}
+	
+	
+	public void dismiss(){
+		mPopupWindow.dismiss();
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -76,6 +92,11 @@ public class ShareDetailPopupWindow implements OnClickListener,TextWatcher{
 		case R.id.layout:
 		case R.id.cancel:
 			mPopupWindow.dismiss();
+		case R.id.send:
+			if(onOperateLisener != null){
+				onOperateLisener.onsubmit(photo,contentText.getText().toString());
+			}
+			break;
 		default:
 			break;
 		}

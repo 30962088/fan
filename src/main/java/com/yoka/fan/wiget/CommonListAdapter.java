@@ -14,6 +14,7 @@ import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Request.Status;
 import com.yoka.fan.network.UnLike;
 import com.yoka.fan.utils.DisplayUtils;
+import com.yoka.fan.utils.ShareUtils.Weibo;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.BuyPopupWindow.GoodsItem;
@@ -253,39 +254,14 @@ public class CommonListAdapter extends BaseAdapter  {
 
 			@Override
 			public void onClick(View v) {
-				new SharePopupWindow(context,
-						new ArrayList<SharePopupWindow.Share>() {
-							{
-								add(new Share(
-										context.getString(R.string.weibo),
-										R.drawable.share_weibo, new OnClickListener() {
-											
-											@Override
-											public void onClick(View v) {
-												new ShareDetailPopupWindow(context);
-												
-											}
-										}));
-								add(new Share(context
-										.getString(R.string.tencent),
-										R.drawable.share_tencent, null));
-								add(new Share(context
-										.getString(R.string.renren),
-										R.drawable.share_renren, null));
-								add(new Share(context
-										.getString(R.string.wechat),
-										R.drawable.share_wechat, null));
-								add(new Share(context
-										.getString(R.string.timeline),
-										R.drawable.share_timeline, null));
-							}
-						});
-
+				new SharePopupWindow(context,model);
 			}
 		});
 
 		return convertView;
 	}
+	
+	
 
 	private static class ViewHolder {
 
