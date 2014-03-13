@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Map;
 
+import com.tencent.weibo.sdk.android.component.sso.WeiboToken;
 import com.yoka.fan.network.Info;
 import com.yoka.fan.network.Info.BaseInfo;
 import com.yoka.fan.network.Info.Result;
@@ -29,8 +30,12 @@ public class User implements Serializable{
 	public String job;
 	
 	public int sex;
-
+	
+	public WeiboToken qweibo;
+	
 	private static User user;
+	
+	
 
 	public static User readUser() {
 		if (user != null) {

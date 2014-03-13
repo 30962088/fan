@@ -9,6 +9,10 @@ public class Constant {
 	public static String token;
 	
 	public static String packageName = "com.wandoujia.phoenix2";
+	
+	public static final long TWEIBO_APP_KEY = 801486157;
+	
+	public static final String TWEIBO_APP_SECRET = "d84226a4e8603482746a897285c66486";
 		
 	/** 当前 DEMO 应用的 APP_KEY，第三方应用应该使用自己的 APP_KEY 替换该 APP_KEY */
     public static final String WEIBO_APP_KEY      = "2083765485";
@@ -22,7 +26,7 @@ public class Constant {
      * 建议使用默认回调页：https://api.weibo.com/oauth2/default.html
      * </p>
      */
-    public static final String REDIRECT_URL = "http://www.sina.com";
+    public static final String WEIBO_REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";
 
     /**
      * Scope 是 OAuth2.0 授权机制中 authorize 接口的一个参数。通过 Scope，平台将开放更多的微博
