@@ -135,6 +135,7 @@ public class SettingFragment extends Fragment implements OnClickListener {
 						
 						@Override
 						public void onclearSuccess() {
+							imageLoader.clearMemoryCache();
 							onResume();
 							LoadingPopup.hide(getActivity());
 						}

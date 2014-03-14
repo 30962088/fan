@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
+import org.json.JSONObject;
+
+import com.tencent.weibo.sdk.android.component.sso.WeiboToken;
 import com.yoka.fan.R;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.utils.ShareUtils.OperateListener;
+import com.yoka.fan.utils.ShareUtils.TWeibo;
 import com.yoka.fan.utils.ShareUtils.Weibo;
 import com.yoka.fan.utils.User.SINAToken;
 import com.yoka.fan.wiget.ShareDetailPopupWindow.OnOperateLisener;
@@ -50,7 +54,14 @@ public class SharePopupWindow implements OnClickListener {
 							}
 						}));
 				add(new Share(context.getString(R.string.tencent),
-						R.drawable.share_tencent, null));
+						R.drawable.share_tencent, new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								shareQWeibo(model);
+								
+							}
+						}));
 				add(new Share(context.getString(R.string.wechat),
 						R.drawable.share_wechat, null));
 				add(new Share(context.getString(R.string.timeline),
@@ -95,9 +106,53 @@ public class SharePopupWindow implements OnClickListener {
 
 	}
 	
+	private void shareQWeibo(CommonListModel model){
+		final User user = User.readUser();
+		final TWeibo weibo = new TWeibo(context);
+		if (user == null || user.qweibo == null) {
+			weibo.login(new OperateListener<WeiboToken>() {
+
+				@Override
+				public void onSuccess(final WeiboToken t) {
+					Utils.tip(context, "登录成功");
+				}
+
+				@Override
+				public void onError(String msg) {
+					
+				}
+			});
+			
+		}else{
+			ShareDetailPopupWindow window = new ShareDetailPopupWindow(context, model.getLinkModel().getUrl(), "");
+			window.setOnOperateLisener(new OnOperateLisener() {
+				
+				@Override
+				public void onsubmit(String photo, String content) {
+					weibo.publish(user.qweibo.accessToken, photo, content, new OperateListener<JSONObject>() {
+						
+						@Override
+						public void onSuccess(JSONObject t) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						@Override
+						public void onError(String msg) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+					
+				}
+			});
+			
+		}
+	}
+	
 	private void shareWeibo(CommonListModel model){
-		Weibo weibo = new Weibo(context);
-		User user = User.readUser();
+		final Weibo weibo = new Weibo(context);
+		final User user = User.readUser();
 		if (user == null || user.weibo == null
 				|| !user.weibo.toOauth2AccessToken().isSessionValid()) {
 			weibo.login(new OperateListener<SINAToken>() {
@@ -105,12 +160,12 @@ public class SharePopupWindow implements OnClickListener {
 				@Override
 				public void onSuccess(SINAToken t) {
 					Utils.tip(context, "登录成功");
-					LoadingPopup.hide(context);
+					
 				}
 
 				@Override
 				public void onError(String msg) {
-					LoadingPopup.hide(context);
+					
 
 				}
 			});
@@ -121,6 +176,20 @@ public class SharePopupWindow implements OnClickListener {
 				@Override
 				public void onsubmit(String photo, String content) {
 					
+					weibo.publish(user.weibo, photo, content, new OperateListener<JSONObject>() {
+						
+						@Override
+						public void onSuccess(JSONObject t) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						@Override
+						public void onError(String msg) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
 					
 				}
 			});

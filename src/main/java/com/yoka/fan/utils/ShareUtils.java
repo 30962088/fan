@@ -1,6 +1,7 @@
 package com.yoka.fan.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
 import org.json.JSONException;
@@ -9,17 +10,23 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.DiscCacheUtil;
+import com.nostra13.universalimageloader.core.assist.MemoryCacheUtil;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuth;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
+import com.sina.weibo.sdk.openapi.legacy.StatusesAPI;
 import com.sina.weibo.sdk.openapi.legacy.UsersAPI;
 import com.tencent.weibo.sdk.android.api.UserAPI;
+import com.tencent.weibo.sdk.android.api.WeiboAPI;
 import com.tencent.weibo.sdk.android.api.util.Util;
 import com.tencent.weibo.sdk.android.component.Authorize;
 import com.tencent.weibo.sdk.android.component.sso.AuthHelper;
@@ -51,6 +58,50 @@ public class ShareUtils {
 					Constant.WEIBO_REDIRECT_URL, Constant.SCOPE);
 		}
 		
+		public void publish(SINAToken token,String photo,String text,final OperateListener<JSONObject> operateListener){
+			StatusesAPI api = new StatusesAPI(token.toOauth2AccessToken());
+			ImageLoader loader = Utils.getImageLoader(context);
+			
+			api.upload(text,DiscCacheUtil.findInCache(photo, loader.getDiscCache()).toString() , null, null, new RequestListener() {
+				
+				@Override
+				public void onIOException(IOException e) {
+					Utils.tip(context, e.getMessage());
+					if (operateListener != null) {
+						operateListener.onError(e.getMessage());
+					}
+				}
+				
+				@Override
+				public void onError(WeiboException e) {
+					Utils.tip(context, e.getMessage());
+					if (operateListener != null) {
+						operateListener.onError(e.getMessage());
+					}
+				}
+				
+				@Override
+				public void onComplete4binary(ByteArrayOutputStream responseOS) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void onComplete(String response) {
+					if (operateListener != null) {
+						try {
+							operateListener.onSuccess(new JSONObject(
+									response));
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+				}
+			});
+			
+		}
 		
 
 		public void getUser(SINAToken token,
@@ -163,6 +214,22 @@ public class ShareUtils {
 
 		public TWeibo(Context context) {
 			this.context = context;
+		}
+		
+		public void publish(String accessToken,String photo,String content,final OperateListener<JSONObject> operateListener){
+			AccountModel account = new AccountModel(accessToken);
+			WeiboAPI api = new WeiboAPI(account);
+			File file = DiscCacheUtil.findInCache(photo, Utils.getImageLoader(context).getDiscCache());
+			api.addPic(context, content, requestFormat, -1, -1, BitmapFactory.decodeFile(file.toString()), 1, 0, new  HttpCallback() {
+				
+				@Override
+				public void onResult(Object object) {
+					if (operateListener != null) {
+						operateListener.onSuccess((JSONObject)((ModelResult)object).getObj());
+					}
+					
+				}
+			}, null, BaseVO.TYPE_JSON);
 		}
 
 		public void getUserInfo(String accessToken,
