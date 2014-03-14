@@ -14,7 +14,8 @@ import com.tencent.weibo.sdk.android.component.sso.WeiboToken;
 import com.tencent.weibo.sdk.android.model.ModelResult;
 import com.yoka.fan.network.Register.Result;
 import com.yoka.fan.utils.Constant;
-import com.yoka.fan.utils.User.SINAToken;
+import com.yoka.fan.utils.ShareAccount.SINAToken;
+
 
 public class ThirdLogin extends Request{
 

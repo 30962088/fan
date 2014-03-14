@@ -20,6 +20,8 @@ public class Dirctionary {
 	
 	private static File relationObjectFile;
 	
+	private static File shareAccountFile;
+	
 	private static File dataDir;
 	
 	public static void init(Context context){
@@ -28,7 +30,7 @@ public class Dirctionary {
 		initUserObjectFile(context);
 		initCateObjectFile(context);
 		initRelationObjectFile(context);
-		
+		initShareAccountFile(context);
 	}
 	
 	private static void initDataDir(Context context){
@@ -38,10 +40,26 @@ public class Dirctionary {
 		}
 	}
 	
+	public static File getShareAccountFile() {
+		return shareAccountFile;
+	}
+	
 	public static File getPictureDir() {
 		return pictureDir;
 	}
 	
+	private static void initShareAccountFile(Context context){
+//		userObjectFile = new File(context.getCacheDir(),"user.class");
+		shareAccountFile = new File(dataDir,"share_account.class");
+		if(!shareAccountFile.exists()){
+			try {
+				shareAccountFile.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 	private static void initUserObjectFile(Context context){
 //		userObjectFile = new File(context.getCacheDir(),"user.class");
 		userObjectFile = new File(dataDir,"user.class");

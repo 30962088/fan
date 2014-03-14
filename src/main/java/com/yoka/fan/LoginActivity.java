@@ -21,10 +21,11 @@ import com.yoka.fan.network.ThirdLogin.WeiboTokenInfo;
 import com.yoka.fan.utils.Constant;
 import com.yoka.fan.utils.ShareUtils.OperateListener;
 import com.yoka.fan.utils.ShareUtils.Weibo;
+import com.yoka.fan.utils.ShareAccount;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.utils.ShareUtils.TWeibo;
-import com.yoka.fan.utils.User.SINAToken;
+import com.yoka.fan.utils.ShareAccount.SINAToken;
 import com.yoka.fan.wiget.LoadingPopup;
 
 import android.content.Context;
@@ -173,9 +174,9 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 	private void onWeiboLogin() {
 		LoadingPopup.show(context);
 		Weibo weibo = new Weibo(context);
-		User user = User.readUser();
-		if (user == null || user.weibo == null
-				|| !user.weibo.toOauth2AccessToken().isSessionValid()) {
+		ShareAccount account = ShareAccount.read();
+		if (account == null || account.weibo == null
+				|| !account.weibo.toOauth2AccessToken().isSessionValid()) {
 			weibo.login(new OperateListener<SINAToken>() {
 
 				@Override
@@ -191,7 +192,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 				}
 			});
 		} else {
-			onWeiboLogin2(user.weibo);
+			onWeiboLogin2(account.weibo);
 		}
 
 	}
@@ -227,9 +228,9 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 
 	private void onQWeiboLogin() {
 		LoadingPopup.show(context);
-		User user = User.readUser();
+		ShareAccount account = ShareAccount.read();
 		final TWeibo weibo = new TWeibo(context);
-		if (user == null || user.qweibo == null) {
+		if (account == null || account.qweibo == null) {
 			weibo.login(new OperateListener<WeiboToken>() {
 
 				@Override
@@ -243,7 +244,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 				}
 			});
 		} else {
-			onQWeiboLogin2(user.qweibo);
+			onQWeiboLogin2(account.qweibo);
 		}
 
 	}

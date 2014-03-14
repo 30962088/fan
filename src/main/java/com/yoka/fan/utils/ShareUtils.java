@@ -36,7 +36,8 @@ import com.tencent.weibo.sdk.android.model.AccountModel;
 import com.tencent.weibo.sdk.android.model.BaseVO;
 import com.tencent.weibo.sdk.android.model.ModelResult;
 import com.tencent.weibo.sdk.android.network.HttpCallback;
-import com.yoka.fan.utils.User.SINAToken;
+import com.yoka.fan.utils.ShareAccount.SINAToken;
+
 
 public class ShareUtils {
 
@@ -173,13 +174,13 @@ public class ShareUtils {
 						token.expires_in = values.getString("expires_in");
 						token.remind_in = values.getString("remind_in");
 						token.uid = values.getString("uid");
-						User user = User.readUser();
-						if(user == null){
-							user = new User();
+						ShareAccount account = ShareAccount.read();
+						if(account == null){
+							account = new ShareAccount();
 							
 						}
-						user.weibo = token;
-						User.saveUser(user);
+						account.weibo = token;
+						ShareAccount.save(account);
 						onLoginListener.onSuccess(token);
 
 					} else {
@@ -295,13 +296,13 @@ public class ShareUtils {
 							Util.saveSharePersistent(context, "CLIENT_ID", Util.getConfig().getProperty("APP_KEY"));
 							Util.saveSharePersistent(context, "AUTHORIZETIME",
 									String.valueOf(System.currentTimeMillis() / 1000l));
-							User user = User.readUser();
-							if(user == null){
-								user = new User();
+							ShareAccount account = ShareAccount.read();
+							if(account == null){
+								account = new ShareAccount();
 								
 							}
-							user.qweibo = token;
-							User.saveUser(user);
+							account.qweibo = token;
+							ShareAccount.save(account);
 							if (listener != null) {
 								listener.onSuccess(token);
 							}

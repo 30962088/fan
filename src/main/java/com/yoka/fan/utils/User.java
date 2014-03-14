@@ -17,18 +17,7 @@ import com.yoka.fan.network.Info.Result;
 
 public class User implements Serializable{
 	
-	public static class SINAToken implements Serializable{
-		public String uid;
-		public String accessToken;
-		public String expires_in;
-		public String remind_in;
-		
-		public Oauth2AccessToken toOauth2AccessToken(){
-			Oauth2AccessToken token = new Oauth2AccessToken(accessToken,String.valueOf(expires_in));
-			token.setUid(uid);
-			return token;
-		}
-	}
+	
 	
 	public static final int MALE = 1;
 
@@ -46,9 +35,7 @@ public class User implements Serializable{
 	
 	public int sex;
 	
-	public WeiboToken qweibo;
 	
-	public SINAToken weibo;
 	
 	private static User user;
 	
