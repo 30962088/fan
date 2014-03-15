@@ -158,6 +158,11 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private static final int ACTION_REQUEST_SELECTION =3;
 	
 	public void openShare() {
+		User user = User.readUser();
+		if(user == null){
+			startActivity(new Intent(this, LoginActivity.class));
+			return;
+		}
 		new PhotoSelectPopupWindow(this, new OnItemClickListener() {
 
 			@Override

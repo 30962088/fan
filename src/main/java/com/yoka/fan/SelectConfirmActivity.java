@@ -1,6 +1,7 @@
 package com.yoka.fan;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,9 +21,12 @@ import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.LoadingPopup;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,12 +91,36 @@ public class SelectConfirmActivity extends Activity implements OnClickListener{
 	}
 	
 	
+	private void scale(File file){
+		Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
+		int width = bitmap.getWidth(),height = bitmap.getHeight();
+		if(width<480){
+			bitmap = Bitmap.createScaledBitmap(bitmap, 480, 640, true);
+			this.width = 480;
+			this.height = 640;
+			FileOutputStream out = null;
+			try {
+			       out = new FileOutputStream(file.toString());
+			       bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+			} catch (Exception e) {
+			    e.printStackTrace();
+			} finally {
+			       try{
+			           out.close();
+			       } catch(Throwable ignore) {}
+			}
+		}
+		Log.d("zzm", file.toString());
+	}
+	
+	
 	private void onSave(){
 		final Map<String, Link> link_goods = new HashMap<String, CollSave.Link>();
 		for(int i = 0;i<list.size();i++){
 			link_goods.put("k"+i, list.get(i).getLink());
 		}
 		final File uploadimg =  new File(Uri.parse(url).getPath());
+		scale(uploadimg);
 		final User user = User.readUser();
 		LoadingPopup.show(this);
 		new AsyncTask<Void, Void, Status>() {
