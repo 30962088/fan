@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.yoka.fan.SelectCategoryActivity.Model;
+import com.yoka.fan.utils.Utils;
 
 
 
@@ -16,6 +17,7 @@ import android.text.TextWatcher;
 
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.GridView;
 
@@ -72,10 +74,18 @@ public class SelectLinkActivity extends BaseSelectActivity implements TextWatche
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		if(linkView.getText().toString().length() == 0 || priceView.getText().toString().length() == 0){
-			setNextEnable(false);
+		if(URLUtil.isValidUrl(linkView.getText().toString())){
+			try{
+				Float.parseFloat(priceView.getText().toString());
+				setNextEnable(true);
+			}catch(NumberFormatException exception){
+				setNextEnable(false);
+			}
+				
+		
+			
 		}else{
-			setNextEnable(true);
+			setNextEnable(false);
 		}
 	}
 

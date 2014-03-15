@@ -175,11 +175,12 @@ public class LinkedView extends RelativeLayout {
 			if(closed){
 				offset = (int) getResources().getDimension(R.dimen.tag_close);
 			}
+			setLayoutParams(new android.view.ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
 			setTextColor(Color.WHITE);
 			setGravity(Gravity.CENTER);
 			setVisibility(View.INVISIBLE);
 			setSingleLine(true);
-			setTextSize(getResources().getDimension(R.dimen.link_textsize));
+			setTextSize(DisplayUtils.spToPx(getContext(), 6));
 			setEllipsize(TruncateAt.END);
 			if (link.getLeft() < 0.5) {
 				if (closed) {

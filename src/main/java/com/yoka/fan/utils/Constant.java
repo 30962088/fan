@@ -14,6 +14,9 @@ public class Constant {
 	
 	public static final String TWEIBO_APP_SECRET = "d84226a4e8603482746a897285c66486";
 		
+	
+	public static final String WECHAT_APP_ID = "wx609ef9c438b73d98";
+	
 	/** 当前 DEMO 应用的 APP_KEY，第三方应用应该使用自己的 APP_KEY 替换该 APP_KEY */
     public static final String WEIBO_APP_KEY      = "2083765485";
 

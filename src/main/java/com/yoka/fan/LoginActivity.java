@@ -103,9 +103,24 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 
 	}
 
+	private boolean validate(String username,String password){
+		if(TextUtils.isEmpty(username)){
+			Utils.tip(context, "请输入用户名");
+			return false;
+		}
+		if(password.length() <6 || password.length() > 16){
+			Utils.tip(context, "密码应该为6-16位字符");
+			return false;
+		}
+		return true;
+	}
+	
 	private void onLogin() {
 		final String username = usernameView.getText().toString();
 		final String password = passwordView.getText().toString();
+		if(!validate(username, password)){
+			return;
+		}
 		LoadingPopup.show(context);
 		new Thread(new Runnable() {
 
@@ -151,6 +166,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 
 			@Override
 			public void onSuccess(final JSONObject user) {
+				LoadingPopup.show(context);
 				try {
 					ThirdLogin request = new ThirdLogin(ThirdLogin.TYPE_SINA,
 							new Gson().toJson(WeiboTokenInfo
@@ -172,7 +188,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 	}
 
 	private void onWeiboLogin() {
-		LoadingPopup.show(context);
+		
 		Weibo weibo = new Weibo(context);
 		ShareAccount account = ShareAccount.read();
 		if (account == null || account.weibo == null
@@ -204,7 +220,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 
 			@Override
 			public void onSuccess(final ModelResult result) {
-
+				LoadingPopup.show(context);
 				try {
 					ThirdLogin request = new ThirdLogin(
 							ThirdLogin.TYPE_TENCENT, new Gson()
@@ -227,7 +243,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 	}
 
 	private void onQWeiboLogin() {
-		LoadingPopup.show(context);
+		
 		ShareAccount account = ShareAccount.read();
 		final TWeibo weibo = new TWeibo(context);
 		if (account == null || account.qweibo == null) {

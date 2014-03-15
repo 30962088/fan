@@ -16,7 +16,7 @@ import com.yoka.fan.utils.Constant;
 
 public abstract class Recommand extends Request{
 
-	private int num = 10;
+	private int num = 12;
 	
 	private String uuid = Constant.uuid;
 	

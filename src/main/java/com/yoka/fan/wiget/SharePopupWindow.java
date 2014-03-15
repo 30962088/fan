@@ -6,6 +6,7 @@ import java.util.zip.Inflater;
 
 import org.json.JSONObject;
 
+import com.tencent.mm.sdk.openapi.SendMessageToWX;
 import com.tencent.weibo.sdk.android.component.sso.WeiboToken;
 import com.yoka.fan.R;
 import com.yoka.fan.utils.ShareAccount;
@@ -14,6 +15,7 @@ import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.utils.ShareUtils.OperateListener;
 import com.yoka.fan.utils.ShareUtils.TWeibo;
+import com.yoka.fan.utils.ShareUtils.Wechat;
 import com.yoka.fan.utils.ShareUtils.Weibo;
 import com.yoka.fan.wiget.ShareDetailPopupWindow.OnOperateLisener;
 
@@ -64,9 +66,23 @@ public class SharePopupWindow implements OnClickListener {
 							}
 						}));
 				add(new Share(context.getString(R.string.wechat),
-						R.drawable.share_wechat, null));
+						R.drawable.share_wechat, new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								shareWechat(model,SendMessageToWX.Req.WXSceneSession);
+								
+							}
+						}));
 				add(new Share(context.getString(R.string.timeline),
-						R.drawable.share_timeline, null));
+						R.drawable.share_timeline, new OnClickListener() {
+							
+							@Override
+							public void onClick(View v) {
+								shareWechat(model,SendMessageToWX.Req.WXSceneTimeline);
+								
+							}
+						}));
 			}
 		};
 		View view = LayoutInflater.from(context).inflate(R.layout.share_layout,
@@ -105,6 +121,11 @@ public class SharePopupWindow implements OnClickListener {
 		view.findViewById(R.id.cancel);
 		mPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
 
+	}
+	
+	private void shareWechat(CommonListModel model,int scene){
+		Wechat wechat = new Wechat(context);
+		wechat.sharePhoto(model.getPhoto(), scene);
 	}
 	
 	private void shareQWeibo(CommonListModel model){

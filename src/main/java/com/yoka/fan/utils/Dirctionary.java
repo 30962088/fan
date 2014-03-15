@@ -50,7 +50,7 @@ public class Dirctionary {
 	
 	private static void initShareAccountFile(Context context){
 //		userObjectFile = new File(context.getCacheDir(),"user.class");
-		shareAccountFile = new File(dataDir,"share_account.class");
+		shareAccountFile = new File(dataDir,"share_account.data");
 		if(!shareAccountFile.exists()){
 			try {
 				shareAccountFile.createNewFile();

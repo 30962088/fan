@@ -4,12 +4,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
+
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -25,6 +28,11 @@ import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.legacy.StatusesAPI;
 import com.sina.weibo.sdk.openapi.legacy.UsersAPI;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.SendMessageToWX;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.mm.sdk.openapi.WXImageObject;
+import com.tencent.mm.sdk.openapi.WXMediaMessage;
 import com.tencent.weibo.sdk.android.api.UserAPI;
 import com.tencent.weibo.sdk.android.api.WeiboAPI;
 import com.tencent.weibo.sdk.android.api.util.Util;
@@ -45,6 +53,43 @@ public class ShareUtils {
 		public void onSuccess(T t);
 
 		public void onError(String msg);
+	}
+	
+	public static class Wechat{
+		
+		private Context context;
+		
+		private static final int THUMB_SIZE = 150;
+		
+		private IWXAPI api;
+		
+		public Wechat(Context context) {
+			this.context = context;
+			api = WXAPIFactory.createWXAPI(context,Constant.WECHAT_APP_ID);
+		}
+		
+		public void sharePhoto(String photo,int scene){
+			ImageLoader loader = Utils.getImageLoader(context);
+			Bitmap bmp = BitmapFactory.decodeFile(DiscCacheUtil.findInCache(photo, loader.getDiscCache()).toString());
+			WXImageObject imgObj = new WXImageObject(bmp);
+			WXMediaMessage msg = new WXMediaMessage();
+			msg.mediaObject = imgObj;
+			
+			Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
+			bmp.recycle();
+			msg.thumbData = Utils.bmpToByteArray(thumbBmp, true);  // 设置缩略图
+
+			SendMessageToWX.Req req = new SendMessageToWX.Req();
+			req.transaction = buildTransaction("img");
+			req.message = msg;
+			req.scene = scene;
+			api.sendReq(req);
+		}
+		
+		private String buildTransaction(final String type) {
+			return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+		}
+		
 	}
 
 	public static class Weibo {
