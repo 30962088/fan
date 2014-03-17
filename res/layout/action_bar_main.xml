@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="44dp"
-    android:background="@color/blue" >
+    android:background="@color/blue" 
+    android:id="@+id/base_actionbar_content">
 
     <RelativeLayout
         android:id="@+id/actionbar_nav"

@@ -3,6 +3,7 @@ package com.yoka.fan.wiget;
 import java.util.List;
 
 import com.yoka.fan.network.ListItemData;
+import com.yoka.fan.wiget.CommonListView.OnVerticalScrollListener;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ public abstract class CommonListFragment extends Fragment{
 
 	private CListView view;
 	
+	private OnVerticalScrollListener onVerticalScrollListener;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,7 +28,16 @@ public abstract class CommonListFragment extends Fragment{
 		
 		
 		view.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		
+		view.setOnVerticalScrollListener(onVerticalScrollListener);
+		
 		return view;
+	}
+	
+	
+	public void setOnVerticalScrollListener(
+			OnVerticalScrollListener onVerticalScrollListener) {
+		this.onVerticalScrollListener = onVerticalScrollListener;
 	}
 	
 	

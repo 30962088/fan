@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.yoka.fan.LoginActivity;
 import com.yoka.fan.MainActivity;
 import com.yoka.fan.R;
 import com.yoka.fan.utils.User;
+import com.yoka.fan.wiget.CommonListView.OnVerticalScrollListener;
 import com.yoka.fan.wiget.CommonPagerAdapter.Page;
+import com.yoka.fan.wiget.TabPageIndicator.OnTabClickLisenter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -18,8 +22,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment implements OnVerticalScrollListener{
 
+	private TabPageIndicator indicator;
+	
+	private View headerContainer;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -31,13 +39,20 @@ public class HomeFragment extends Fragment{
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onViewCreated(view, savedInstanceState);
-		
+		headerContainer = getActivity().findViewById(R.id.base_actionbar_content);
+		headerContainer.setVisibility(View.VISIBLE);
 		List<CommonPagerAdapter.Page> pages = new ArrayList<CommonPagerAdapter.Page>(){{
-			add(new Page("推荐", new CollRecommandListFragment(),false));
+			add(new Page("推荐",new CollRecommandListFragment(){{
+				setOnVerticalScrollListener(HomeFragment.this);
+			}},false ));
 			
-			add(new Page("最新", new GetTopNewListFragment(),false));
+			add(new Page("最新", new GetTopNewListFragment(){{
+				setOnVerticalScrollListener(HomeFragment.this);
+			}},false));
 			
-			add(new Page("关注", new CollFollowListFragment(), false));
+			add(new Page("关注", new CollFollowListFragment(){{
+				setOnVerticalScrollListener(HomeFragment.this);
+			}}, false));
 		}};
 		
 		
@@ -49,12 +64,23 @@ public class HomeFragment extends Fragment{
         pager.setAdapter(adapter);
         pager.setOffscreenPageLimit(-1);
         
-        
-
-        TabPageIndicator indicator = (TabPageIndicator)view.findViewById(R.id.indicator);
+        indicator = (TabPageIndicator)view.findViewById(R.id.indicator);
         indicator.setModel(pages);
         indicator.setViewPager(pager);
-        
+        indicator.setOnTabClickLisenter(new OnTabClickLisenter() {
+			
+			@Override
+			public boolean onclick(int index, View tabView) {
+				if(index == 2){
+					User user = User.readUser();
+					if(user == null){
+						getActivity().startActivity(new Intent(getActivity(),LoginActivity.class));
+						return false;
+					}
+				}
+				return true;
+			}
+		});
         indicator.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
 			public void onPageScrollStateChanged(int arg0) { }
@@ -65,22 +91,31 @@ public class HomeFragment extends Fragment{
 			@Override
 			public void onPageSelected(int position) {
 				Activity activity = getActivity();
-				if(activity instanceof MainActivity){
-					MainActivity mainActivity = (MainActivity)activity;
-					switch (position) {
-					case 0:
-						mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-						break;
-					default:
-						mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-						break;
-					}
-				}
+				
 				
 			}
 
 		});
 		
 	}
+
+	@Override
+	public void onScrollUp() {
+		indicator.setVisibility(View.VISIBLE);
+		if(headerContainer != null){
+			headerContainer.setVisibility(View.VISIBLE);
+		}
+		
+	}
+
+	@Override
+	public void onScrollDown() {
+		indicator.setVisibility(View.GONE);
+		if(headerContainer != null){
+			headerContainer.setVisibility(View.GONE);
+		}
+	}
+	
+	
 	
 }

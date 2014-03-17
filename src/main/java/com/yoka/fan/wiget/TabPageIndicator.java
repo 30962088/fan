@@ -20,7 +20,7 @@ import android.widget.TextView;
 public class TabPageIndicator extends LinearLayout{
 
 	public static interface OnTabClickLisenter{
-		public void onclick(View tab,Fragment fragment);
+		public boolean onclick(int index,View tabView);
 	}
 	
 	private OnPageChangeListener onPageChangeListener;
@@ -31,6 +31,12 @@ public class TabPageIndicator extends LinearLayout{
 	
 	private ViewPager viewPager;
 	
+	
+	private OnTabClickLisenter onTabClickLisenter;
+	
+	public void setOnTabClickLisenter(OnTabClickLisenter onTabClickLisenter) {
+		this.onTabClickLisenter = onTabClickLisenter;
+	}
 	
 	public void setOnPageChangeListener(
 			OnPageChangeListener onPageChangeListener) {
@@ -46,6 +52,7 @@ public class TabPageIndicator extends LinearLayout{
 		super(context);
 		// TODO Auto-generated constructor stub
 	}
+	
 	
 
 	
@@ -63,7 +70,10 @@ public class TabPageIndicator extends LinearLayout{
 					if(viewPager != null && viewPager.getCurrentItem() == pos && page.getFragment() instanceof CommonListFragment){
 						((CommonListFragment)page.getFragment()).refresh();
 					}
-					viewPager.setCurrentItem(pos);
+					if(onTabClickLisenter == null || onTabClickLisenter.onclick(pos, v)){
+						viewPager.setCurrentItem(pos);
+					}
+					
 					
 				}
 			});

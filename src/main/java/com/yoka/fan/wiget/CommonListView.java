@@ -4,22 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Paint.Align;
-import android.graphics.Paint.FontMetrics;
-import android.graphics.drawable.BitmapDrawable;
 
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.Adapter;
+
 import com.yoka.fan.network.ListItemData;
-import com.yoka.fan.utils.DisplayUtils;
 import com.yoka.fan.wiget.BaseListView.OnLoadListener;
 
 public abstract class CommonListView extends BaseListView implements OnLoadListener{
+	
+	public static interface OnVerticalScrollListener{
+		public void onScrollUp();
+		public void onScrollDown();
+	}
 	
 	private static int limit = 20;
 	
@@ -49,8 +51,17 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 	public CommonListView(Context context) {
 		super(context);
 		init();
+		
 	}
 	
+	private OnVerticalScrollListener onVerticalScrollListener;
+	
+	public void setOnVerticalScrollListener(
+			OnVerticalScrollListener onVerticalScrollListener) {
+		this.onVerticalScrollListener = onVerticalScrollListener;
+	}
+	
+	private float startY=0;
 
 	private void init(){
 		
@@ -58,22 +69,33 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 		setAdapter(adapter);
 		setOnLoadListener(this);
 		setLimit(limit);
-	
-	
-	}
-	
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		// TODO Auto-generated method stub
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-	}
-	
-	@Override
-	protected void onVisibilityChanged(View changedView, int visibility) {
-		// TODO Auto-generated method stub
-		super.onVisibilityChanged(changedView, visibility);
+		getRefreshableView().setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Adapter adapter = getRefreshableView().getAdapter();
+				if(onVerticalScrollListener != null&&adapter != null && adapter.getCount()>3){
+					switch (event.getAction()) {
+					case MotionEvent.ACTION_DOWN:
+						startY = event.getY();
+						break;
+					case MotionEvent.ACTION_UP:
+						float delta = event.getY()-startY;
+						if(delta<5){
+							onVerticalScrollListener.onScrollDown();
+						}else if(delta > 5) {
+							onVerticalScrollListener.onScrollUp();
+						}
+						break;
+					}
+				}
+				return false;
+			}
+		});
+		
 		
 	}
+	
 	
 	
 	public abstract String getEmptyTip();
@@ -116,5 +138,7 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 		adapter.notifyDataSetChanged();
 		
 	}
+	
+	
 	
 }

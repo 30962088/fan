@@ -111,6 +111,7 @@ public class LinkedView extends RelativeLayout {
 						float left = (event.getX() - b[0]) / b[2];
 						float top = (event.getY() - b[1]) / b[3];
 						onImageClickListener.onClick(left, top);
+						
 					}
 				}
 				return true;
@@ -356,6 +357,9 @@ public class LinkedView extends RelativeLayout {
 			}
 
 		}
+		
+		
+		
 	}
 
 }

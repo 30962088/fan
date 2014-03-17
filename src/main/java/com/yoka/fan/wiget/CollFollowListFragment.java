@@ -7,6 +7,7 @@ import com.yoka.fan.R;
 import com.yoka.fan.network.CollFollow;
 import com.yoka.fan.network.ListItemData;
 import com.yoka.fan.utils.User;
+import com.yoka.fan.wiget.CommonListView.OnVerticalScrollListener;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,11 +27,18 @@ public class CollFollowListFragment extends Fragment implements OnClickListener{
 	
 	private MyListView listView;
 	
+	private OnVerticalScrollListener onVerticalScrollListener;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		user = User.readUser();
 		
+	}
+	
+	public void setOnVerticalScrollListener(
+			OnVerticalScrollListener onVerticalScrollListener) {
+		this.onVerticalScrollListener = onVerticalScrollListener;
 	}
 	
 	@Override
@@ -71,6 +79,7 @@ public class CollFollowListFragment extends Fragment implements OnClickListener{
 		loginView.setVisibility(View.GONE);
 		if(listView == null){
 			listView = new MyListView(getActivity());
+			listView.setOnVerticalScrollListener(onVerticalScrollListener);
 			contentView.addView(listView);
 		}
 	}

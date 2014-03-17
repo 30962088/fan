@@ -21,7 +21,9 @@ import com.yoka.fan.utils.Relation;
 import com.yoka.fan.utils.Relation.OperatorListener;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.CommonListView.OnVerticalScrollListener;
 import com.yoka.fan.wiget.CommonPagerAdapter.Page;
+import com.yoka.fan.wiget.TabPageIndicator.OnTabClickLisenter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -37,7 +39,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ZoneFragment extends Fragment implements OnClickListener{
+public class ZoneFragment extends Fragment implements OnClickListener,OnVerticalScrollListener{
 
 	private TextView matchView;
 	
@@ -56,6 +58,12 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 	private String name;
 	
 	private User user;
+	
+	private TabPageIndicator indicator;
+	
+	private View headerContainer;
+	
+	private View zoneHeader;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +85,13 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 			Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.zone_header, null);
 	}
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		headerContainer = getActivity().findViewById(R.id.base_actionbar_content);
+		headerContainer.setVisibility(View.VISIBLE);
+	}
 	
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -85,7 +100,7 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 		if(User.readUser() == null){
 			return;
 		}
-		
+		zoneHeader = view.findViewById(R.id.zone_header);
 		matchView = (TextView) view.findViewById(R.id.match);
 		focusView = (TextView) view.findViewById(R.id.focus);
 		fansView = (TextView) view.findViewById(R.id.fans);
@@ -166,9 +181,11 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 		List<CommonPagerAdapter.Page> pages = new ArrayList<CommonPagerAdapter.Page>(){{
 			add(new Page(name == null ? "我的搭配" : "TA的搭配" ,new CollListFragment(){{
 				setArguments(arguments);
+				setOnVerticalScrollListener(ZoneFragment.this);
 			}},false));
 			add(new Page(name == null ? "我的喜欢" : "TA的喜欢",new CollLikeListFragment(){{
 				setArguments(arguments);
+				setOnVerticalScrollListener(ZoneFragment.this);
 			}},false));
 		}};
 		CommonPagerAdapter adapter = new CommonPagerAdapter(getChildFragmentManager(),pages);
@@ -180,9 +197,10 @@ public class ZoneFragment extends Fragment implements OnClickListener{
         
         
 
-        TabPageIndicator indicator = (TabPageIndicator)view.findViewById(R.id.indicator);
+        indicator = (TabPageIndicator)view.findViewById(R.id.indicator);
         indicator.setModel(pages);
         indicator.setViewPager(pager);
+        
         
         indicator.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
@@ -194,17 +212,7 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 			@Override
 			public void onPageSelected(int position) {
 				Activity activity = getActivity();
-				if(activity instanceof MainActivity){
-					MainActivity mainActivity = (MainActivity)activity;
-					switch (position) {
-					case 0:
-						mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-						break;
-					default:
-						mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-						break;
-					}
-				}
+				
 				
 			}
 
@@ -272,6 +280,25 @@ public class ZoneFragment extends Fragment implements OnClickListener{
 		
 		
 		
+	}
+	
+	@Override
+	public void onScrollUp() {
+		indicator.setVisibility(View.VISIBLE);
+		zoneHeader.setVisibility(View.VISIBLE);
+		if(headerContainer != null){
+			headerContainer.setVisibility(View.VISIBLE);
+		}
+		
+	}
+
+	@Override
+	public void onScrollDown() {
+		indicator.setVisibility(View.GONE);
+		zoneHeader.setVisibility(View.GONE);
+		if(headerContainer != null){
+			headerContainer.setVisibility(View.GONE);
+		}
 	}
 	
 	

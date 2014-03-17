@@ -12,13 +12,15 @@
         android:layout_height="30dp"
         android:layout_centerInParent="true" />
     
-    <RelativeLayout
-        android:visibility="gone"
+    <LinearLayout
+        android:visibility="visible"
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent" 
+        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/zone_header"
             android:layout_width="match_parent"
             android:layout_height="94dp"
             android:gravity="center_vertical"
@@ -128,7 +130,6 @@
             android:id="@+id/bottom_panel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="94dp"
             android:orientation="vertical" >
 
             <com.yoka.fan.wiget.TabPageIndicator
@@ -141,13 +142,13 @@
                 android:gravity="center_vertical"
                 android:showDividers="middle" />
 
-            <android.support.v4.view.ViewPager
+            <com.yoka.fan.wiget.NonSwipeableViewPager
                 android:id="@+id/pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
     
 

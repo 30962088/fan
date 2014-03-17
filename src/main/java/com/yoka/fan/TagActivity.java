@@ -5,12 +5,14 @@ import java.util.List;
 import com.yoka.fan.network.ListItemData;
 import com.yoka.fan.network.Tag;
 import com.yoka.fan.wiget.CommonListView;
+import com.yoka.fan.wiget.CommonListView.OnVerticalScrollListener;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.view.View;
 
-public class TagActivity extends BaseActivity{
+public class TagActivity extends BaseActivity implements OnVerticalScrollListener{
 
 	public static final String PARAM_TAG = "tag";
 	
@@ -20,13 +22,17 @@ public class TagActivity extends BaseActivity{
 	
 	private String style;
 	
+	private View headerContainer;
+	
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		tag = getIntent().getStringExtra(PARAM_TAG);
 		style = getIntent().getStringExtra(PARAM_STYLE);
 		TagListView listView = new TagListView(this);
+		listView.setOnVerticalScrollListener(this);
 		setContentView(listView);
+		headerContainer = findViewById(R.id.base_actionbar_content);
 	}
 	
 	
@@ -76,6 +82,23 @@ public class TagActivity extends BaseActivity{
 		}
 
 		
+		
+	}
+
+	@Override
+	public void onScrollUp() {
+		if(headerContainer != null){
+			headerContainer.setVisibility(View.VISIBLE);
+		}
+		
+	}
+
+
+	@Override
+	public void onScrollDown() {
+		if(headerContainer != null){
+			headerContainer.setVisibility(View.GONE);
+		}
 		
 	}
 
