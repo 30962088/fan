@@ -51,7 +51,7 @@ public class Utils {
 	
 	public static byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		bmp.compress(CompressFormat.PNG, 100, output);
+		bmp.compress(CompressFormat.JPEG, 100, output);
 		if (needRecycle) {
 			bmp.recycle();
 		}

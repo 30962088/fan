@@ -125,7 +125,7 @@ public class SharePopupWindow implements OnClickListener {
 	
 	private void shareWechat(CommonListModel model,int scene){
 		Wechat wechat = new Wechat(context);
-		wechat.sharePhoto(model.getPhoto(), scene);
+		wechat.sharePhoto(model.getLinkModel().getUrl(), scene);
 	}
 	
 	private void shareQWeibo(CommonListModel model){

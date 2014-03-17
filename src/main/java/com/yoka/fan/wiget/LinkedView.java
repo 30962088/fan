@@ -180,7 +180,7 @@ public class LinkedView extends RelativeLayout {
 			setGravity(Gravity.CENTER);
 			setVisibility(View.INVISIBLE);
 			setSingleLine(true);
-			setTextSize(DisplayUtils.spToPx(getContext(), 6));
+			setTextSize(DisplayUtils.spToPx(getContext(), 4));
 			setEllipsize(TruncateAt.END);
 			if (link.getLeft() < 0.5) {
 				if (closed) {

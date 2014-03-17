@@ -113,7 +113,15 @@ public class ShareDetailPopupWindow implements OnClickListener, TextWatcher {
 	}
 
 	public void dismiss() {
-		mPopupWindow.dismiss();
+		new Handler(context.getMainLooper()).post(new Runnable() {
+			
+			@Override
+			public void run() {
+				mPopupWindow.dismiss();
+				
+			}
+		});
+		
 	}
 
 	@Override
