@@ -29,7 +29,7 @@ public class CollDetail extends Request{
 		private String tags;
 		private String url;
 		private String type_url;
-		private double price;
+		private String price;
 		private String img;
 		public String getBrand() {
 			return brand;
@@ -43,7 +43,7 @@ public class CollDetail extends Request{
 		public String getType_url() {
 			return type_url;
 		}
-		public double getPrice() {
+		public String getPrice() {
 			return price;
 		}
 		public String getImg() {

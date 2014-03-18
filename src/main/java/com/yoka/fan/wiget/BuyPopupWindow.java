@@ -36,7 +36,7 @@ import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
-public class BuyPopupWindow implements OnClickListener,AnimationListener,OnItemClickListener{
+public class BuyPopupWindow implements OnClickListener,OnItemClickListener{
 
 	
 	
@@ -44,31 +44,37 @@ public class BuyPopupWindow implements OnClickListener,AnimationListener,OnItemC
 	
 	private ListView listView;
 	
-	private View loadingView;
-	
+
 	private Context context;
 	
 	private String coll_id;
 	
 	private List<GoodsItem> list;
 	
+	
+	
 	public BuyPopupWindow(Context context,String coll_id) {
+		this.coll_id = coll_id;
+		this.context = context;
+        load(coll_id);
+	}
+	
+	private void onload(final List<GoodsItem> list){
+		this.list = list;
 		View view = LayoutInflater.from(context).inflate(R.layout.popup_buy_layout,null);
 		view.setOnClickListener(this);
 		mPopupWindow = new PopupWindow(view, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, true);
 		mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#4D000000")));
 		mPopupWindow.setTouchable(true);
         mPopupWindow.setOutsideTouchable(true);
-        this.context = context;
-        this.coll_id = coll_id;
+        
         listView = (ListView) view.findViewById(R.id.listview);
         listView.setOnItemClickListener(this);
-        loadingView = view.findViewById(R.id.loading);
-        
+        ListViewAdapter adapter = new ListViewAdapter(context,list);
+        listView.setAdapter(adapter);
         
         
         Animation rotation = AnimationUtils.loadAnimation(context, R.anim.slide_in_from_top);
-        rotation.setAnimationListener(this);
         
         View bottomBar = view.findViewById(R.id.popup);
         bottomBar.setOnClickListener(this);
@@ -76,11 +82,12 @@ public class BuyPopupWindow implements OnClickListener,AnimationListener,OnItemC
         view.findViewById(R.id.cancel);
         view.findViewById(R.id.close).setOnClickListener(this);
         mPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-        
-        
+		
 	}
 	
+	
 	private void load(final String coll_id){
+		LoadingPopup.show(context);
 		new AsyncTask<Void, Void, List<GoodsItem>>(){
 
 			@Override
@@ -101,6 +108,7 @@ public class BuyPopupWindow implements OnClickListener,AnimationListener,OnItemC
 						}
 					}
 				}
+				LoadingPopup.hide(context);
 				
 				
 				return list;
@@ -113,13 +121,7 @@ public class BuyPopupWindow implements OnClickListener,AnimationListener,OnItemC
 		}.execute();
 	}
 	
-	private void onload(final List<GoodsItem> list){
-		this.list = list;
-		ListViewAdapter adapter = new ListViewAdapter(context,list);
-        listView.setAdapter(adapter);
-        listView.setVisibility(View.VISIBLE);
-        loadingView.setVisibility(View.GONE);
-	}
+	
 	
 
 	@Override
@@ -138,7 +140,7 @@ public class BuyPopupWindow implements OnClickListener,AnimationListener,OnItemC
 	public static class GoodsItem{
 		private String typeResId;
 		private String name;
-		private double price;
+		private String price;
 		private String url;
 		private String img;
 		private String title;
@@ -148,7 +150,7 @@ public class BuyPopupWindow implements OnClickListener,AnimationListener,OnItemC
 			super();
 			this.title = title;
 		}
-		public GoodsItem(String typeResId, String name, double price, String url,
+		public GoodsItem(String typeResId, String name, String price, String url,
 				String img,String link, String title) {
 			super();
 			this.typeResId = typeResId;
@@ -263,23 +265,7 @@ public class BuyPopupWindow implements OnClickListener,AnimationListener,OnItemC
 
 	}
 
-	@Override
-	public void onAnimationStart(Animation animation) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void onAnimationEnd(Animation animation) {
-		load(coll_id);
-		
-	}
-
-	@Override
-	public void onAnimationRepeat(Animation animation) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
