@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -161,7 +162,10 @@ public class FansListActivity extends BaseActivity implements OnLoadListener{
 				holder = (ViewHolder) convertView.getTag();
 			}
 			holder.imageview.setImageResource(R.drawable.photo_default);
-			imageLoader.displayImage(model.photo, holder.imageview);
+			if(!TextUtils.isEmpty(model.photo)){
+				imageLoader.displayImage(model.photo, holder.imageview);
+			}
+			
 			holder.imageview.setOnClickListener(new OnClickListener() {
 				
 				@Override
