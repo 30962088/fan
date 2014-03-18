@@ -102,8 +102,9 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 		}
 		
 		countView.setText(getString(R.string.share_count, 5-list.size()));
-
-		linkedView.load(new LinkModel(url, -1, -1, list));
+		LinkModel linkModel = new LinkModel(url, -1, -1, list);
+		linkModel.setShowLink(true);
+		linkedView.load(linkModel);
 	}
 	
 	

@@ -21,7 +21,7 @@ public class CommonListModel {
 	
 	private int comment;
 	
-	private boolean showLinked = false;
+	
 	
 	private LinkModel linkModel;
 	
@@ -137,13 +137,7 @@ public class CommonListModel {
 	}
 	
 
-	public void setShowLinked(boolean showLinked) {
-		this.showLinked = showLinked;
-	}
 	
-	public boolean isShowLinked() {
-		return showLinked;
-	}
 	public Map<String, String> getMetaAttr() {
 		return metaAttr;
 	}

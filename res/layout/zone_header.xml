@@ -11,120 +11,123 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_centerInParent="true" />
-    
+
     <LinearLayout
-        android:visibility="visible"
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" 
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible" >
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/zone_header"
             android:layout_width="match_parent"
-            android:layout_height="94dp"
-            android:gravity="center_vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp" >
-
-            <RelativeLayout
-                android:layout_width="60dp"
-                android:layout_height="60dp" >
-
-                <com.yoka.fan.wiget.PhotoView
-                    android:id="@+id/photo"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp" />
-
-                
-            </RelativeLayout>
+            android:layout_height="wrap_content" >
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_weight="1" >
+                android:layout_width="match_parent"
+                android:layout_height="94dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp" >
+
+                <RelativeLayout
+                    android:layout_width="60dp"
+                    android:layout_height="60dp" >
+
+                    <com.yoka.fan.wiget.PhotoView
+                        android:id="@+id/photo"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+                </RelativeLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical" >
+                    android:layout_marginLeft="20dp"
+                    android:layout_weight="1" >
 
-                    <TextView
-                        android:id="@+id/match"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="345"
-                        android:textColor="#585858"
-                        android:textSize="15sp" />
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical" >
 
-                    <TextView
+                        <TextView
+                            android:id="@+id/match"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="345"
+                            android:textColor="#585858"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="搭配"
+                            android:textColor="#a8a8a8"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/follow_list"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="搭配"
-                        android:textColor="#a8a8a8"
-                        android:textSize="12sp" />
+                        android:layout_marginRight="20dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/focus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="345"
+                            android:textColor="#585858"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="关注"
+                            android:textColor="#a8a8a8"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/fans_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/fans"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="345"
+                            android:textColor="#585858"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="粉丝"
+                            android:textColor="#a8a8a8"
+                            android:textSize="12sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/follow_list"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/focus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="345"
-                        android:textColor="#585858"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="关注"
-                        android:textColor="#a8a8a8"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/fans_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/fans"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="345"
-                        android:textColor="#585858"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="粉丝"
-                        android:textColor="#a8a8a8"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/follow_btn"
+                    android:layout_width="64dp"
+                    android:layout_height="26dp"
+                    android:background="@drawable/btn_border_selector"
+                    android:gravity="center"
+                    android:text="关注"
+                    android:textColor="@color/btn_color_selector" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/follow_btn"
-                android:layout_width="64dp"
-                android:layout_height="26dp"
-                android:background="@drawable/btn_border_selector"
-                android:gravity="center"
-                android:text="关注"
-                android:textColor="@color/btn_color_selector" />
-        </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/bottom_panel"
@@ -132,16 +135,20 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
 
-            <com.yoka.fan.wiget.TabPageIndicator
-                android:id="@+id/indicator"
+            <FrameLayout 
+                android:id="@+id/indicator_wrap"
                 android:layout_width="match_parent"
-                android:layout_height="33dp"
-                android:background="@drawable/tag_bg"
-                android:divider="@drawable/divider"
-                android:dividerPadding="10dp"
-                android:gravity="center_vertical"
-                android:showDividers="middle" />
-
+                android:layout_height="wrap_content">
+                
+           		
+	            <com.yoka.fan.wiget.TabPageIndicator
+	                android:id="@+id/indicator"
+	                android:layout_width="match_parent"
+	                android:layout_height="33dp"
+	                android:background="@drawable/tag_bg"
+	                android:gravity="center_vertical" />
+            
+ 			</FrameLayout>
             <com.yoka.fan.wiget.NonSwipeableViewPager
                 android:id="@+id/pager"
                 android:layout_width="match_parent"
@@ -149,7 +156,5 @@
                 android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
-
-    
 
 </RelativeLayout>

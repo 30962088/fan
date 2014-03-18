@@ -69,30 +69,7 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 		setAdapter(adapter);
 		setOnLoadListener(this);
 		setLimit(limit);
-		getRefreshableView().setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				Adapter adapter = getRefreshableView().getAdapter();
-				if(onVerticalScrollListener != null&&adapter != null && adapter.getCount()>3){
-					switch (event.getAction()) {
-					case MotionEvent.ACTION_DOWN:
-						startY = event.getY();
-						break;
-					case MotionEvent.ACTION_UP:
-						float delta = event.getY()-startY;
-						if(delta<5){
-							onVerticalScrollListener.onScrollDown();
-						}else if(delta > 5) {
-							onVerticalScrollListener.onScrollUp();
-						}
-						break;
-					}
-				}
-				return false;
-			}
-		});
-		
+				
 		
 	}
 	
@@ -139,6 +116,27 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 		
 	}
 	
-	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent event) {
+		Adapter adapter = getRefreshableView().getAdapter();
+		if(onVerticalScrollListener != null&&adapter != null && adapter.getCount()>3){
+			switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				startY = event.getY();
+				break;
+			case MotionEvent.ACTION_UP:
+				float delta = event.getY()-startY;
+				if(delta<-5){
+					onVerticalScrollListener.onScrollDown();
+				}else if(delta > 5) {
+					onVerticalScrollListener.onScrollUp();
+				}
+				Log.d("zzm", ""+delta);
+				break;
+			}
+		}
+		
+		return super.dispatchTouchEvent(event);
+	}
 	
 }

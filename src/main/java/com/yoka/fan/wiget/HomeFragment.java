@@ -8,6 +8,7 @@ import com.yoka.fan.LoginActivity;
 import com.yoka.fan.MainActivity;
 import com.yoka.fan.R;
 import com.yoka.fan.utils.User;
+import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.CommonListView.OnVerticalScrollListener;
 import com.yoka.fan.wiget.CommonPagerAdapter.Page;
 import com.yoka.fan.wiget.TabPageIndicator.OnTabClickLisenter;
@@ -28,6 +29,12 @@ public class HomeFragment extends Fragment implements OnVerticalScrollListener{
 	
 	private View headerContainer;
 	
+	private View indicatorWrap;
+	
+	public HomeFragment() {
+		// TODO Auto-generated constructor stub
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -39,6 +46,7 @@ public class HomeFragment extends Fragment implements OnVerticalScrollListener{
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onViewCreated(view, savedInstanceState);
+		indicatorWrap = view.findViewById(R.id.indicator_wrap);
 		headerContainer = getActivity().findViewById(R.id.base_actionbar_content);
 		headerContainer.setVisibility(View.VISIBLE);
 		List<CommonPagerAdapter.Page> pages = new ArrayList<CommonPagerAdapter.Page>(){{
@@ -81,39 +89,31 @@ public class HomeFragment extends Fragment implements OnVerticalScrollListener{
 				return true;
 			}
 		});
-        indicator.setOnPageChangeListener(new OnPageChangeListener() {
-			@Override
-			public void onPageScrollStateChanged(int arg0) { }
-
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) { }
-
-			@Override
-			public void onPageSelected(int position) {
-				Activity activity = getActivity();
-				
-				
-			}
-
-		});
+        
 		
 	}
 
 	@Override
 	public void onScrollUp() {
-		indicator.setVisibility(View.VISIBLE);
-		if(headerContainer != null){
-			headerContainer.setVisibility(View.VISIBLE);
+		if(indicatorWrap.getVisibility() == View.GONE){
+			Utils.expand(indicatorWrap);
+			if(headerContainer != null){
+				Utils.expand(headerContainer);
+			}
 		}
+		
 		
 	}
 
 	@Override
 	public void onScrollDown() {
-		indicator.setVisibility(View.GONE);
-		if(headerContainer != null){
-			headerContainer.setVisibility(View.GONE);
+		if(indicatorWrap.getVisibility() == View.VISIBLE){
+			Utils.collapse(indicatorWrap);
+			if(headerContainer != null){
+				Utils.collapse(headerContainer);
+			}
 		}
+		
 	}
 	
 	

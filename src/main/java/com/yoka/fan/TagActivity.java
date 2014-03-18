@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.yoka.fan.network.ListItemData;
 import com.yoka.fan.network.Tag;
+import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.CommonListView;
 import com.yoka.fan.wiget.CommonListView.OnVerticalScrollListener;
 
@@ -88,7 +89,8 @@ public class TagActivity extends BaseActivity implements OnVerticalScrollListene
 	@Override
 	public void onScrollUp() {
 		if(headerContainer != null){
-			headerContainer.setVisibility(View.VISIBLE);
+			Utils.expand(headerContainer);
+//			headerContainer.setVisibility(View.VISIBLE);
 		}
 		
 	}
@@ -97,7 +99,8 @@ public class TagActivity extends BaseActivity implements OnVerticalScrollListene
 	@Override
 	public void onScrollDown() {
 		if(headerContainer != null){
-			headerContainer.setVisibility(View.GONE);
+			Utils.collapse(headerContainer);
+//			headerContainer.setVisibility(View.GONE);
 		}
 		
 	}

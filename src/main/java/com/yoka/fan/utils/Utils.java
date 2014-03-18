@@ -74,9 +74,9 @@ public class Utils {
 	public synchronized static ImageLoader getImageLoader(Context context) {
 		if (imageLoader == null) {
 			DisplayImageOptions options = new DisplayImageOptions.Builder()
-					.cacheInMemory(true).cacheOnDisc(true).build();
+			.cacheInMemory(true).cacheOnDisc(true).build();
 			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-					context).defaultDisplayImageOptions(options).build();
+					context).defaultDisplayImageOptions(options).memoryCacheSizePercentage(33).build();
 			imageLoader = ImageLoader.getInstance();
 			imageLoader.init(config);
 		}
@@ -179,7 +179,7 @@ public class Utils {
 	}
 
 	public static void expand(final View v) {
-//		v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		v.measure(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		final int targtetHeight = v.getMeasuredHeight();
 
 		v.getLayoutParams().height = 0;
@@ -201,7 +201,7 @@ public class Utils {
 		};
 
 		// 1dp/ms
-		a.setDuration(100);
+		a.setDuration(200);
 		v.startAnimation(a);
 	}
 
@@ -228,7 +228,7 @@ public class Utils {
 		};
 
 		// 1dp/ms
-		a.setDuration(100);
+		a.setDuration(200);
 		v.startAnimation(a);
 	}
 

@@ -14,7 +14,7 @@ public class LinkModel{
 	
 	private List<Link> linkList;
 	
-	private boolean showLink = true;
+	private boolean showLink = false;
 		
 	public LinkModel(String url,int width,int height, List<Link> linkList) {
 		this.width = width;

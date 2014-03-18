@@ -114,13 +114,14 @@ public class CommonListAdapter extends BaseAdapter  {
 		}
 		holder.mPhotoView.setImageBitmap(null);
 
-		if (model.isShowLinked()) {
-			holder.mLinkedView.load(model.getLinkModel());
-		} else {
-			LinkModel linkModel = model.getLinkModel();
-			holder.mLinkedView.load(new LinkModel(linkModel.getUrl(), linkModel
-					.getWidth(), linkModel.getHeight(), null));
-		}
+		holder.mLinkedView.load(model.getLinkModel());
+//		if (model.isShowLinked()) {
+//			
+//		} else {
+//			LinkModel linkModel = model.getLinkModel();
+//			holder.mLinkedView.load(new LinkModel(linkModel.getUrl(), linkModel
+//					.getWidth(), linkModel.getHeight(), null));
+//		}
 
 		if (model.getPhoto() == null) {
 			holder.mPhotoView.setVisibility(View.GONE);
@@ -182,10 +183,10 @@ public class CommonListAdapter extends BaseAdapter  {
 
 			@Override
 			public void onClick(float left, float top) {
-				if (!model.isShowLinked()) {
-					model.setShowLinked(true);
-					mLinkedView.load(model.getLinkModel());
-				}
+				LinkModel linkModel = model.getLinkModel();
+				boolean isshow = !linkModel.isShowLink();
+				linkModel.setShowLink(isshow);
+				mLinkedView.load(linkModel);
 
 			}
 		});

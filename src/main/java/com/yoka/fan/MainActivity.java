@@ -7,6 +7,7 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.yoka.fan.utils.Dirctionary;
 import com.yoka.fan.utils.Relation;
 import com.yoka.fan.utils.User;
+import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.HomeFragment;
 import com.yoka.fan.wiget.PhotoSelectPopupWindow;
 import com.yoka.fan.wiget.SettingFragment;
@@ -36,6 +37,8 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private View actionbarCarema;
 
 	private View actionbarSetting;
+	
+	private View actionbarContainer;
 
 	private static MainActivity instance;
 
@@ -47,12 +50,14 @@ public class MainActivity extends SlidingFragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		instance = this;
+		
 		if (savedInstanceState != null)
 			mContent = getSupportFragmentManager().getFragment(
 					savedInstanceState, "mContent");
 		if (mContent == null)
 			mContent = new HomeFragment();
 		setContentView(R.layout.main_layout);
+		actionbarContainer = findViewById(R.id.base_actionbar_content);
 		mTitleView = (TextView) findViewById(R.id.actionbar_title);
 		actionbarCarema = findViewById(R.id.actionbar_camera);
 		actionbarCarema.setOnClickListener(this);
@@ -104,6 +109,10 @@ public class MainActivity extends SlidingFragmentActivity implements
 	}
 
 	public void switchContent(Fragment fragment) {
+		if(actionbarContainer.getVisibility() == View.GONE){
+			Utils.expand(actionbarContainer);
+		}
+		
 		if (fragment instanceof ZoneFragment) {
 			actionbarCarema.setVisibility(View.GONE);
 			actionbarSetting.setVisibility(View.VISIBLE);

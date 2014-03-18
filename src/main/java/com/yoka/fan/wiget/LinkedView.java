@@ -141,13 +141,21 @@ public class LinkedView extends RelativeLayout {
 	}
 
 	public void load(LinkModel model) {
-		this.linkModel = model;
-		init = true;
-		// tagContainer.setVisibility(View.INVISIBLE);
-		tagContainer.removeAllViews();
-		// changeImageSize();
-		imageView.setImageBitmap(null);
-		imageLoader.displayImage(model.getUrl(), imageView);
+		if(this.linkModel != model){
+			this.linkModel = model;
+			init = true;
+			tagContainer.removeAllViews();
+			// changeImageSize();
+			imageView.setImageBitmap(null);
+			imageLoader.displayImage(model.getUrl(), imageView);
+			
+		}
+		if(model.isShowLink()){
+			tagContainer.setVisibility(View.VISIBLE);
+		}else{
+			tagContainer.setVisibility(View.INVISIBLE);
+		}
+		
 	}
 
 	private void changeImageSize() {
@@ -181,7 +189,7 @@ public class LinkedView extends RelativeLayout {
 			setGravity(Gravity.CENTER);
 			setVisibility(View.INVISIBLE);
 			setSingleLine(true);
-			setTextSize(DisplayUtils.spToPx(getContext(), 4));
+			setTextSize(DisplayUtils.spToPx(getContext(), 5));
 			setEllipsize(TruncateAt.END);
 			if (link.getLeft() < 0.5) {
 				if (closed) {
