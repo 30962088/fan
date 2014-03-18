@@ -63,11 +63,14 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 		passwordView = (EditText) findViewById(R.id.password);
 	}
 
+	
+	private static final int REQ_REGISTER = 1;
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.register:
-			startActivity(new Intent(this, RegisterActivity.class));
+			startActivityForResult(new Intent(this, RegisterActivity.class),REQ_REGISTER);
 			break;
 
 		case R.id.login_qq_btn:
@@ -97,6 +100,7 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 				startActivity(new Intent(LoginActivity.this,
 						RecommandListActivity.class));
 				MainActivity.getInstance().login(User.readUser());
+				finish();
 
 			}
 		});
@@ -270,5 +274,13 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 		// TODO Auto-generated method stub
 		return "登录";
 	}
+	
+	@Override
+	public void onActivityResult(int reqCode, int resultCode, Intent data) {
+		if(reqCode == REQ_REGISTER && resultCode == RESULT_OK){
+			finish();
+		}
+	}
+	
 
 }

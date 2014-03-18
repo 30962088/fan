@@ -77,8 +77,10 @@ public class RegisterActivity extends BaseActivity implements OnClickListener{
 							User.fillInfo(user);
 							User.saveUser(user);
 							error("注册成功");
-							startActivity(new Intent(RegisterActivity.this,RecommandListActivity.class));
 							
+							startActivity(new Intent(RegisterActivity.this,RecommandListActivity.class));
+							setResult(RESULT_OK);
+							finish();
 						};
 						
 					}.request();

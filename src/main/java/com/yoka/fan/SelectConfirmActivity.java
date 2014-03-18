@@ -21,6 +21,7 @@ import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.LoadingPopup;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -115,13 +116,17 @@ public class SelectConfirmActivity extends Activity implements OnClickListener{
 	
 	
 	private void onSave(){
+		final User user = User.readUser();
+		if(user == null){
+			startActivity(new Intent(this, LoginActivity.class));
+			return;
+		}
 		final Map<String, Link> link_goods = new HashMap<String, CollSave.Link>();
 		for(int i = 0;i<list.size();i++){
 			link_goods.put("k"+i, list.get(i).getLink());
 		}
 		final File uploadimg =  new File(Uri.parse(url).getPath());
 		scale(uploadimg);
-		final User user = User.readUser();
 		LoadingPopup.show(this);
 		new AsyncTask<Void, Void, Status>() {
 

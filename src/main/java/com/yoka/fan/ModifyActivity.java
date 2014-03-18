@@ -209,7 +209,7 @@ public class ModifyActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onActivityResult(int reqCode, int resultCode, Intent data){
 		
-		super.onActivityResult(reqCode, resultCode, data);  
+//		super.onActivityResult(reqCode, resultCode, data);  
 		
 		switch (reqCode) {
 		case ACTION_REQUEST_GALLERY:

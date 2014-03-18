@@ -62,7 +62,7 @@ public class SidingMenuFragment extends Fragment implements OnClickListener{
 			startActivity(intent);
 			break;
 		case R.id.user_btn:
-			zoneBtn.performClick();
+			startActivity(new Intent(getActivity(), ModifyActivity.class));
 			break;
 		case R.id.setting:
 			switchFragment(new SettingFragment());

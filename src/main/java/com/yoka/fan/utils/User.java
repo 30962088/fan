@@ -76,7 +76,7 @@ public class User implements Serializable{
 	public static void fillInfo(User user){
 		Result result = getInfo(user);
 		BaseInfo baseInfo = result.getOther_info().getBase_info();
-		user.sex = baseInfo.getSex();
+		user.sex = Integer.parseInt(baseInfo.getSex());
 		user.job = baseInfo.getJob();
 	}
 

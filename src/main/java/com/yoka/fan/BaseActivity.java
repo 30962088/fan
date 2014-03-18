@@ -1,6 +1,15 @@
 package com.yoka.fan;
 
+import com.yoka.fan.utils.Dirctionary;
+import com.yoka.fan.utils.User;
+import com.yoka.fan.wiget.PhotoSelectPopupWindow;
+import com.yoka.fan.wiget.PhotoSelectPopupWindow.OnItemClickListener;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -32,6 +41,7 @@ public abstract class BaseActivity extends FragmentActivity{
 		
 		((ViewGroup)findViewById(R.id.content_view)).addView(view);
 		
+		
 		setWebTitle(getActionBarTitle());
 		
 		findViewById(R.id.actionbar_left).setOnClickListener(new OnClickListener() {
@@ -62,6 +72,77 @@ public abstract class BaseActivity extends FragmentActivity{
 	
 	protected ImageView getActionbarLeft(){
 		return (ImageView) findViewById(R.id.actionbar_left);
+	}
+	
+	private Uri cameraPic;
+	
+	private static final int ACTION_REQUEST_CAMERA = 1;
+	
+	private static final int ACTION_REQUEST_GALLERY = 2;
+	
+	private static final int ACTION_REQUEST_SELECTION =3;
+	
+	public void openShare() {
+		new PhotoSelectPopupWindow(this, new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(int id) {
+				switch (id) {
+				case R.id.take_photo:
+					Intent getCameraImage = new Intent(
+							"android.media.action.IMAGE_CAPTURE");
+					cameraPic = Uri.fromFile(Dirctionary.creatPicture());
+					getCameraImage.putExtra(MediaStore.EXTRA_OUTPUT, cameraPic);
+					startActivityForResult(getCameraImage,
+							ACTION_REQUEST_CAMERA);
+					break;
+				case R.id.read_photo:
+					Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+					intent.setType("image/*");
+
+					Intent chooser = Intent.createChooser(intent, "从本地相册读取");
+					startActivityForResult(chooser, ACTION_REQUEST_GALLERY);
+					break;
+				default:
+					break;
+				}
+			}
+		},"分享你的搭配");
+	}
+	
+	private void onSelectSuccess(Uri uri){
+		Intent intent = new Intent(this, SelectPicActivity.class);
+		intent.setData(uri);
+		startActivityForResult(intent, ACTION_REQUEST_SELECTION);
+	}
+	
+	@Override
+	public void onActivityResult(int reqCode, int resultCode, Intent data){
+		
+		super.onActivityResult(reqCode, resultCode, data);  
+		
+		switch (reqCode) {
+		case ACTION_REQUEST_GALLERY:
+			if (resultCode == Activity.RESULT_OK) {        
+				onSelectSuccess(data.getData());
+			}
+			break;
+		case ACTION_REQUEST_CAMERA:
+			if (resultCode == Activity.RESULT_OK) {        
+				onSelectSuccess(cameraPic);
+			}
+			break;
+		case ACTION_REQUEST_SELECTION:
+			if (resultCode == Activity.RESULT_OK) {
+				Intent intent = new Intent(this,SelectMainActivity.class);
+				intent.setData(data.getData());
+				startActivity(intent);
+			}
+			break;
+		default:
+			break;
+		}
+		
 	}
 	
 }

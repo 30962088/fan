@@ -64,11 +64,18 @@ public class ShareUtils {
 		private IWXAPI api;
 		
 		public Wechat(Context context) {
+			
 			this.context = context;
 			api = WXAPIFactory.createWXAPI(context,Constant.WECHAT_APP_ID);
+			
 		}
 		
 		public void sharePhoto(String photo,int scene){
+			if(!api.isWXAppInstalled()){
+				Utils.tip(context, "微信未安装");
+				return;
+			}
+			
 			ImageLoader loader = Utils.getImageLoader(context);
 			Bitmap bmp = BitmapFactory.decodeFile(DiscCacheUtil.findInCache(photo, loader.getDiscCache()).toString());
 			WXImageObject imgObj = new WXImageObject(bmp);

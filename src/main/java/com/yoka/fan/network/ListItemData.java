@@ -37,6 +37,8 @@ public class ListItemData {
 	
 	public Map<String, String> meta_attr;
 	
+	public boolean stared = false;
+	
 	public static class Img{
 		public String url;
 		public int width;
@@ -97,6 +99,7 @@ public class ListItemData {
 		model.setUser_id(owner_id);
 		model.setDescr(description);
 		model.setMetaAttr(meta_attr);
+		model.setStared(stared);
 		return model;
 	}
 	

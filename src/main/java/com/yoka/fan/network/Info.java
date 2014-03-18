@@ -9,6 +9,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.yoka.fan.utils.Constant;
 
@@ -23,12 +24,12 @@ public class Info extends Request{
 	
 	public static class BaseInfo{
 		private String birthday;
-		private int sex;
+		private String sex;
 		private String job;
 		public String getBirthday() {
 			return birthday;
 		}
-		public int getSex() {
+		public String getSex() {
 			return sex;
 		}
 		public String getJob() {
@@ -39,23 +40,23 @@ public class Info extends Request{
 	
 	public static class Result{
 		private String _id;
-		private int follows;
-		private int followers;
-		private int show_specials;
-		private int show_count;
+		private String follows;
+		private String followers;
+		private String show_specials;
+		private String show_count;
 		private String head_url;
 		private String nick;
 		private OtherInfo other_info;
-		public int getFollowers() {
+		public String getFollowers() {
 			return followers;
 		}
-		public int getFollows() {
+		public String getFollows() {
 			return follows;
 		}
 		public String getId() {
 			return _id;
 		}
-		public int getShow_specials() {
+		public String getShow_specials() {
 			return show_specials;
 		}
 		public String getHead_url() {
@@ -67,7 +68,7 @@ public class Info extends Request{
 		public String getNick() {
 			return nick;
 		}
-		public int getShow_count() {
+		public String getShow_count() {
 			return show_count;
 		}
 		public OtherInfo getOther_info() {

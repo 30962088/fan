@@ -9,6 +9,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.FansListActivity;
 import com.yoka.fan.LoginActivity;
 import com.yoka.fan.MainActivity;
+import com.yoka.fan.ModifyActivity;
 import com.yoka.fan.R;
 import com.yoka.fan.ZoneActivity;
 import com.yoka.fan.network.Follow;
@@ -31,6 +32,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -170,6 +172,7 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 		focusView.setText("" + result.getFollows());
 		photoView.setImageResource(R.drawable.photo_default);
 		imageLoader.displayImage(result.getHead_url(), photoView);
+		photoView.setOnClickListener(this);
 		initPage(result.getId());
 		getView().findViewById(R.id.content).setVisibility(View.VISIBLE);
 		getView().findViewById(R.id.loading).setVisibility(View.GONE);
@@ -232,6 +235,11 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.photo:
+			if(TextUtils.equals(target_id, user.id)){
+				startActivity(new Intent(getActivity(), ModifyActivity.class));
+			}
+			break;
 		case R.id.fans_btn:
 			Intent intent = new Intent(getActivity(), FansListActivity.class);
 			intent.putExtra(FansListActivity.PARAM_TARGET_ID, target_id);

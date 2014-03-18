@@ -50,13 +50,15 @@ public class HomeFragment extends Fragment implements OnVerticalScrollListener{
 		headerContainer = getActivity().findViewById(R.id.base_actionbar_content);
 		headerContainer.setVisibility(View.VISIBLE);
 		List<CommonPagerAdapter.Page> pages = new ArrayList<CommonPagerAdapter.Page>(){{
-			add(new Page("推荐",new CollRecommandListFragment(){{
-				setOnVerticalScrollListener(HomeFragment.this);
-			}},false ));
+			
 			
 			add(new Page("最新", new GetTopNewListFragment(){{
 				setOnVerticalScrollListener(HomeFragment.this);
 			}},false));
+			
+			add(new Page("推荐",new CollRecommandListFragment(){{
+				setOnVerticalScrollListener(HomeFragment.this);
+			}},false ));
 			
 			add(new Page("关注", new CollFollowListFragment(){{
 				setOnVerticalScrollListener(HomeFragment.this);

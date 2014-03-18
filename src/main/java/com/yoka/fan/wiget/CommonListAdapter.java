@@ -9,6 +9,7 @@ import com.yoka.fan.LoginActivity;
 import com.yoka.fan.R;
 import com.yoka.fan.TagActivity;
 import com.yoka.fan.ZoneActivity;
+import com.yoka.fan.SelectCategoryActivity.Model;
 import com.yoka.fan.network.Like;
 import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Request.Status;
@@ -76,6 +77,14 @@ public class CommonListAdapter extends BaseAdapter  {
 		return position;
 	}
 
+	private void openZoneActivity(CommonListModel model){
+		Intent intent = new Intent(context, ZoneActivity.class);
+		intent.putExtra(ZoneActivity.PARAM_TARGET_ID,
+				"" + model.getUser_id());
+		intent.putExtra(ZoneActivity.PARAM_NAME, "" + model.getName());
+		context.startActivity(intent);
+	}
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final CommonListModel model = list.get(position);
@@ -115,13 +124,6 @@ public class CommonListAdapter extends BaseAdapter  {
 		holder.mPhotoView.setImageBitmap(null);
 
 		holder.mLinkedView.load(model.getLinkModel());
-//		if (model.isShowLinked()) {
-//			
-//		} else {
-//			LinkModel linkModel = model.getLinkModel();
-//			holder.mLinkedView.load(new LinkModel(linkModel.getUrl(), linkModel
-//					.getWidth(), linkModel.getHeight(), null));
-//		}
 
 		if (model.getPhoto() == null) {
 			holder.mPhotoView.setVisibility(View.GONE);
@@ -135,6 +137,14 @@ public class CommonListAdapter extends BaseAdapter  {
 		} else {
 			holder.mNameView.setVisibility(View.VISIBLE);
 			holder.mNameView.setText(model.getName());
+			holder.mNameView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					openZoneActivity(model);
+					
+				}
+			});
 		}
 
 		holder.mDatetimeView.setText(model.getDatetime());
@@ -146,15 +156,7 @@ public class CommonListAdapter extends BaseAdapter  {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(context, ZoneActivity.class);
-				intent.putExtra(ZoneActivity.PARAM_TARGET_ID,
-						"" + model.getUser_id());
-				intent.putExtra(ZoneActivity.PARAM_NAME, "" + model.getName());
-				// intent.putExtra(ZoneActivity.PARAM_TARGET_ID,
-				// ""+User.readUser().id);
-				// intent.putExtra(ZoneActivity.PARAM_NAME,
-				// User.readUser().nickname);
-				context.startActivity(intent);
+				openZoneActivity(model);
 
 			}
 		});

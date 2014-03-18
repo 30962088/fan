@@ -12,6 +12,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 
 public class TagActivity extends BaseActivity implements OnVerticalScrollListener{
 
@@ -28,12 +30,23 @@ public class TagActivity extends BaseActivity implements OnVerticalScrollListene
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
+		
 		tag = getIntent().getStringExtra(PARAM_TAG);
 		style = getIntent().getStringExtra(PARAM_STYLE);
 		TagListView listView = new TagListView(this);
 		listView.setOnVerticalScrollListener(this);
 		setContentView(listView);
 		headerContainer = findViewById(R.id.base_actionbar_content);
+		ImageView camera = ((ImageView)findViewById(R.id.actionbar_right));
+		camera.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				openShare();
+			}
+		});
+		camera.setImageResource(R.drawable.camera);
 	}
 	
 	

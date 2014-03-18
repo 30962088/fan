@@ -38,7 +38,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class FansListActivity extends BaseActivity implements OnLoadListener,OnItemClickListener{
+public class FansListActivity extends BaseActivity implements OnLoadListener{
 	
 	public static final String PARAM_TYPE = "PARAM_TYPE";
 	
@@ -66,7 +66,6 @@ public class FansListActivity extends BaseActivity implements OnLoadListener,OnI
 		type = getIntent().getStringExtra(PARAM_TYPE);
 		target_id = getIntent().getStringExtra(PARAM_TARGET_ID);
 		listView = new BaseListView(this);
-		listView.setOnItemClickListener(this);
 		listView.setLimit(limit);
 		listView.setOnLoadListener(this);
 		list = new ArrayList<FansListActivity.Model>();
@@ -143,6 +142,13 @@ public class FansListActivity extends BaseActivity implements OnLoadListener,OnI
 			return position;
 		}
 
+		private void openZone(Model model){
+			Intent intent = new Intent(context, ZoneActivity.class);
+			intent.putExtra(ZoneActivity.PARAM_TARGET_ID, model.id);
+			intent.putExtra(ZoneActivity.PARAM_NAME, model.name);
+			context.startActivity(intent);
+		}
+		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			final Model model = list.get(position);
@@ -156,8 +162,23 @@ public class FansListActivity extends BaseActivity implements OnLoadListener,OnI
 			}
 			holder.imageview.setImageResource(R.drawable.photo_default);
 			imageLoader.displayImage(model.photo, holder.imageview);
+			holder.imageview.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					openZone(model);
+					
+				}
+			});
 			holder.nameView.setText(model.name);
-			
+			holder.nameView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					openZone(model);
+					
+				}
+			});
 			final TextView _btnView = holder.btnView;
 			final User user = User.readUser();
 			_btnView.setSelected(model.selected);
@@ -180,6 +201,7 @@ public class FansListActivity extends BaseActivity implements OnLoadListener,OnI
 									final boolean selected = !model.selected;
 									_btnView.setSelected(selected);
 									_btnView.setText(selected ? "已关注" : "关注");
+									model.selected = selected;
 									new AsyncTask<Void, Void, Status>(){
 
 										@Override
@@ -280,16 +302,7 @@ public class FansListActivity extends BaseActivity implements OnLoadListener,OnI
 		
 	}
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		Model model = list.get(position-1);
-		Intent intent = new Intent(this, ZoneActivity.class);
-		intent.putExtra(ZoneActivity.PARAM_TARGET_ID, model.id);
-		intent.putExtra(ZoneActivity.PARAM_NAME, model.name);
-		startActivity(intent);
-		 
-		
-	}
-
+	
+	
+	
 }

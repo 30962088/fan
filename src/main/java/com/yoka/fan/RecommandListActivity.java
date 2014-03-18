@@ -279,10 +279,10 @@ public class RecommandListActivity extends BaseActivity2 implements OnClickListe
 	@Override
 	public void finish() {
 		// TODO Auto-generated method stub
-//		super.finish();
-		Intent intent = new Intent(RecommandListActivity.this,MainActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		startActivity(intent);
+		super.finish();
+//		Intent intent = new Intent(RecommandListActivity.this,MainActivity.class);
+//		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//		startActivity(intent);
 	}
 
 	@Override

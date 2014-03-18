@@ -6,8 +6,10 @@ import java.util.List;
 
 import com.yoka.fan.network.CollLike;
 import com.yoka.fan.network.ListItemData;
+import com.yoka.fan.utils.User;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 
 public class CollLikeListFragment extends CommonListFragment{
 
@@ -33,7 +35,14 @@ public class CollLikeListFragment extends CommonListFragment{
 	protected List<ListItemData> load(int offset, int limit) {
 		CollLike request = new CollLike(offset, limit, user_id, target_id, access_token);
 		request.request();
-		return request.getListData();
+		List<ListItemData> list = request.getListData();
+		if(list != null && TextUtils.equals(user_id, User.readUser().id)){
+			for(ListItemData data:list){
+				data.stared = true;
+			}
+		}
+		
+		return list;
 	}
 
 

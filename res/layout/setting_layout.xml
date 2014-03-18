@@ -145,7 +145,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="卖家免费获流量"
+                            android:text="成为搭配明星，获百万粉丝"
                             android:textColor="#585858"
                             android:textSize="14sp" />
 
@@ -208,6 +208,27 @@
                     android:background="#c8c7cc" />
 
                 <LinearLayout
+                    android:id="@+id/about_us"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="关于我们"
+                        android:textColor="#585858"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="8dp"
+                        android:layout_height="13dp"
+                        android:src="@drawable/arrow_right2" />
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/guide"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
@@ -296,25 +317,7 @@
                     android:layout_height="1px"
                     android:background="#c8c7cc" />
 
-                <LinearLayout
-                    android:id="@+id/about_us"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:gravity="center_vertical" >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="关于我们"
-                        android:textColor="#585858"
-                        android:textSize="14sp" />
-
-                    <ImageView
-                        android:layout_width="8dp"
-                        android:layout_height="13dp"
-                        android:src="@drawable/arrow_right2" />
-                </LinearLayout>
+                
             </LinearLayout>
         </LinearLayout>
         
