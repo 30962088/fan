@@ -5,10 +5,12 @@ import java.util.List;
 import com.yoka.fan.network.ListItemData;
 import com.yoka.fan.network.Tag;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.CommonListModel.NameValuePair;
 import com.yoka.fan.wiget.CommonListView;
 import com.yoka.fan.wiget.CommonListView.OnVerticalScrollListener;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
@@ -17,22 +19,29 @@ import android.widget.ImageView;
 
 public class TagActivity extends BaseActivity implements OnVerticalScrollListener{
 
-	public static final String PARAM_TAG = "tag";
+	public static final String PARAM_NAME = "name";
 	
-	public static final String PARAM_STYLE = "style";
+	public static final String PARAM_VALUE = "value";
 	
-	private String tag;
+	private String name;
 	
-	private String style;
+	private String value;
 	
 	private View headerContainer;
+	
+	public static void open(Context context,String name,String value){
+		Intent intent = new Intent(context, TagActivity.class);
+		intent.putExtra(PARAM_NAME, name);
+		intent.putExtra(PARAM_VALUE, value);
+		context.startActivity(intent);
+	}
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		
-		tag = getIntent().getStringExtra(PARAM_TAG);
-		style = getIntent().getStringExtra(PARAM_STYLE);
+		name = getIntent().getStringExtra(PARAM_NAME);
+		value = getIntent().getStringExtra(PARAM_VALUE);
 		TagListView listView = new TagListView(this);
 		listView.setOnVerticalScrollListener(this);
 		setContentView(listView);
@@ -53,7 +62,7 @@ public class TagActivity extends BaseActivity implements OnVerticalScrollListene
 	@Override
 	protected String getActionBarTitle() {
 		// TODO Auto-generated method stub
-		return tag;
+		return value;
 	}
 	
 	private class TagListView extends CommonListView{
@@ -84,7 +93,7 @@ public class TagActivity extends BaseActivity implements OnVerticalScrollListene
 
 		@Override
 		protected List<ListItemData> load(int skip,int limit) {
-			Tag request = new Tag(style,skip,limit);
+			Tag request = new Tag(new NameValuePair(name, value),skip,limit);
 			request.request();
 			return request.getListData();
 		}

@@ -21,6 +21,7 @@ import com.yoka.fan.utils.ShareUtils.Weibo;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.BuyPopupWindow.GoodsItem;
+import com.yoka.fan.wiget.CommonListModel.NameValuePair;
 import com.yoka.fan.wiget.LinkModel.Link;
 import com.yoka.fan.wiget.LinkedView.onImageClickListener;
 import com.yoka.fan.wiget.LinkedView.onTagClickListener;
@@ -363,9 +364,9 @@ public class CommonListAdapter extends BaseAdapter  {
 			mJubaoBtn = view.findViewById(R.id.jubao);
 		}
 
-		public void setTags(final Context context, List<String> tags,final String style) {
+		public void setTags(final Context context, List<NameValuePair> tags,final String style) {
 			mTagContainer.removeAllViews();
-			for (final String tag : tags) {
+			for (final NameValuePair pair : tags) {
 				TextView textView = (TextView) LayoutInflater.from(context)
 						.inflate(R.layout.tag_view, null);
 				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -373,15 +374,12 @@ public class CommonListAdapter extends BaseAdapter  {
 								30));
 				params.setMargins(0, 0, DisplayUtils.Dp2Px(context, 3), 0);
 				textView.setLayoutParams(params);
-				textView.setText(tag);
+				textView.setText(pair.getValue());
 				textView.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
-						Intent intent = new Intent(context, TagActivity.class);
-						intent.putExtra(TagActivity.PARAM_TAG, tag);
-						intent.putExtra(TagActivity.PARAM_STYLE, style);
-						context.startActivity(intent);
+						TagActivity.open(context, pair.getName(), pair.getValue());
 
 					}
 				});

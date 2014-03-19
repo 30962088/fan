@@ -25,11 +25,28 @@ public class CommonListModel {
 	
 	private LinkModel linkModel;
 	
-	private List<String> Tags;
+	private List<NameValuePair> Tags;
 	
 	private String descr;
 	
 	private Map<String,String> metaAttr;
+	
+	public static class NameValuePair{
+		private String name;
+		private String value;
+		public NameValuePair(String name, String value) {
+			super();
+			this.name = name;
+			this.value = value;
+		}
+		public String getName() {
+			return name;
+		}
+		public String getValue() {
+			return value;
+		}
+		
+	}
 	
 	public CommonListModel() {
 		// TODO Auto-generated constructor stub
@@ -37,7 +54,7 @@ public class CommonListModel {
 	
 
 	public CommonListModel(String name, String photo, String datetime,
-			int star, boolean stared, int comment, LinkModel linkModel, List<String> tags,String desc) {
+			int star, boolean stared, int comment, LinkModel linkModel, List<NameValuePair> tags,String desc) {
 		super();
 		this.name = name;
 		this.photo = photo;
@@ -105,15 +122,19 @@ public class CommonListModel {
 		return linkModel;
 	}
 	
-	public List<String> getTags() {
+	
+	
+	
+	public List<NameValuePair> getTags() {
 		return Tags;
 	}
 
-	public void setTags(List<String> tags) {
+
+	public void setTags(List<NameValuePair> tags) {
 		Tags = tags;
 	}
-	
-	
+
+
 	public void setDescr(String descr) {
 		this.descr = descr;
 	}

@@ -13,14 +13,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yoka.fan.utils.Constant;
 import com.yoka.fan.utils.User;
+import com.yoka.fan.wiget.CommonListModel;
 
 public class Tag extends Request{
 
 	private String uuid = Constant.uuid;
 	
 	private String access_token = User.readUser().access_token;
-	
-	private String tag;
 	
 	
 	private int refresh = REFRESH_NO_CACHE;
@@ -32,10 +31,12 @@ public class Tag extends Request{
 	
 	private List<ListItemData> listData;
 	
+	private CommonListModel.NameValuePair pair;
 	
-	public Tag(String tag,int skip,int limit) {
+	
+	public Tag(CommonListModel.NameValuePair pair,int skip,int limit) {
 		super();
-		this.tag = tag;
+		this.pair = pair;
 		this.limit = limit;
 		this.skip = skip;
 	}
@@ -91,7 +92,7 @@ public class Tag extends Request{
 		params.add(new BasicNameValuePair("limit",""+limit));
 		params.add(new BasicNameValuePair("refresh",""+refresh));
 		params.add(new BasicNameValuePair("skip",""+skip));
-		params.add(new BasicNameValuePair("tags","{\"风格\":\""+tag+"\"}"));
+		params.add(new BasicNameValuePair("tags","{\""+pair.getName()+"\":\""+pair.getValue()+"\"}"));
 		return params;
 	}
 

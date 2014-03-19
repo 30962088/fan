@@ -8,6 +8,7 @@ import java.util.Map;
 import com.yoka.fan.utils.RelativeDateFormat;
 import com.yoka.fan.wiget.CommonListModel;
 import com.yoka.fan.wiget.LinkModel;
+import com.yoka.fan.wiget.CommonListModel.NameValuePair;
 
 public class ListItemData {
 
@@ -44,6 +45,8 @@ public class ListItemData {
 		public int width;
 		public int height;
 	}
+	
+	
 	
 	public static class Link{
 		
@@ -95,7 +98,16 @@ public class ListItemData {
 		model.setName(owner_name);
 		model.setPhoto(owner_face);
 		model.setStar(likes);
-		model.setTags(tags);
+		
+		List<NameValuePair> nameValuePairs = new ArrayList<CommonListModel.NameValuePair>();
+		
+		if(meta_attr != null){
+			for(String key : meta_attr.keySet()){
+				nameValuePairs.add(new NameValuePair(key, meta_attr.get(key)));
+			}
+		}
+		
+		model.setTags(nameValuePairs);
 		model.setUser_id(owner_id);
 		model.setDescr(description);
 		model.setMetaAttr(meta_attr);
