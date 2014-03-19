@@ -75,6 +75,8 @@ public class MainActivity extends SlidingFragmentActivity implements
 		// TODO Auto-generated method stub
 		super.onResume();
 		login(User.readUser());
+//		String s = null;
+//		s.toCharArray();
 	}
 
 	@Override
