@@ -4,15 +4,16 @@
     android:background="#fff"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
+    
     >
 
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:gravity="center_vertical" >
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+    android:paddingRight="20dp" >
 
         <com.yoka.fan.wiget.PhotoView
             android:id="@+id/photo"
@@ -54,11 +55,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical" >
+            android:orientation="vertical" 
+            android:paddingLeft="20dp">
 
             <com.yoka.fan.wiget.LinkedView
                 android:id="@+id/linked"
-                android:minHeight="200dp"
+                android:minHeight="300dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -75,10 +77,9 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_width="22dp"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="23dp" >
+            android:layout_alignParentRight="true" >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -88,9 +89,10 @@
 
                 <LinearLayout
                     android:id="@+id/star"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal" >
 
                     <ImageView
                         android:layout_width="21.5dp"
@@ -100,6 +102,8 @@
                     <TextView
                         android:id="@+id/starCount"
                         style="@style/listItemTextView"
+                        android:layout_height="wrap_content"
+                        android:textColor="#ee4c9c"
                         android:text="125" />
                     
                 </LinearLayout>
@@ -132,14 +136,24 @@
                     android:src="@drawable/share_selector" />
 
                 <View style="@style/listItemSep" />
+                
+                <ImageView 
+	                android:id="@+id/more"
+	                android:layout_width="21.5dp"
+	                android:layout_height="18dp"
+	                android:scaleType="center"
+	                android:src="@drawable/more"
+	                android:layout_alignParentBottom="true"/>
+                
             </LinearLayout>
             
-            <ImageView 
-                android:id="@+id/more"
-                android:layout_width="21.5dp"
+            <TextView 
+                android:id="@+id/jubao"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:scaleType="center"
-                android:src="@drawable/more"
+                android:text="举报"
+                android:gravity="center"
+                android:textSize="11sp"
                 android:layout_alignParentBottom="true"/>
             
         </RelativeLayout>

@@ -68,6 +68,8 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 	private View zoneHeader;
 
 	private View indicatorHeader;
+	
+	private View collBtn;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +108,7 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 		if (User.readUser() == null) {
 			return;
 		}
+		collBtn = view.findViewById(R.id.coll_btn);
 		indicatorHeader = view.findViewById(R.id.indicator_wrap);
 		zoneHeader = view.findViewById(R.id.zone_header);
 		matchView = (TextView) view.findViewById(R.id.match);
@@ -185,15 +188,16 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 		arguments.putString("target_id", target_id);
 		arguments.putString("user_id", user.id);
 		arguments.putString("access_token", user.access_token);
+		final CollListFragment collListFragment = new CollListFragment() {
+			{
+				setArguments(arguments);
+				setOnVerticalScrollListener(ZoneFragment.this);
+			}
+		};
 		List<CommonPagerAdapter.Page> pages = new ArrayList<CommonPagerAdapter.Page>() {
 			{
 				add(new Page(name == null ? "我的搭配" : "TA的搭配",
-						new CollListFragment() {
-							{
-								setArguments(arguments);
-								setOnVerticalScrollListener(ZoneFragment.this);
-							}
-						}, false));
+						collListFragment, false));
 				add(new Page(name == null ? "我的喜欢" : "TA的喜欢",
 						new CollLikeListFragment() {
 							{
@@ -206,13 +210,20 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 		CommonPagerAdapter adapter = new CommonPagerAdapter(
 				getChildFragmentManager(), pages);
 
-		ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
+		final ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
 		pager.setAdapter(adapter);
-
+		collBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				pager.setCurrentItem(0);
+				collListFragment.refresh();
+			}
+		});
 		indicator = (TabPageIndicator) view.findViewById(R.id.indicator);
 		indicator.setModel(pages);
 		indicator.setViewPager(pager);
-
+		
 		indicator.setOnPageChangeListener(new OnPageChangeListener() {
 			@Override
 			public void onPageScrollStateChanged(int arg0) {

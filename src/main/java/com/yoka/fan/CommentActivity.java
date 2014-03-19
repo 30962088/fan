@@ -30,6 +30,8 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,6 +58,12 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 	
 	private EditText commentView;
 	
+	private void hidden(){
+		InputMethodManager imm = (InputMethodManager)getSystemService(
+			      Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(commentView.getWindowToken(), 0);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,13 +86,22 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 		publishView.setOnClickListener(this);
 		listView.setAdapter(adapter);
 		listView.setLimit(limit);
-        findViewById(R.id.comment_layout).setOnClickListener(new OnClickListener() {
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				hidden();
+				
+			}
+			
+		});
+		
+		findViewById(R.id.base_actionbar_content).setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				InputMethodManager imm = (InputMethodManager)getSystemService(
-					      Context.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(commentView.getWindowToken(), 0);
+				hidden();
 				
 			}
 		});

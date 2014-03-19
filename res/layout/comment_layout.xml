@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:id="@+id/comment_layout">
+    android:id="@+id/comment_layout"
+    android:clickable="true"
+    android:focusableInTouchMode="true">
     
     <com.yoka.fan.wiget.BaseListView
         android:background="#fff"

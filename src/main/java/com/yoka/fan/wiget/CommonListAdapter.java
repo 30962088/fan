@@ -1,5 +1,6 @@
 package com.yoka.fan.wiget;
 
+import java.net.Authenticator.RequestorType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import com.yoka.fan.R;
 import com.yoka.fan.TagActivity;
 import com.yoka.fan.ZoneActivity;
 import com.yoka.fan.SelectCategoryActivity.Model;
+import com.yoka.fan.network.Accuse;
 import com.yoka.fan.network.Like;
 import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Request.Status;
@@ -52,8 +54,11 @@ public class CommonListAdapter extends BaseAdapter  {
 	private List<CommonListModel> list;
 
 	private ImageLoader imageLoader;
+	
+	private Animation zoomAnim;
 
 	public CommonListAdapter(Context context, List<CommonListModel> list) {
+		this.zoomAnim = AnimationUtils.loadAnimation(context, R.anim.zoom_center_closure);
 		this.context = context;
 		this.list = list;
 		imageLoader = Utils.getImageLoader(context);
@@ -96,7 +101,7 @@ public class CommonListAdapter extends BaseAdapter  {
 			WindowManager wm = (WindowManager) context
 					.getSystemService(Context.WINDOW_SERVICE);
 			Display display = wm.getDefaultDisplay();
-			int width = display.getWidth() - DisplayUtils.Dp2Px(context, 95); // deprecated
+			int width = display.getWidth() - DisplayUtils.Dp2Px(context, 90); // deprecated
 			int height = width / 3 * 4;
 
 			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -146,6 +151,51 @@ public class CommonListAdapter extends BaseAdapter  {
 				}
 			});
 		}
+		
+		holder.mJubaoBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				ConfirmDialog.open(context, "举报", "举报本条搭配？", new ConfirmDialog.OnClickListener() {
+					
+					@Override
+					public void onPositiveClick() {
+						
+						new AsyncTask<Void, Void, Accuse>(){
+
+							@Override
+							protected Accuse doInBackground(Void... params) {
+								User user = User.readUser();
+								Accuse accuse = null;
+								if(user == null){
+									accuse = new Accuse("", "", model.getId());
+								}else{
+									accuse = new Accuse(user.id, user.access_token, model.getId());
+								}
+								accuse.request();
+								return accuse;
+							}
+							
+							protected void onPostExecute(Accuse result) {
+								if(result.getStatus() == Request.Status.SUCCESS){
+									Utils.tip(context, "举报成功");
+								}
+							};
+							
+						}.execute();
+						
+						
+					}
+					
+					@Override
+					public void onNegativeClick() {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				
+			}
+		});
 
 		holder.mDatetimeView.setText(model.getDatetime());
 		holder.mStarCount.setText("" + model.getStar());
@@ -198,57 +248,63 @@ public class CommonListAdapter extends BaseAdapter  {
 
 			@Override
 			public void onClick(View v) {
-				User user = User.readUser();
-				if (user == null) {
-					context.startActivity(new Intent(context,
-							LoginActivity.class));
-					return;
-				}
+				
 				final boolean isStared = !model.isStared();
 				model.setStared(isStared);
 				int count = model.getStar();
-				Request request = null;
+				
 				if (isStared) {
 					count++;
-					request = new Like(user.id, user.access_token, model
-							.getId());
+					
 				} else {
 					count--;
-					request = new UnLike(user.id, user.access_token, model
-							.getId());
+					
 				}
 				model.setStar(count);
+				
 				mStarBtn.setSelected(model.isStared());
 				mStarCount.setText("" + model.getStar());
+				mStarCount.startAnimation(zoomAnim);
 				// notifyDataSetChanged();
 
-				final Request req = request;
+				final User user = User.readUser();
 
-				new AsyncTask<String, Void, Status>() {
+				if(user != null){
+					new AsyncTask<String, Void, Status>() {
 
-					@Override
-					protected Request.Status doInBackground(String... params) {
-
-						req.request();
-						return req.getStatus();
-					}
-
-					protected void onPostExecute(Request.Status result) {
-						if (result == Request.Status.ERROR) {
-							int count = model.getStar();
-							if (isStared) {
-								count--;
-							} else {
-								count++;
+						@Override
+						protected Request.Status doInBackground(String... params) {
+							Request request = null;
+							if(isStared){
+								request = new Like(user.id, user.access_token, model
+										.getId());
+							}else{
+								request = new UnLike(user.id, user.access_token, model
+										.getId());
 							}
-							model.setStar(count);
-							model.setStared(!isStared);
-							mStarBtn.setSelected(model.isStared());
-							mStarCount.setText("" + model.getStar());
-							// notifyDataSetChanged();
+							request.request();
+							return request.getStatus();
 						}
-					};
-				}.execute(model.getId());
+
+						protected void onPostExecute(Request.Status result) {
+							if (result == Request.Status.ERROR) {
+								int count = model.getStar();
+								if (isStared) {
+									count--;
+								} else {
+									count++;
+								}
+								model.setStar(count);
+								model.setStared(!isStared);
+								mStarBtn.setSelected(model.isStared());
+								mStarCount.setText("" + model.getStar());
+								// notifyDataSetChanged();
+							}
+						};
+					}.execute(model.getId());
+				}
+				
+				
 
 			}
 		});
@@ -289,6 +345,8 @@ public class CommonListAdapter extends BaseAdapter  {
 		private View mMoreBtn;
 
 		private View mShareBtn;
+		
+		private View mJubaoBtn;
 
 		public ViewHolder(View view) {
 			mPhotoView = (ImageView) view.findViewById(R.id.photo);
@@ -302,6 +360,7 @@ public class CommonListAdapter extends BaseAdapter  {
 			mStarBtn = view.findViewById(R.id.star);
 			mShareBtn = view.findViewById(R.id.share);
 			mCommentBtn = view.findViewById(R.id.comment);
+			mJubaoBtn = view.findViewById(R.id.jubao);
 		}
 
 		public void setTags(final Context context, List<String> tags,final String style) {

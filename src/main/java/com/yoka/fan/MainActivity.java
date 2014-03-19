@@ -114,12 +114,12 @@ public class MainActivity extends SlidingFragmentActivity implements
 		}
 		
 		if (fragment instanceof ZoneFragment) {
-			actionbarCarema.setVisibility(View.GONE);
-			actionbarSetting.setVisibility(View.VISIBLE);
+//			actionbarCarema.setVisibility(View.GONE);
+//			actionbarSetting.setVisibility(View.VISIBLE);
 			mTitleView.setText("我的空间");
 		} else {
-			actionbarCarema.setVisibility(View.VISIBLE);
-			actionbarSetting.setVisibility(View.GONE);
+//			actionbarCarema.setVisibility(View.VISIBLE);
+//			actionbarSetting.setVisibility(View.GONE);
 			if (fragment instanceof HomeFragment) {
 				mTitleView.setText("潮流搭配");
 			} else if (fragment instanceof SettingFragment) {
