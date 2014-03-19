@@ -101,7 +101,7 @@ public class TagActivity extends BaseActivity implements OnVerticalScrollListene
 
 	@Override
 	public void onScrollUp() {
-		if(headerContainer != null){
+		if(headerContainer != null && headerContainer.getVisibility() == View.GONE){
 			Utils.expand(headerContainer);
 //			headerContainer.setVisibility(View.VISIBLE);
 		}
@@ -111,7 +111,7 @@ public class TagActivity extends BaseActivity implements OnVerticalScrollListene
 
 	@Override
 	public void onScrollDown() {
-		if(headerContainer != null){
+		if(headerContainer != null && headerContainer.getVisibility() == View.VISIBLE){
 			Utils.collapse(headerContainer);
 //			headerContainer.setVisibility(View.GONE);
 		}
