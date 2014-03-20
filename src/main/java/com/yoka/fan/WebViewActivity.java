@@ -65,4 +65,7 @@ public class WebViewActivity extends BaseActivity{
 		return super.onKeyDown(keyCode, event);
 	}
 
+	
+
+	
 }

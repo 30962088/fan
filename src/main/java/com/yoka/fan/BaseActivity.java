@@ -111,7 +111,7 @@ public abstract class BaseActivity extends FragmentActivity{
 	}
 	
 	private void onSelectSuccess(Uri uri){
-		Intent intent = new Intent(this, SelectPicActivity.class);
+		Intent intent = new Intent(this, SelectMainActivity.class);
 		intent.setData(uri);
 		startActivityForResult(intent, ACTION_REQUEST_SELECTION);
 	}

@@ -4,6 +4,8 @@ import java.net.Authenticator.RequestorType;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.validator.routines.UrlValidator;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.CommentActivity;
 import com.yoka.fan.LoginActivity;
@@ -109,24 +111,31 @@ public class CommonListAdapter extends BaseAdapter  {
 					width, height);
 
 			holder.mLinkedView.setLayoutParams(layoutParams);
-			holder.mLinkedView.setOnTagClickListener(new onTagClickListener() {
-				
-				@Override
-				public void onClose(Link link) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-				@Override
-				public void onClick(Link link) {
-					new BuyPopupWindow(context, model.getId());
-					
-				}
-			});
+			
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
+		holder.mLinkedView.setOnTagClickListener(new onTagClickListener() {
+			
+			@Override
+			public void onClose(Link link) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onClick(Link link) {
+				List<GoodsItem> list = new ArrayList<BuyPopupWindow.GoodsItem>();
+				
+				for(LinkModel.Link link2 : model.getLinkModel().getLinkList()){
+					list.add(link2.toGoodsItem());
+				}
+				new BuyPopupWindow(context, list);
+//				new BuyPopupWindow(context, model.getId());
+				
+			}
+		});
 		holder.mPhotoView.setImageBitmap(null);
 
 		holder.mLinkedView.load(model.getLinkModel());
@@ -134,8 +143,10 @@ public class CommonListAdapter extends BaseAdapter  {
 		if (model.getPhoto() == null) {
 			holder.mPhotoView.setVisibility(View.GONE);
 		} else {
-			holder.mPhotoView.setVisibility(View.VISIBLE);
-			imageLoader.displayImage(model.getPhoto(), holder.mPhotoView);
+			holder.mPhotoView.setImageResource(R.drawable.photo_default);
+			if(UrlValidator.getInstance().isValid(model.getPhoto())){
+				imageLoader.displayImage(model.getPhoto(), holder.mPhotoView);
+			}
 		}
 
 		if (model.getName() == null) {
@@ -215,6 +226,8 @@ public class CommonListAdapter extends BaseAdapter  {
 
 			@Override
 			public void onClick(View v) {
+				CommentActivity.commonListAdapter = CommonListAdapter.this;
+				CommentActivity.commonListModel = model;
 				Intent intent = new Intent(context, CommentActivity.class);
 				intent.putExtra(CommentActivity.PARAM_COLL_ID, model.getId());
 				context.startActivity(intent);

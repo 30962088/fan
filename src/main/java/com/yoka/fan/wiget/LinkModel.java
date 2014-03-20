@@ -2,6 +2,10 @@ package com.yoka.fan.wiget;
 
 import java.util.List;
 
+import org.apache.commons.validator.routines.UrlValidator;
+
+import com.yoka.fan.wiget.BuyPopupWindow.GoodsItem;
+
 import android.content.Context;
 
 public class LinkModel{
@@ -11,6 +15,8 @@ public class LinkModel{
 	private int width;
 	
 	private int height;
+	
+
 	
 	private List<Link> linkList;
 	
@@ -66,6 +72,13 @@ public class LinkModel{
 		
 		private float top;
 		
+		private String url;
+		
+		private String price;
+		
+		private String typeUrl;
+		
+		private String img;
 		
 		
 		public Link(String id,String name, float left, float top) {
@@ -90,6 +103,40 @@ public class LinkModel{
 			return top;
 		}
 		
+		public void setUrl(String url) {
+			this.url = url;
+		}
+		public void setPrice(String price) {
+			this.price = price;
+		}
+		public String getPrice() {
+			return price;
+		}
+		public void setTypeUrl(String typeUrl) {
+			this.typeUrl = typeUrl;
+		}
+		public String getTypeUrl() {
+			return typeUrl;
+		}
+		public String getUrl() {
+			return url;
+		}
+		
+		public void setImg(String img) {
+			this.img = img;
+		}
+		public String getImg() {
+			return img;
+		}
+		
+		public GoodsItem toGoodsItem(){
+			String text = "去购买>";
+			if(!UrlValidator.getInstance().isValid(url)){
+				text = "暂无购买";
+			}
+			GoodsItem item = new GoodsItem(typeUrl, name, price, url, img, text, null);
+			return item;
+		}
 		
 		
 	}

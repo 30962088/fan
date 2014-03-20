@@ -36,7 +36,7 @@ public class BaseListView extends PullToRefreshListView{
 	
 	private View mFooterLoading;
 	
-	private boolean hasMode = false;
+	protected boolean hasMode = false;
 	
 	private int limit = 10;
 	

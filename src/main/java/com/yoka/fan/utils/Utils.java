@@ -2,6 +2,9 @@ package com.yoka.fan.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
@@ -231,5 +234,24 @@ public class Utils {
 		a.setDuration(200);
 		v.startAnimation(a);
 	}
+	
+	public static boolean isValidURL(String url) {  
+
+	    URL u = null;
+
+	    try {  
+	        u = new URL(url);  
+	    } catch (MalformedURLException e) {  
+	        return false;  
+	    }
+
+	    try {  
+	        u.toURI();  
+	    } catch (URISyntaxException e) {  
+	        return false;  
+	    }  
+
+	    return true;  
+	} 
 
 }

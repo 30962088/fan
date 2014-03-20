@@ -8,12 +8,15 @@ import java.util.List;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.network.CommentList;
 import com.yoka.fan.network.CommentList.Result;
+import com.yoka.fan.network.Request.Status;
 import com.yoka.fan.network.CreateComment;
 import com.yoka.fan.network.Request;
 import com.yoka.fan.utils.RelativeDateFormat;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.BaseListView;
+import com.yoka.fan.wiget.CommonListAdapter;
+import com.yoka.fan.wiget.CommonListModel;
 import com.yoka.fan.wiget.LoadingPopup;
 import com.yoka.fan.wiget.BaseListView.OnLoadListener;
 
@@ -57,6 +60,10 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 
 	
 	private EditText commentView;
+	
+	public static CommonListModel commonListModel;
+	
+	public static CommonListAdapter commonListAdapter;
 	
 	private void hidden(){
 		InputMethodManager imm = (InputMethodManager)getSystemService(
@@ -303,12 +310,19 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 		list.add(0, new Comment(user.id,user.photo, user.nickname, RelativeDateFormat.format(new Date(result.getCreate_date())) , result.getTxt()));
 		adapter.notifyDataSetChanged();
 		commentView.setText("");
+		if(commonListModel != null && commonListAdapter != null){
+			commonListModel.setComment(commonListModel.getComment()+1);
+			commonListAdapter.notifyDataSetChanged();
+		}
 	}
 
 	@Override
 	public boolean onLoad(int offset, int limit) {
 		CommentList request = new CommentList(user.id, user.access_token, collId, offset, limit);
 		request.request();
+		if(request.getStatus() != Status.SUCCESS){
+			return true;
+		}
 		List<CommentList.Result> results = request.getResults();
 		if(results == null){
 			results = new ArrayList<CommentList.Result>();

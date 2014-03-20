@@ -3,6 +3,7 @@ package com.yoka.fan.wiget;
 import java.util.List;
 
 import com.yoka.fan.network.ListItemData;
+import com.yoka.fan.wiget.CommonListView.LoadResult;
 import com.yoka.fan.wiget.CommonListView.OnVerticalScrollListener;
 
 import android.content.Context;
@@ -70,7 +71,7 @@ public abstract class CommonListFragment extends Fragment{
 		}
 
 		@Override
-		protected List<ListItemData> load(int offset, int limit) {
+		protected LoadResult load(int offset, int limit) {
 			
 			return CommonListFragment.this.load(offset, limit);
 		}
@@ -89,7 +90,7 @@ public abstract class CommonListFragment extends Fragment{
 		view.setRefreshing(true);
 	}
 	
-	protected abstract List<ListItemData> load(int offset, int limit);
+	protected abstract LoadResult load(int offset, int limit);
 
 
 	protected abstract String getEmptyTip();

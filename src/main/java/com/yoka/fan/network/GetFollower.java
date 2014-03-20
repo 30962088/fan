@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.yoka.fan.network.Fans.FansResult;
 import com.yoka.fan.network.Info.Result;
 import com.yoka.fan.utils.Constant;
 
@@ -36,17 +37,23 @@ public class GetFollower extends Request{
 	
 	private String uuid = Constant.uuid;
 	
-	private List<Result> list;
 	
 	
+	private FansResult result;
+	
+	public FansResult getResults() {
+		return result;
+	}
 	
 	
 	@Override
 	public void onSuccess(String data) {
 		try {
 			@SuppressWarnings("unchecked")
-			Map<String, Result> map = (Map<String, Result>)new Gson().fromJson(new JSONObject(data).getString("list"), new TypeToken<Map<String, Result>>(){}.getType());
-			list = new ArrayList<Result>(map.values());
+			JSONObject object = new JSONObject(data);
+			Map<String, Result> map = (Map<String, Result>)new Gson().fromJson(object.getString("list"), new TypeToken<Map<String, Result>>(){}.getType());
+			List<Result> results = new ArrayList<Result>(map.values());
+			result = new FansResult(results, object.getInt("total"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -54,13 +61,10 @@ public class GetFollower extends Request{
 		
 	}
 	
-	public List<Result> getList() {
-		return list;
-	}
 	
 	public List<String> getIdList(){
 		List<String> idlist = new ArrayList<String>();
-		for(Result result : list){
+		for(Result result : this.result.getResults()){
 			idlist.add(result.getId());
 		}
 		return idlist;

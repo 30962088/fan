@@ -70,6 +70,8 @@ public class ListItemData {
 		
 		public String type_url;
 		
+		public String img;
+		
 		private static float StringToFloat(String val){
 			return Float.parseFloat(val.substring(0,val.length()-2))/100;
 		}
@@ -92,7 +94,12 @@ public class ListItemData {
 		List<LinkModel.Link> links = new ArrayList<LinkModel.Link>();
 		for(String id : link_goods.keySet()){
 			Link link = link_goods.get(id);
-			links.add(new LinkModel.Link(id, link.brand+" "+link.tags, link.getLeft(), link.getTop()));
+			LinkModel.Link link2 = new LinkModel.Link(id, link.brand+" "+link.tags, link.getLeft(), link.getTop());
+			link2.setPrice(link.price);
+			link2.setImg(link.img);
+			link2.setTypeUrl(link.type_url);
+			link2.setUrl(link.url);
+			links.add(link2);
 		}
 		model.setLinkModel(new LinkModel(show_img.url,show_img.width,show_img.height, links));
 		model.setName(owner_name);

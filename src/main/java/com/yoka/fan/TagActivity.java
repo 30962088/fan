@@ -92,10 +92,10 @@ public class TagActivity extends BaseActivity implements OnVerticalScrollListene
 		}
 
 		@Override
-		protected List<ListItemData> load(int skip,int limit) {
+		protected LoadResult load(int skip,int limit) {
 			Tag request = new Tag(new NameValuePair(name, value),skip,limit);
 			request.request();
-			return request.getListData();
+			return new LoadResult(request.getStatus(),request.getListData());
 		}
 
 		@Override

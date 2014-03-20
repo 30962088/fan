@@ -26,7 +26,26 @@ public  class Fans extends Request{
 	
 	private String uuid = Constant.uuid;
 	
-	private List<Result> results;
+	
+	
+	public static class FansResult{
+		private List<Result> results;
+		private int total;
+		
+		public FansResult(List<Result> results, int total) {
+			super();
+			this.results = results;
+			this.total = total;
+		}
+		public List<Result> getResults() {
+			return results;
+		}
+		public int getTotal() {
+			return total;
+		}
+	}
+	
+	private FansResult result;
 	
 	public Fans(String user_id, String target_id, int skip, int limit) {
 		super();
@@ -36,16 +55,18 @@ public  class Fans extends Request{
 		this.limit = limit;
 	}
 	
-	public List<Result> getResults() {
-		return results;
+	public FansResult getResults() {
+		return result;
 	}
 
 	@Override
 	public void onSuccess(String data) {
 		try {
 			@SuppressWarnings("unchecked")
-			Map<String, Result> map = (Map<String, Result>)new Gson().fromJson(new JSONObject(data).getString("list"), new TypeToken<Map<String, Result>>(){}.getType());
-			results = new ArrayList<Result>(map.values());
+			JSONObject object = new JSONObject(data);
+			Map<String, Result> map = (Map<String, Result>)new Gson().fromJson(object.getString("list"), new TypeToken<Map<String, Result>>(){}.getType());
+			List<Result> results = new ArrayList<Result>(map.values());
+			result = new FansResult(results, object.getInt("total"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

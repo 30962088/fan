@@ -7,6 +7,7 @@ import java.util.List;
 import com.yoka.fan.network.CollLike;
 import com.yoka.fan.network.ListItemData;
 import com.yoka.fan.utils.User;
+import com.yoka.fan.wiget.CommonListView.LoadResult;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -32,7 +33,7 @@ public class CollLikeListFragment extends CommonListFragment{
 	
 
 	@Override
-	protected List<ListItemData> load(int offset, int limit) {
+	protected LoadResult load(int offset, int limit) {
 		CollLike request = new CollLike(offset, limit, user_id, target_id, access_token);
 		request.request();
 		List<ListItemData> list = request.getListData();
@@ -42,7 +43,7 @@ public class CollLikeListFragment extends CommonListFragment{
 			}
 		}
 		
-		return list;
+		return new LoadResult(request.getStatus(),list);
 	}
 
 

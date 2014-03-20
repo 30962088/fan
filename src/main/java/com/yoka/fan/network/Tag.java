@@ -19,7 +19,7 @@ public class Tag extends Request{
 
 	private String uuid = Constant.uuid;
 	
-	private String access_token = User.readUser().access_token;
+	
 	
 	
 	private int refresh = REFRESH_NO_CACHE;
@@ -88,7 +88,7 @@ public class Tag extends Request{
 	public List<NameValuePair> fillParams() {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("uuid",uuid));
-		params.add(new BasicNameValuePair("access_token	",access_token));
+//		params.add(new BasicNameValuePair("access_token	",access_token));
 		params.add(new BasicNameValuePair("limit",""+limit));
 		params.add(new BasicNameValuePair("refresh",""+refresh));
 		params.add(new BasicNameValuePair("skip",""+skip));

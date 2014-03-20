@@ -6,6 +6,7 @@ import com.yoka.fan.R;
 import com.yoka.fan.network.CollRecommand;
 import com.yoka.fan.network.GetTopNew;
 import com.yoka.fan.network.ListItemData;
+import com.yoka.fan.wiget.CommonListView.LoadResult;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -21,10 +22,10 @@ public class CollRecommandListFragment extends CommonListFragment{
 	
 	
 	@Override
-	protected List<ListItemData> load(int offset, int limit) {
+	protected LoadResult load(int offset, int limit) {
 		CollRecommand request = new CollRecommand( offset, limit);
 		request.request();
-		return request.getListData();
+		return new LoadResult(request.getStatus(), request.getListData()) ;
 	}
 
 	@Override

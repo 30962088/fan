@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.yoka.fan.network.Coll;
 import com.yoka.fan.network.ListItemData;
+import com.yoka.fan.wiget.CommonListView.LoadResult;
+
 import android.os.Bundle;
 
 public class CollListFragment extends CommonListFragment{
@@ -28,10 +30,10 @@ public class CollListFragment extends CommonListFragment{
 	
 	
 	@Override
-	protected List<ListItemData> load(int offset, int limit) {
+	protected LoadResult load(int offset, int limit) {
 		Coll request = new Coll(offset, limit, user_id, target_id, access_token);
 		request.request();
-		return request.getListData();
+		return new LoadResult(request.getStatus(),request.getListData());
 	}
 
 

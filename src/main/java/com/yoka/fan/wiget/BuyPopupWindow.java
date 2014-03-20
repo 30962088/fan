@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
+import org.apache.commons.validator.routines.UrlValidator;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.R;
 import com.yoka.fan.WebViewActivity;
@@ -48,18 +50,27 @@ public class BuyPopupWindow implements OnClickListener,OnItemClickListener{
 
 	private Context context;
 	
-	private String coll_id;
 	
 	private List<GoodsItem> list;
 	
 	
 	
 	public BuyPopupWindow(Context context,String coll_id) {
-		this.coll_id = coll_id;
 		this.context = context;
         load(coll_id);
 	}
 	
+	
+	
+	public BuyPopupWindow(Context context, List<GoodsItem> list) {
+		super();
+		this.context = context;
+		this.list = list;
+		onload(list);
+	}
+
+
+
 	private void onload(final List<GoodsItem> list){
 		this.list = list;
 		View view = LayoutInflater.from(context).inflate(R.layout.popup_buy_layout,null);
@@ -101,7 +112,7 @@ public class BuyPopupWindow implements OnClickListener,OnItemClickListener{
 					
 					for(Goods goods : result.getLinkGoods().values()){
 						String text = "去购买>";
-						if(TextUtils.isEmpty(goods.getUrl())){
+						if(!UrlValidator.getInstance().isValid(goods.getUrl())){
 							text = "暂无购买";
 						}
 						list.add(new GoodsItem(goods.getType_url(),goods.getBrand()+goods.getTags(),goods.getPrice(),goods.getUrl(),goods.getImg(),text,null));
@@ -110,7 +121,7 @@ public class BuyPopupWindow implements OnClickListener,OnItemClickListener{
 						list.add(new GoodsItem("编辑推荐"));
 						for(Goods goods : result.getLinkGoodsType()){
 							String text = "相似推荐>";
-							if(TextUtils.isEmpty(goods.getUrl())){
+							if(!UrlValidator.getInstance().isValid(goods.getUrl())){
 								text = "暂无购买";
 							}
 							list.add(new GoodsItem(goods.getType_url(),goods.getBrand()+goods.getTags(),goods.getPrice(),goods.getUrl(),goods.getImg(),text,null));
@@ -231,12 +242,17 @@ public class BuyPopupWindow implements OnClickListener,OnItemClickListener{
 				imageLoader.displayImage(item.typeResId, holder.typeView);
 				holder.nameView.setText(item.name);
 				holder.jumpView.setText(item.link);
-				if("暂无购买".equals(item.link)){
-					holder.priceView.setVisibility(View.GONE);
-				}else{
-					holder.priceView.setVisibility(View.VISIBLE);
-					holder.priceView.setText("¥"+item.price);
-				}
+//				if("暂无购买".equals(item.link)){
+//					holder.priceView.setVisibility(View.GONE);
+//				}else{
+//					holder.priceView.setVisibility(View.VISIBLE);
+					if(TextUtils.isEmpty(item.price)){
+						holder.priceView.setText("");
+					}else{
+						holder.priceView.setText("¥"+item.price);
+					}
+					
+//				}
 				
 				if(item.img == null){
 					holder.imgView.setVisibility(View.GONE);
@@ -288,7 +304,7 @@ public class BuyPopupWindow implements OnClickListener,OnItemClickListener{
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		GoodsItem item = list.get(position);
-		if(TextUtils.isEmpty(item.url)){
+		if(UrlValidator.getInstance().isValid(item.url)){
 			WebViewActivity.open(context, item.url);
 		}
 		

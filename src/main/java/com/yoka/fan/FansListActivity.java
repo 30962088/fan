@@ -3,6 +3,8 @@ package com.yoka.fan;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.validator.routines.UrlValidator;
+
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnLastItemVisibleListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
@@ -12,6 +14,7 @@ import com.yoka.fan.network.Fans;
 import com.yoka.fan.network.Follow;
 import com.yoka.fan.network.GetFollower;
 import com.yoka.fan.network.Request;
+import com.yoka.fan.network.Fans.FansResult;
 import com.yoka.fan.network.Info.Result;
 import com.yoka.fan.network.Request.Status;
 import com.yoka.fan.network.UnFollow;
@@ -162,7 +165,7 @@ public class FansListActivity extends BaseActivity implements OnLoadListener{
 				holder = (ViewHolder) convertView.getTag();
 			}
 			holder.imageview.setImageResource(R.drawable.photo_default);
-			if(!TextUtils.isEmpty(model.photo)){
+			if(UrlValidator.getInstance().isValid(model.photo)){
 				imageLoader.displayImage(model.photo, holder.imageview);
 			}
 			
@@ -282,22 +285,25 @@ public class FansListActivity extends BaseActivity implements OnLoadListener{
 			request = new GetFollower(user.id,target_id,offset,limit);
 		}
 		request.request();
-		List<Result> results = new ArrayList<Result>();
+		if(request.getStatus() != Status.SUCCESS){
+			return true;
+		}
+		FansResult result = null;
 		if(request.getStatus() == Status.SUCCESS){
 			
 			if(request instanceof Fans){
-				results = ((Fans)request).getResults();
+				result = ((Fans)request).getResults();
 			}else if(request instanceof GetFollower){
-				results = ((GetFollower)request).getList();
+				result = ((GetFollower)request).getResults();
 			}
 			if(offset == 0){
 				list.clear();
 			}
-			for(Result result : results){
-				list.add(new Model(result.getId(), result.getHeadUrl(), result.getNick(),false));
+			for(Result r : result.getResults()){
+				list.add(new Model(r.getId(), r.getHeadUrl(), r.getNick(),false));
 			}
 		}
-		return results.size()>=limit?true:false;
+		return list.size()<result.getTotal()&&offset<result.getTotal()?true:false;
 	}
 
 	@Override

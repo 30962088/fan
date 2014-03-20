@@ -158,7 +158,7 @@ public class TouchView extends ImageView {
 	public byte[] getSelection() {
 		maskView.setVisibility(View.GONE);
 		Bitmap bitmap = getBitmapFromView((View)getParent());
-		bitmap = Bitmap.createBitmap(bitmap,rectBounds[0] ,rectBounds[1],rectBounds[2],rectBounds[3]);
+		bitmap = Bitmap.createBitmap(bitmap,Math.min(rectBounds[0],0) ,Math.min(rectBounds[1],0),rectBounds[2],rectBounds[3]);
 //		try {
 //			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream("/sdcard/fantest.jpg"));
 //		} catch (FileNotFoundException e) {
@@ -330,7 +330,7 @@ public class TouchView extends ImageView {
 				int y1 = Math.max((getHeight() - rectHeight) / 2, 0);
 				int x2 = x1 + rectWidth;
 				int y2 = y1 + rectHeight;
-				rectBounds = new int[] { x1, y1, x2 - x1, Math.min(y2-y1, getHeight())  };
+				rectBounds = new int[] { Math.min(x1, 0) , Math.min(y1,0) , x2 - x1, Math.min(y2-y1, getHeight())  };
 				if (rectType == TYPE_RECYCLE) {
 					maskCanvas.drawOval(new RectF(x1, y1, x2, y2), clearPaint);
 				} else {

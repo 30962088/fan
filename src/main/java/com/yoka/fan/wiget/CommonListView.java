@@ -14,6 +14,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.Adapter;
 
 import com.yoka.fan.network.ListItemData;
+import com.yoka.fan.network.Request.Status;
 import com.yoka.fan.wiget.BaseListView.OnLoadListener;
 
 public abstract class CommonListView extends BaseListView implements OnLoadListener{
@@ -25,13 +26,21 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 	
 	private static int limit = 20;
 	
-	private List<CommonListModel> list = new ArrayList<CommonListModel>();
+	protected List<CommonListModel> list = new ArrayList<CommonListModel>();
 	
-	private CommonListAdapter adapter;
+	protected CommonListAdapter adapter;
 	
 	public CommonListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init();
+	}
+	
+	public List<CommonListModel> getList() {
+		return list;
+	}
+	
+	public CommonListAdapter getAdapter() {
+		return adapter;
 	}
 
 	public CommonListView(
@@ -77,7 +86,23 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 	
 	public abstract String getEmptyTip();
 	
-	protected abstract List<ListItemData> load(int offset,int limit);
+	public static class LoadResult{
+		private Status status;
+		private List<ListItemData> list;
+		public LoadResult(Status status, List<ListItemData> list) {
+			super();
+			this.status = status;
+			this.list = list;
+		}
+		public List<ListItemData> getList() {
+			return list;
+		}
+		public Status getStatus() {
+			return status;
+		}
+	}
+	
+	protected abstract LoadResult load(int offset,int limit);
 	
 	
 
@@ -87,7 +112,11 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 	@Override
 	public boolean onLoad(int offset,int limit) {
 		this.offset = offset;
-		List<ListItemData> result = load(offset,limit);
+		LoadResult loadResult = load(offset,limit);
+		if(loadResult.getStatus() != Status.SUCCESS){
+			return true;
+		}
+		List<ListItemData> result = loadResult.list;
 		if(result == null ){
 			result = new ArrayList<ListItemData>();
 		}
@@ -138,5 +167,6 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 		
 		return super.dispatchTouchEvent(event);
 	}
+	
 	
 }
