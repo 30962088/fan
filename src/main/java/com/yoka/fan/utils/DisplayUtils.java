@@ -22,7 +22,7 @@ public class DisplayUtils {
 
 	public static int spToPx(Context context, float spValue) {
 		float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
-		int pixelValue = (int) (spValue * scaledDensity + 0.5f);
+		int pixelValue = (int) (spValue * scaledDensity);
 		return pixelValue;
 	}
 

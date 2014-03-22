@@ -24,6 +24,7 @@ import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -189,7 +190,7 @@ public class LinkedView extends RelativeLayout {
 			setGravity(Gravity.CENTER);
 			setVisibility(View.INVISIBLE);
 			setSingleLine(true);
-			setTextSize(DisplayUtils.spToPx(getContext(), 5));
+			setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
 			setEllipsize(TruncateAt.END);
 			if (link.getLeft() < 0.5) {
 				if (closed) {

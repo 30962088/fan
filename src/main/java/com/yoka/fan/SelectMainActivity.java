@@ -52,6 +52,12 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 	
 	private ImageLoader imageLoader;
 	
+	private static SelectMainActivity instance;
+	
+	public static SelectMainActivity getInstance() {
+		return instance;
+	}
+	
 	public static class Result implements Serializable{
 		private Link link;
 		private String name;
@@ -112,6 +118,7 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		instance = this;
 		url = getIntent().getDataString();
 		imageLoader = Utils.getImageLoader(this);
 		setContentView(R.layout.select_main_layout);
@@ -197,6 +204,13 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 			float top = intent.getFloatExtra(PARAM_TOP, 0);
 			float left = intent.getFloatExtra(PARAM_LEFT, 0);
 			results.add(Result.toResult(list,left,top));
+			load();
+		}
+	}
+	
+	public void remove(int index){
+		if(results != null){
+			results.remove(index);
 			load();
 		}
 	}

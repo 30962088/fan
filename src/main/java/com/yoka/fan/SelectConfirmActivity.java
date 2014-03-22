@@ -78,17 +78,31 @@ public class SelectConfirmActivity extends Activity implements OnClickListener{
 	}
 	
 	private void initListView(){
-		
-
-		for(Result result : list){
-			TextView textView = (TextView) LayoutInflater.from(this).inflate(R.layout.category_item,null);
+		listView.removeAllViews();
+		int i = 0;
+		for(final Result result : list){
+			View view = LayoutInflater.from(this).inflate(R.layout.confirm_list_item,null);
+			TextView textView = (TextView) view.findViewById(R.id.text);
 			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			layoutParams.topMargin = DisplayUtils.Dp2Px(this, 10);
-			int padding = DisplayUtils.Dp2Px(this, 12);
-			textView.setPadding(padding, padding/2, padding, padding/2);
-			textView.setLayoutParams(layoutParams);
+			view.setLayoutParams(layoutParams);
 			textView.setText(result.getName());
-			listView.addView(textView);
+			final int k = i;
+			view.findViewById(R.id.close).setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					SelectMainActivity activity = SelectMainActivity.getInstance();
+					
+					list.remove(result);
+					initListView();
+					if(activity != null){
+						activity.remove(k);
+					}
+				}
+			});
+			listView.addView(view);
+			i++;
 		}
 	}
 	
