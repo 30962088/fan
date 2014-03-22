@@ -115,10 +115,16 @@ public class Category implements Serializable {
 	private static Category instance;
 
 	public Map<String, List<Tag>> getCats() {
-		if(cats == null || cats.size() == 0){
-			return new HashMap<String, List<Tag>>();
+		HashMap<String, List<Tag>> result = new HashMap<String, List<Tag>>();
+		if(cats != null){
+			for(Map<String, List<Tag>> map : cats){
+				for(String title : map.keySet()){
+					result.put(title, map.get(title));
+				}
+			}
 		}
-		return cats.get(0);
+		
+		return result;
 	}
 	
 	public static void sync(final OperatorListener listener) {

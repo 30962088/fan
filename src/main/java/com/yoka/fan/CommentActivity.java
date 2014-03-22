@@ -46,12 +46,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 	
 	private String collId;
 	
-	
 	private int limit = 20;
-	
-	private User user;
-
-	
 	private ListViewAdapter adapter;
 	
 	private List<Comment> list;
@@ -74,12 +69,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		user = User.readUser();
-		if(user == null){
-			startActivity(new Intent(this, LoginActivity.class));
-			finish();
-			return;
-		}
+		
 		collId = getIntent().getStringExtra(PARAM_COLL_ID);
 		setContentView(R.layout.comment_layout);
 		
@@ -282,6 +272,11 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 	}
 
 	private void onPublish() {
+		final User user = User.readUser();
+		if(user == null){
+			startActivity(new Intent(this, LoginActivity.class));
+			return;
+		}
 		final String content = commentView.getText().toString();
 		LoadingPopup.show(this);
 		new AsyncTask<Void, Void, CreateComment>(){
@@ -318,7 +313,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,OnL
 
 	@Override
 	public boolean onLoad(int offset, int limit) {
-		CommentList request = new CommentList(user.id, user.access_token, collId, offset, limit);
+		CommentList request = new CommentList(collId, offset, limit);
 		request.request();
 		if(request.getStatus() != Status.SUCCESS){
 			return true;

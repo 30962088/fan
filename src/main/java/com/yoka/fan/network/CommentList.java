@@ -76,10 +76,6 @@ public class CommentList extends Request{
 	
 	private String uuid = Constant.uuid;
 	
-	private String user_id;
-	
-	private String access_token;
-	
 	private String goods_id;
 	
 	private int skip;
@@ -90,11 +86,9 @@ public class CommentList extends Request{
 	
 	private int comment_type=2;
 	
-	public CommentList(String user_id, String access_token, String goods_id,
+	public CommentList(String goods_id,
 			int skip, int limit) {
 		super();
-		this.user_id = user_id;
-		this.access_token = access_token;
 		this.goods_id = goods_id;
 		this.skip = skip;
 		this.limit = limit;
@@ -146,8 +140,6 @@ public class CommentList extends Request{
 	public List<NameValuePair> fillParams() {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("uuid", uuid));
-		params.add(new BasicNameValuePair("user_id", user_id));
-		params.add(new BasicNameValuePair("access_token", access_token));
 		params.add(new BasicNameValuePair("skip", ""+skip));
 		params.add(new BasicNameValuePair("limit", ""+limit));
 		params.add(new BasicNameValuePair("goods_id", goods_id));

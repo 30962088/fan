@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.yoka.fan.SelectCategoryActivity.Model;
 import com.yoka.fan.utils.Category;
+import com.yoka.fan.utils.Utils;
 import com.yoka.fan.utils.Category.Brand;
 import com.yoka.fan.wiget.SearchInput;
 
@@ -16,6 +17,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -44,12 +46,12 @@ public class SelectBrandActivity extends BaseSelectActivity implements TextWatch
 		inputView = (SearchInput) findViewById(R.id.search_input);
 		inputView.addTextChangedListener(this);
 		inputView.getSearchInput().setHint("选择品牌");
-		setNextEnable(false);
+//		setNextEnable(false);
 		
 		
 		selectedList = (ArrayList<Model>) getIntent().getSerializableExtra(PARAM_SELECTED_LIST);
 		if(selectedList != null){
-			((GridView)findViewById(R.id.select_list)).setAdapter(new SelectCategoryActivity.GridAdapter(this, selectedList));
+			((GridView)findViewById(R.id.select_list)).setAdapter(new SelectCategoryActivity.GridAdapter(this, selectedList,false));
 		}
 		
 		listview = (ListView) findViewById(R.id.listview);
@@ -59,10 +61,16 @@ public class SelectBrandActivity extends BaseSelectActivity implements TextWatch
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				if(model != null){
+					model.setSelected(false);
+				}
 				model = list.get(position);
-				inputView.getSearchInput().setText("");
-				inputView.getSearchInput().append(model.getName());
-				setNextEnable(true);
+				model.setSelected(true);
+				adapter.notifyDataSetChanged();
+				onNextClick();
+//				inputView.getSearchInput().setText("");
+//				inputView.getSearchInput().append(model.getName());
+//				setNextEnable(true);
 				
 			}
 			
@@ -94,14 +102,16 @@ public class SelectBrandActivity extends BaseSelectActivity implements TextWatch
 		return models;
 	}
 	
+	private ListAdapter adapter;
+	
 	public void update(final List<Model> list){
 		this.list = list;
 		runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				
-				listview.setAdapter(new ListAdapter(SelectBrandActivity.this, list));
+				adapter = new ListAdapter(SelectBrandActivity.this, list);
+				listview.setAdapter(adapter);
 				
 			}
 		});
@@ -146,6 +156,11 @@ public class SelectBrandActivity extends BaseSelectActivity implements TextWatch
 			if(convertView == null){
 				convertView = LayoutInflater.from(context).inflate(R.layout.brand_item,null);
 			}
+			if(model.isSelected()){
+				convertView.setBackgroundResource(R.color.brand_selected);
+			}else{
+				convertView.setBackgroundResource(R.color.brand);
+			}
 			((TextView)convertView).setText(model.getName());
 			return convertView;
 		}
@@ -167,7 +182,7 @@ public class SelectBrandActivity extends BaseSelectActivity implements TextWatch
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		setNextEnable(false);
+//		setNextEnable(false);
 		Category.findBrandByPinyin(s.toString(),new Category.findBrandListener() {
 			
 			@Override
@@ -199,6 +214,10 @@ public class SelectBrandActivity extends BaseSelectActivity implements TextWatch
 
 	@Override
 	protected void onNextClick() {
+		if(model == null){
+			Utils.tip(this, "请选择品牌");
+			return;
+		}
 		ArrayList<Model> list = new ArrayList<SelectCategoryActivity.Model>(selectedList);
 		list.add(model);
 		Intent intent = new Intent(this,SelectColorActivity.class);

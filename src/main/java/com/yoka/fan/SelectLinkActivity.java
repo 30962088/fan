@@ -13,6 +13,7 @@ import com.yoka.fan.utils.Utils;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 
 import android.view.View;
@@ -42,9 +43,9 @@ public class SelectLinkActivity extends BaseSelectActivity implements TextWatche
 		models = (List<com.yoka.fan.SelectCategoryActivity.Model>) getIntent()
 				.getSerializableExtra(PARAM_SELECTED_LIST);
 		((GridView) findViewById(R.id.select_list))
-				.setAdapter(new SelectCategoryActivity.GridAdapter(this, models));
+				.setAdapter(new SelectCategoryActivity.GridAdapter(this, models,false));
 		
-		setNextEnable(false);
+//		setNextEnable(false);
 	
 	}
 
@@ -74,19 +75,19 @@ public class SelectLinkActivity extends BaseSelectActivity implements TextWatche
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		if(URLUtil.isValidUrl(linkView.getText().toString())){
-			try{
-				Float.parseFloat(priceView.getText().toString());
-				setNextEnable(true);
-			}catch(NumberFormatException exception){
-				setNextEnable(false);
-			}
-				
-		
-			
-		}else{
-			setNextEnable(false);
-		}
+//		if(URLUtil.isValidUrl(linkView.getText().toString())){
+//			try{
+//				Float.parseFloat(priceView.getText().toString());
+//				setNextEnable(true);
+//			}catch(NumberFormatException exception){
+//				setNextEnable(false);
+//			}
+//				
+//		
+//			
+//		}else{
+//			setNextEnable(false);
+//		}
 	}
 
 	@Override
@@ -109,9 +110,32 @@ public class SelectLinkActivity extends BaseSelectActivity implements TextWatche
 
 	@Override
 	protected void onNextClick() {
+		String url = linkView.getText().toString();
+		String price = priceView.getText().toString();
+		if(!TextUtils.isEmpty(url) && !URLUtil.isValidUrl(url)){
+			Utils.tip(this, "链接格式错误");
+			return;
+		}
+		if(!TextUtils.isEmpty(price)){
+			try{
+				Float.parseFloat(price);
+			}catch(NumberFormatException e){
+				Utils.tip(this, "请输入正确的价格");
+				return;
+			}
+			
+		}
 		ArrayList<SelectCategoryActivity.Model> list = new ArrayList<SelectCategoryActivity.Model>(models);
-		list.add(new Model(linkView.getText().toString(), linkView.getText().toString(), Model.TYPE_LINK));
-		list.add(new Model(priceView.getText().toString(),priceView.getText().toString(),Model.TYPE_PRICE));
+		if(!TextUtils.isEmpty(url)){
+			list.add(new Model(url, url, Model.TYPE_LINK));
+		}
+		
+		if(!TextUtils.isEmpty(price)){
+			list.add(new Model(price,price,Model.TYPE_PRICE));
+		}
+		
+		
+		
 		Intent intent = new Intent(this,SelectMainActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		intent.setAction(SelectMainActivity.ACTION_COMPLETE);

@@ -27,6 +27,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,6 +94,7 @@ public class SelectConfirmActivity extends Activity implements OnClickListener{
 	
 	
 	private void scale(File file){
+		
 		Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
 		int width = bitmap.getWidth(),height = bitmap.getHeight();
 		if(width<480){
@@ -117,8 +119,13 @@ public class SelectConfirmActivity extends Activity implements OnClickListener{
 	
 	private void onSave(){
 		final User user = User.readUser();
+		final String desc = descView.getText().toString();
 		if(user == null){
 			startActivity(new Intent(this, LoginActivity.class));
+			return;
+		}
+		if(desc == null || desc.length() <5){
+			Utils.tip(this, "描述不能少于5个字哦:)");
 			return;
 		}
 		final Map<String, Link> link_goods = new HashMap<String, CollSave.Link>();
@@ -133,7 +140,7 @@ public class SelectConfirmActivity extends Activity implements OnClickListener{
 			@Override
 			protected com.yoka.fan.network.Request.Status doInBackground(
 					Void... params) {
-				CollSave request = new CollSave(link_goods, user.access_token, descView.getText().toString(), uploadimg, width, height, user.id);
+				CollSave request = new CollSave(link_goods, user.access_token,desc , uploadimg, width, height, user.id);
 				request.request();
 				return request.getStatus();
 			}

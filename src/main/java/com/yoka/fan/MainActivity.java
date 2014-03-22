@@ -15,7 +15,11 @@ import com.yoka.fan.wiget.ZoneFragment;
 import com.yoka.fan.wiget.PhotoSelectPopupWindow.OnItemClickListener;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -37,7 +41,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private View actionbarCarema;
 
 	private View actionbarSetting;
-	
+
 	private View actionbarContainer;
 
 	private static MainActivity instance;
@@ -50,7 +54,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		instance = this;
-		
+
 		if (savedInstanceState != null)
 			mContent = getSupportFragmentManager().getFragment(
 					savedInstanceState, "mContent");
@@ -75,8 +79,8 @@ public class MainActivity extends SlidingFragmentActivity implements
 		// TODO Auto-generated method stub
 		super.onResume();
 		login(User.readUser());
-//		String s = null;
-//		s.toCharArray();
+		// String s = null;
+		// s.toCharArray();
 	}
 
 	@Override
@@ -111,17 +115,17 @@ public class MainActivity extends SlidingFragmentActivity implements
 	}
 
 	public void switchContent(Fragment fragment) {
-		if(actionbarContainer.getVisibility() == View.GONE){
+		if (actionbarContainer.getVisibility() == View.GONE) {
 			Utils.expand(actionbarContainer);
 		}
-		
+
 		if (fragment instanceof ZoneFragment) {
-//			actionbarCarema.setVisibility(View.GONE);
-//			actionbarSetting.setVisibility(View.VISIBLE);
+			// actionbarCarema.setVisibility(View.GONE);
+			// actionbarSetting.setVisibility(View.VISIBLE);
 			mTitleView.setText("我的空间");
 		} else {
-//			actionbarCarema.setVisibility(View.VISIBLE);
-//			actionbarSetting.setVisibility(View.GONE);
+			// actionbarCarema.setVisibility(View.VISIBLE);
+			// actionbarSetting.setVisibility(View.GONE);
 			if (fragment instanceof HomeFragment) {
 				mTitleView.setText("潮流搭配");
 			} else if (fragment instanceof SettingFragment) {
@@ -161,15 +165,15 @@ public class MainActivity extends SlidingFragmentActivity implements
 	}
 
 	private Uri cameraPic;
-	
+
 	private static final int ACTION_REQUEST_CAMERA = 1;
-	
+
 	private static final int ACTION_REQUEST_GALLERY = 2;
-	
-	private static final int ACTION_REQUEST_SELECTION =3;
-	
+
+	private static final int ACTION_REQUEST_SELECTION = 3;
+
 	public void openShare() {
-		
+
 		new PhotoSelectPopupWindow(this, new OnItemClickListener() {
 
 			@Override
@@ -186,7 +190,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 				case R.id.read_photo:
 					Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 					intent.setType("image/*");
-
 					Intent chooser = Intent.createChooser(intent, "从本地相册读取");
 					startActivityForResult(chooser, ACTION_REQUEST_GALLERY);
 					break;
@@ -194,34 +197,56 @@ public class MainActivity extends SlidingFragmentActivity implements
 					break;
 				}
 			}
-		},"分享你的搭配");
+		}, "分享你的搭配");
 	}
-	
-	private void onSelectSuccess(Uri uri){
+
+	private void onSelectSuccess(Uri uri) {
+		uri = SelectPicActivity.crop(BitmapFactory.decodeFile(uri.getPath()));
 		Intent intent = new Intent(this, SelectMainActivity.class);
 		intent.setData(uri);
 		startActivityForResult(intent, ACTION_REQUEST_SELECTION);
 	}
-	
+
+	public static String convertMediaUriToPath(Context context, Uri uri) {
+		Cursor cursor = context.getContentResolver().query(uri, null, null,
+				null, null);
+		cursor.moveToFirst();
+		String document_id = cursor.getString(0);
+		document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+		cursor.close();
+
+		cursor = context.getContentResolver().query(
+				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+				null, MediaStore.Images.Media._ID + " = ? ",
+				new String[] { document_id }, null);
+		cursor.moveToFirst();
+		String path = cursor.getString(cursor
+				.getColumnIndex(MediaStore.Images.Media.DATA));
+		cursor.close();
+
+		return path;
+	}
+
 	@Override
-	public void onActivityResult(int reqCode, int resultCode, Intent data){
-		
-		super.onActivityResult(reqCode, resultCode, data);  
-		
+	public void onActivityResult(int reqCode, int resultCode, Intent data) {
+
+		super.onActivityResult(reqCode, resultCode, data);
+
 		switch (reqCode) {
 		case ACTION_REQUEST_GALLERY:
-			if (resultCode == Activity.RESULT_OK) {        
-				onSelectSuccess(data.getData());
+			if (resultCode == Activity.RESULT_OK) {
+				onSelectSuccess(Uri.parse(convertMediaUriToPath(this,
+						data.getData())));
 			}
 			break;
 		case ACTION_REQUEST_CAMERA:
-			if (resultCode == Activity.RESULT_OK) {        
+			if (resultCode == Activity.RESULT_OK) {
 				onSelectSuccess(cameraPic);
 			}
 			break;
 		case ACTION_REQUEST_SELECTION:
 			if (resultCode == Activity.RESULT_OK) {
-				Intent intent = new Intent(this,SelectMainActivity.class);
+				Intent intent = new Intent(this, SelectMainActivity.class);
 				intent.setData(data.getData());
 				startActivity(intent);
 			}
@@ -229,15 +254,13 @@ public class MainActivity extends SlidingFragmentActivity implements
 		default:
 			break;
 		}
-		
+
 	}
-	
-	
+
 	private long currentBackPressedTime = 0;
 
 	private static final int BACK_PRESSED_INTERVAL = 2000;
 
-	
 	@Override
 	public void onBackPressed() {
 		// 判断时间间隔

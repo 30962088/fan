@@ -97,9 +97,11 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 
 			@Override
 			public void run() {
-				startActivity(new Intent(LoginActivity.this,
-						RecommandListActivity.class));
-				MainActivity.getInstance().login(User.readUser());
+				if(result.first == 1){
+					startActivity(new Intent(LoginActivity.this,
+							RecommandListActivity.class));
+					MainActivity.getInstance().login(User.readUser());
+				}
 				finish();
 
 			}

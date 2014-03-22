@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -36,9 +37,12 @@ public class SelectColorActivity extends BaseSelectActivity implements
 
 	private List<SelectCategoryActivity.Model> models;
 
-
+	private SelectCategoryActivity.Model model;
+	
+	private Model selectModel;
 	
 	private List<Model> list;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,27 +55,28 @@ public class SelectColorActivity extends BaseSelectActivity implements
 		models = (List<com.yoka.fan.SelectCategoryActivity.Model>) getIntent()
 				.getSerializableExtra(PARAM_SELECTED_LIST);
 		((GridView) findViewById(R.id.select_list))
-				.setAdapter(new SelectCategoryActivity.GridAdapter(this, models));
-		setNextEnable(false);
+				.setAdapter(new SelectCategoryActivity.GridAdapter(this, models,false));
+//		setNextEnable(false);
 		gridView = (GridView) findViewById(R.id.gridview);
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				
-				inputView.getSearchInput().setText("");
-				inputView.getSearchInput().append(list.get(position).name);
-				
+				if(selectModel != null){
+					selectModel.setSelected(false);
+				}
+				selectModel = list.get(position);
+				String color = selectModel.name;
+				model = new SelectCategoryActivity.Model(color, color,SelectCategoryActivity.Model.TYPE_COLOR);
+				selectModel.setSelected(true);
+				adapter.notifyDataSetChanged();
+//				inputView.getSearchInput().setText("");
+//				inputView.getSearchInput().append(list.get(position).name);
+				onNextClick();
 			}
 			
 		});
-	}
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
 		Category.findColorByPinyin(new findColorListener() {
 
 			@Override
@@ -83,6 +88,8 @@ public class SelectColorActivity extends BaseSelectActivity implements
 		});
 	}
 
+	
+
 	public static List<Model> toList(List<Color> colors) {
 		List<Model> models = new ArrayList<SelectColorActivity.Model>();
 		for (Color color : colors) {
@@ -90,6 +97,8 @@ public class SelectColorActivity extends BaseSelectActivity implements
 		}
 		return models;
 	}
+	
+	private GridAdapter adapter;
 
 	public void update(final List<Model> list) {
 		this.list = list;
@@ -97,9 +106,8 @@ public class SelectColorActivity extends BaseSelectActivity implements
 
 			@Override
 			public void run() {
-
-				gridView.setAdapter(new GridAdapter(SelectColorActivity.this,
-						list));
+				adapter = new GridAdapter(SelectColorActivity.this,list);
+				gridView.setAdapter(adapter);
 
 			}
 		});
@@ -124,11 +132,15 @@ public class SelectColorActivity extends BaseSelectActivity implements
 		private String id;
 		private String name;
 		private String url;
+		private boolean selected;
 
 		public Model(String id, String name, String url) {
 			this.id = id;
 			this.name = name;
 			this.url = url;
+		}
+		public void setSelected(boolean selected) {
+			this.selected = selected;
 		}
 	}
 
@@ -176,6 +188,12 @@ public class SelectColorActivity extends BaseSelectActivity implements
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
+			if(model.selected){
+				convertView.setBackgroundResource(R.drawable.category_item_bg_selected);
+			}else{
+				convertView.setBackgroundResource(R.drawable.category_item_bg);
+			}
+			
 			if (model.url != null) {
 				holder.imageView.setVisibility(View.VISIBLE);
 				imageLoader.displayImage(model.url, holder.imageView);
@@ -214,11 +232,11 @@ public class SelectColorActivity extends BaseSelectActivity implements
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		if(s.toString().length() == 0){
+		/*if(s.toString().length() == 0){
 			setNextEnable(false);
 		}else{
 			setNextEnable(true);
-		}
+		}*/
 		Category.findColorByPinyin(s.toString(), new findColorListener() {
 
 			@Override
@@ -251,9 +269,13 @@ public class SelectColorActivity extends BaseSelectActivity implements
 
 	@Override
 	protected void onNextClick() {
+		if(model == null){
+			Utils.tip(this, "请选择颜色");
+			return;
+		}
 		String color = inputView.getSearchInput().getText().toString();
 		ArrayList<SelectCategoryActivity.Model> list = new ArrayList<SelectCategoryActivity.Model>(models);
-		list.add(new SelectCategoryActivity.Model(color, color,SelectCategoryActivity.Model.TYPE_COLOR));
+		list.add(model);
 		Intent intent = new Intent(this,SelectLinkActivity.class);
 		Bundle bundle = getIntent().getExtras();
 		if(bundle == null){

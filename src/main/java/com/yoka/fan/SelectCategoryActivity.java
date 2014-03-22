@@ -8,6 +8,7 @@ import java.util.Map;
 import com.yoka.fan.utils.Category;
 import com.yoka.fan.utils.Category.Tag;
 import com.yoka.fan.utils.Category.findCatsListener;
+import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.SearchInput;
 
 import android.app.Activity;
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -44,7 +46,7 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.select_catetory_layout);
-		setNextEnable(false);
+//		setNextEnable(false);
 		inputView = (SearchInput) findViewById(R.id.search_input);
 		inputView.addTextChangedListener(this);
 		inputView.getSearchInput().setHint("选择分类");
@@ -82,13 +84,15 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 		gridView.setLayoutParams(params);
 	}
 	
+	private ListAdapter adapter;
+	
 	public void update(final List<ListModel> list){
 		runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				
-				listView.setAdapter(new ListAdapter(SelectCategoryActivity.this, list,inputView.getSearchInput()));
+				adapter = new ListAdapter(SelectCategoryActivity.this, list,inputView.getSearchInput());
+				listView.setAdapter(adapter);
 				
 			}
 		});
@@ -117,6 +121,7 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 		private String id;
 		private String name;
 		private int type;
+		private boolean selected = false;
 	
 		public Model(String id, String name, int type) {
 			this.id = id;
@@ -132,6 +137,12 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 		}
 		public int getType() {
 			return type;
+		}
+		public void setSelected(boolean selected) {
+			this.selected = selected;
+		}
+		public boolean isSelected() {
+			return selected;
 		}
 	}
 	
@@ -196,10 +207,17 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
+					if(SelectCategoryActivity.this.model != null){
+						SelectCategoryActivity.this.model.setSelected(false);
+					}
 					SelectCategoryActivity.this.model = model.list.get(position);
-					editText.setText("");
-					editText.append(SelectCategoryActivity.this.model.name);
-					setNextEnable(true);
+					SelectCategoryActivity.this.model.setSelected(true);
+					adapter.notifyDataSetChanged();
+					onNextClick();
+					
+//					editText.setText("");
+//					editText.append(SelectCategoryActivity.this.model.name);
+//					setNextEnable(true);
 					
 					
 				}
@@ -227,10 +245,19 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 		
 		private Context context;
 		
+		private boolean selected = true;
+		
 		public GridAdapter(Context context, List<Model> models) {
 			this.context = context;
 			this.models = models;
 		}
+		
+		public GridAdapter(Context context, List<Model> models,boolean selected) {
+			this.context = context;
+			this.models = models;
+			this.selected = selected;
+		}
+		
 
 		@Override
 		public int getCount() {
@@ -256,6 +283,11 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 			if(convertView == null){
 				convertView = LayoutInflater.from(context).inflate(R.layout.category_item,null);
 			}
+			if(model.selected && selected){
+				convertView.setBackgroundResource(R.drawable.category_item_bg_selected);
+			}else{
+				convertView.setBackgroundResource(R.drawable.category_item_bg);
+			}
 			((TextView)convertView).setText(model.name);
 			return convertView;
 		}
@@ -278,7 +310,7 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 
 	@Override
 	public void afterTextChanged(Editable s) {
-		setNextEnable(false);
+//		setNextEnable(false);
 		Category.findCatsByPinyin(s.toString(),new findCatsListener() {
 			
 			@Override
@@ -309,7 +341,10 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 
 	@Override
 	protected void onNextClick() {
-
+		if(model == null){
+			Utils.tip(this, "请选择分类");
+			return;
+		}
 		ArrayList<Model> models = new ArrayList<SelectCategoryActivity.Model>();
 		models.add(model);
 		Intent intent = new Intent(this,SelectBrandActivity.class);
