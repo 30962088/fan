@@ -1,6 +1,5 @@
 package com.yoka.fan;
 
-import java.io.File;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
@@ -18,7 +17,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -54,12 +52,13 @@ public class MainActivity extends SlidingFragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		instance = this;
-
-		if (savedInstanceState != null)
-			mContent = getSupportFragmentManager().getFragment(
-					savedInstanceState, "mContent");
-		if (mContent == null)
-			mContent = new HomeFragment();
+//		if (savedInstanceState != null)
+//			mContent = getSupportFragmentManager().getFragment(
+//					savedInstanceState, "mContent");
+//		if (mContent == null){
+//			mContent = new HomeFragment();
+//		}
+			
 		setContentView(R.layout.main_layout);
 		actionbarContainer = findViewById(R.id.base_actionbar_content);
 		mTitleView = (TextView) findViewById(R.id.actionbar_title);
@@ -69,8 +68,9 @@ public class MainActivity extends SlidingFragmentActivity implements
 		actionbarSetting.setOnClickListener(this);
 		initSlidingMenu();
 
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.content_frame, mContent).commit();
+//		getSupportFragmentManager().beginTransaction()
+//				.replace(R.id.content_frame, mContent).commit();
+		switchContent(new HomeFragment());
 
 	}
 
@@ -83,11 +83,11 @@ public class MainActivity extends SlidingFragmentActivity implements
 		// s.toCharArray();
 	}
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		getSupportFragmentManager().putFragment(outState, "mContent", mContent);
-	}
+//	@Override
+//	public void onSaveInstanceState(Bundle outState) {
+//		super.onSaveInstanceState(outState);
+//		getSupportFragmentManager().putFragment(outState, "mContent", mContent);
+//	}
 
 	private void initSlidingMenu() {
 		menuFragment = new SidingMenuFragment();

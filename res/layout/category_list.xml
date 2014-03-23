@@ -13,13 +13,14 @@
         android:gravity="center_vertical"
         android:text="标题"/>
     
-    <GridView 
+    <com.yoka.fan.utils.NonScrollableGridView 
         android:id="@+id/gridview"
         android:columnWidth="60dp"
         android:horizontalSpacing="5dp"
         android:verticalSpacing="5dp"
         android:numColumns="auto_fit"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></GridView>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"></com.yoka.fan.utils.NonScrollableGridView>
 
 </LinearLayout>

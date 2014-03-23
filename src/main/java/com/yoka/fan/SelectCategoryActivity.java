@@ -62,28 +62,7 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 		});
 		
 	}
-	
-	public static void setGridViewHeightBasedOnChildren(GridView gridView) {
-		BaseAdapter listAdapter = (BaseAdapter) gridView.getAdapter();
-		if (listAdapter == null) {
-			return;
-		}
-		int totalHeight = 0;
-		int count = listAdapter.getCount();
-		View listItem = listAdapter.getView(0, null, gridView);
-		listItem.measure(0, 0); // 计算子项View 的宽高
-		totalHeight = listItem.getMeasuredHeight(); // 统计所有子项的总高度
-		int yu = count % 4;
-		ViewGroup.LayoutParams params = gridView.getLayoutParams();
-		if (yu > 0) {
-			params.height = (count - yu) / 4 * (totalHeight + 10)
-					+ totalHeight;
-		} else {
-			params.height = count / 4 * totalHeight + (count / 4 - 1) * 10;
-		}
-		gridView.setLayoutParams(params);
-	}
-	
+
 	private ListAdapter adapter;
 	
 	public void update(final List<ListModel> list){
@@ -215,14 +194,9 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 					adapter.notifyDataSetChanged();
 					onNextClick();
 					
-//					editText.setText("");
-//					editText.append(SelectCategoryActivity.this.model.name);
-//					setNextEnable(true);
-					
 					
 				}
 			});
-			setGridViewHeightBasedOnChildren(holder.gridView);
 			return convertView;
 		}
 		
