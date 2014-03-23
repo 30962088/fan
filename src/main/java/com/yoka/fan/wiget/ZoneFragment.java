@@ -137,8 +137,15 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 
 			}
 		});
-		initView();
+		
 
+	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		initView();
 	}
 
 	private void initView() {
@@ -168,6 +175,8 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 		}).start();
 
 	}
+	
+	private boolean isInit = false;
 
 	private void initUserView(Result result) {
 		matchView.setText("" + result.getShow_count());
@@ -175,10 +184,14 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 		focusView.setText("" + result.getFollows());
 		photoView.setImageResource(R.drawable.photo_default);
 		imageLoader.displayImage(result.getHead_url(), photoView);
-		photoView.setOnClickListener(this);
-		initPage(result.getId());
-		getView().findViewById(R.id.content).setVisibility(View.VISIBLE);
-		getView().findViewById(R.id.loading).setVisibility(View.GONE);
+		if(!isInit){
+			photoView.setOnClickListener(this);
+			initPage(result.getId());
+			getView().findViewById(R.id.content).setVisibility(View.VISIBLE);
+			getView().findViewById(R.id.loading).setVisibility(View.GONE);
+			isInit = true;
+		}
+		
 	}
 
 	private void initPage(String target_id) {
@@ -275,9 +288,19 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 	}
 
 	private void onFollowClick() {
-
+		int i = Integer.parseInt(fansView.getText().toString());
+		
 		followBtn.setSelected(!followBtn.isSelected());
+		
+		if(followBtn.isSelected()){
+			i++;
+		}else{
+			i--;
+		}
+		fansView.setText(""+i);
+		
 		followBtn.setText(followBtn.isSelected() ? "已关注" : "关注");
+		final int j = i;
 		new AsyncTask<Void, Void, Request.Status>() {
 
 			@Override
@@ -304,6 +327,7 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 						Relation.removeFollow(user, target_id);
 					}
 				} else {
+					fansView.setText(""+(j-1));
 					followBtn.setSelected(!followBtn.isSelected());
 					followBtn.setText(followBtn.isSelected() ? "已关注" : "关注");
 				}
