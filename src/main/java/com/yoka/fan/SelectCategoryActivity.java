@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.yoka.fan.SelectMainActivity.Result;
 import com.yoka.fan.utils.Category;
 import com.yoka.fan.utils.Category.Tag;
 import com.yoka.fan.utils.Category.findCatsListener;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.AlertDialog;
 import com.yoka.fan.wiget.SearchInput;
 
 import android.app.Activity;
@@ -34,11 +36,14 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 	
 	public static final String PARAM_MODEL = "PARAM_MODEL";
 	
+	public static final String PARAM_SELECTED = "PARAM_SELECTED";
+	
 	private ListView listView;
 	
 	private SearchInput inputView;
 	
-
+	private Result selected;
+	
 	private Model model;
 	
 	@Override
@@ -47,6 +52,7 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.select_catetory_layout);
 //		setNextEnable(false);
+		selected = (Result) getIntent().getSerializableExtra(PARAM_SELECTED_RESULT);
 		inputView = (SearchInput) findViewById(R.id.search_input);
 		inputView.addTextChangedListener(this);
 		inputView.getSearchInput().setHint("选择分类");
@@ -72,6 +78,16 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 			public void run() {
 				adapter = new ListAdapter(SelectCategoryActivity.this, list,inputView.getSearchInput());
 				listView.setAdapter(adapter);
+				if(selected != null){
+					for(ListModel listModel:list){
+						for(Model model : listModel.list){
+							if(model.id.equals(selected.getLink().getType())){
+								selectModel(model);
+							}
+							
+						}
+					}
+				}
 				
 			}
 		});
@@ -136,6 +152,15 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 		
 	}
 	
+	private void selectModel(Model model){
+		if(SelectCategoryActivity.this.model != null){
+			SelectCategoryActivity.this.model.setSelected(false);
+		}
+		SelectCategoryActivity.this.model = model;
+		SelectCategoryActivity.this.model.setSelected(true);
+		adapter.notifyDataSetChanged();
+	}
+	
 	private class ListAdapter extends BaseAdapter{
 
 		private List<ListModel> list;
@@ -186,12 +211,7 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					if(SelectCategoryActivity.this.model != null){
-						SelectCategoryActivity.this.model.setSelected(false);
-					}
-					SelectCategoryActivity.this.model = model.list.get(position);
-					SelectCategoryActivity.this.model.setSelected(true);
-					adapter.notifyDataSetChanged();
+					selectModel(model.list.get(position));
 					onNextClick();
 					
 					
@@ -316,7 +336,7 @@ public class SelectCategoryActivity extends BaseSelectActivity implements TextWa
 	@Override
 	protected void onNextClick() {
 		if(model == null){
-			Utils.tip(this, "请选择分类");
+			AlertDialog.show(this, "请选择分类");
 			return;
 		}
 		ArrayList<Model> models = new ArrayList<SelectCategoryActivity.Model>();

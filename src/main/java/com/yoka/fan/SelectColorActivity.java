@@ -5,10 +5,12 @@ import java.util.List;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yoka.fan.SelectCategoryActivity.Model;
+import com.yoka.fan.SelectMainActivity.Result;
 import com.yoka.fan.utils.Category;
 import com.yoka.fan.utils.Category.Color;
 import com.yoka.fan.utils.Category.findColorListener;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.AlertDialog;
 import com.yoka.fan.wiget.SearchInput;
 
 import android.content.Context;
@@ -43,11 +45,25 @@ public class SelectColorActivity extends BaseSelectActivity implements
 	
 	private List<Model> list;
 	
+	private Result selected;
+	
+	
+	private void setSelected(Model model){
+		if(selectModel != null){
+			selectModel.setSelected(false);
+		}
+		selectModel = model;
+		String color = selectModel.name;
+		this.model = new SelectCategoryActivity.Model(color, color,SelectCategoryActivity.Model.TYPE_COLOR);
+		selectModel.setSelected(true);
+		adapter.notifyDataSetChanged();
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		selected = (Result) getIntent().getSerializableExtra(PARAM_SELECTED_RESULT);
 		setContentView(R.layout.select_color_layout);
 		inputView = (SearchInput) findViewById(R.id.search_input);
 		inputView.addTextChangedListener(this);
@@ -63,14 +79,8 @@ public class SelectColorActivity extends BaseSelectActivity implements
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if(selectModel != null){
-					selectModel.setSelected(false);
-				}
-				selectModel = list.get(position);
-				String color = selectModel.name;
-				model = new SelectCategoryActivity.Model(color, color,SelectCategoryActivity.Model.TYPE_COLOR);
-				selectModel.setSelected(true);
-				adapter.notifyDataSetChanged();
+				setSelected(list.get(position));
+				
 //				inputView.getSearchInput().setText("");
 //				inputView.getSearchInput().append(list.get(position).name);
 				onNextClick();
@@ -108,7 +118,13 @@ public class SelectColorActivity extends BaseSelectActivity implements
 			public void run() {
 				adapter = new GridAdapter(SelectColorActivity.this,list);
 				gridView.setAdapter(adapter);
-
+				if(selected != null){
+					for(Model model : list){
+						if(model.name.equals(selected.getLink().getColor())){
+							setSelected(model);
+						}
+					}
+				}
 			}
 		});
 	}
@@ -270,7 +286,7 @@ public class SelectColorActivity extends BaseSelectActivity implements
 	@Override
 	protected void onNextClick() {
 		if(model == null){
-			Utils.tip(this, "请选择颜色");
+			AlertDialog.show(this, "请选择颜色");
 			return;
 		}
 		String color = inputView.getSearchInput().getText().toString();

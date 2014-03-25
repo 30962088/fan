@@ -7,7 +7,7 @@
     <TextView 
         android:id="@+id/textview"
         android:layout_width="match_parent"
-        android:layout_height="27dp"
+        android:layout_height="37dp"
         android:textSize="12sp"
         android:textColor="#707070"
         android:gravity="center_vertical"
@@ -16,11 +16,11 @@
     <com.yoka.fan.utils.NonScrollableGridView 
         android:id="@+id/gridview"
         android:columnWidth="60dp"
-        android:horizontalSpacing="5dp"
-        android:verticalSpacing="5dp"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="10dp"
         android:numColumns="auto_fit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="5dp"></com.yoka.fan.utils.NonScrollableGridView>
+        android:layout_marginBottom="10dp"></com.yoka.fan.utils.NonScrollableGridView>
 
 </LinearLayout>

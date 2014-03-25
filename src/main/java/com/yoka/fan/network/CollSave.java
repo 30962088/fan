@@ -62,6 +62,29 @@ public class CollSave extends Request{
 		public float getLeftFloat(){
 			return Float.parseFloat(left.substring(0,left.length()-2))/100;
 		}
+		public void setBrand(String brand) {
+			this.brand = brand;
+		}
+		public void setColor(String color) {
+			this.color = color;
+		}
+		public void setLeft(String left) {
+			this.left = left;
+		}
+		public void setTop(String top) {
+			this.top = top;
+		}
+		public void setType(String type) {
+			this.type = type;
+		}
+		public void setPrice(float price) {
+			this.price = price;
+		}
+		public void setUrl(String url) {
+			this.url = url;
+		}
+		
+		
 		
 		
 	}

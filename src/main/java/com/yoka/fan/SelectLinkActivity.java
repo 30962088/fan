@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.yoka.fan.SelectCategoryActivity.Model;
+import com.yoka.fan.SelectMainActivity.Result;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.AlertDialog;
 
 
 
@@ -30,16 +32,26 @@ public class SelectLinkActivity extends BaseSelectActivity implements TextWatche
 	private EditText priceView;
 
 	private List<SelectCategoryActivity.Model> models;
+	
+	private Result selected;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		selected = (Result) getIntent().getSerializableExtra(PARAM_SELECTED_RESULT);
 		setContentView(R.layout.select_link_layout);
 		linkView = (EditText) findViewById(R.id.link_input);
 		linkView.addTextChangedListener(this);
 		priceView = (EditText) findViewById(R.id.price_input);
 		priceView.addTextChangedListener(this);
+		if(selected != null){
+			linkView.setText(selected.getLink().getUrl());
+			if(selected.getLink().getPrice()>0){
+				priceView.setText(""+selected.getLink().getPrice());
+			}
+			
+		}
 		models = (List<com.yoka.fan.SelectCategoryActivity.Model>) getIntent()
 				.getSerializableExtra(PARAM_SELECTED_LIST);
 		((GridView) findViewById(R.id.select_list))
@@ -113,14 +125,14 @@ public class SelectLinkActivity extends BaseSelectActivity implements TextWatche
 		String url = linkView.getText().toString();
 		String price = priceView.getText().toString();
 		if(!TextUtils.isEmpty(url) && !URLUtil.isValidUrl(url)){
-			Utils.tip(this, "链接格式错误");
+			AlertDialog.show(this, "链接格式错误");
 			return;
 		}
 		if(!TextUtils.isEmpty(price)){
 			try{
 				Float.parseFloat(price);
 			}catch(NumberFormatException e){
-				Utils.tip(this, "请输入正确的价格");
+				AlertDialog.show(this, "请输入正确的价格");
 				return;
 			}
 			

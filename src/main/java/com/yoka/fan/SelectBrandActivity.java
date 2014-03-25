@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.yoka.fan.SelectCategoryActivity.Model;
+import com.yoka.fan.SelectMainActivity.Result;
 import com.yoka.fan.utils.Category;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.utils.Category.Brand;
+import com.yoka.fan.wiget.AlertDialog;
 import com.yoka.fan.wiget.SearchInput;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,14 +38,29 @@ public class SelectBrandActivity extends BaseSelectActivity implements TextWatch
 	
 	private List<Model> list;
 	
+	private Result selected;
+	
 	private ArrayList<Model> selectedList;
+	
+	
+	private void setSelect(Model model){
+		if(this.model != null){
+			this.model.setSelected(false);
+		}
+		this.model = model;
+		if(this.model != null){
+			this.model.setSelected(true);
+		}
+		
+		adapter.notifyDataSetChanged();
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.select_brand_layout);
-		
+		selected = (Result) getIntent().getSerializableExtra(PARAM_SELECTED_RESULT);
 		inputView = (SearchInput) findViewById(R.id.search_input);
 		inputView.addTextChangedListener(this);
 		inputView.getSearchInput().setHint("选择品牌");
@@ -61,12 +79,7 @@ public class SelectBrandActivity extends BaseSelectActivity implements TextWatch
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if(model != null){
-					model.setSelected(false);
-				}
-				model = list.get(position);
-				model.setSelected(true);
-				adapter.notifyDataSetChanged();
+				setSelect(list.get(position));
 				onNextClick();
 //				inputView.getSearchInput().setText("");
 //				inputView.getSearchInput().append(model.getName());
@@ -112,7 +125,13 @@ public class SelectBrandActivity extends BaseSelectActivity implements TextWatch
 			public void run() {
 				adapter = new ListAdapter(SelectBrandActivity.this, list);
 				listview.setAdapter(adapter);
-				
+				if(selected != null){
+					for(Model model : list){
+						if(model.getName().equals(selected.getLink().getBrand())){
+							setSelect(model);
+						}
+					}
+				}
 			}
 		});
 	}
@@ -176,13 +195,20 @@ public class SelectBrandActivity extends BaseSelectActivity implements TextWatch
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void afterTextChanged(Editable s) {
 //		setNextEnable(false);
+		if(!TextUtils.isEmpty(s.toString())){
+			model = new Model(s.toString(), s.toString(), Model.TYPE_BRAND);
+		}else{
+			model = null;
+		}
+		setSelect(model);
+		
 		Category.findBrandByPinyin(s.toString(),new Category.findBrandListener() {
 			
 			@Override
@@ -215,7 +241,7 @@ public class SelectBrandActivity extends BaseSelectActivity implements TextWatch
 	@Override
 	protected void onNextClick() {
 		if(model == null){
-			Utils.tip(this, "请选择品牌");
+			AlertDialog.show(this, "请选择品牌");
 			return;
 		}
 		ArrayList<Model> list = new ArrayList<SelectCategoryActivity.Model>(selectedList);

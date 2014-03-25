@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" 
+    android:background="#00000000">
+    
+    
+    <LinearLayout 
+        android:background="@drawable/alert_bg"
+        android:layout_centerInParent="true"
+        android:id="@+id/popup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="13dp"
+        android:paddingRight="13dp"
+        android:orientation="vertical">
+        
+        <ImageView 
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:scaleType="center"
+            android:src="@drawable/alert"/>
+        
+        <TextView 
+            android:id="@+id/alert_text"
+            android:textColor="#fff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:text="请先选择分类"
+            android:layout_marginBottom="15dp"
+            android:minWidth="100dp"/>
+        
+    </LinearLayout>
+
+</RelativeLayout>

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -59,6 +60,7 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 	}
 	
 	public static class Result implements Serializable{
+		private String id = UUID.randomUUID().toString();
 		private Link link;
 		private String name;
 		public Result(Link link,String name) {
@@ -71,6 +73,43 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 		public Link getLink() {
 			return link;
 		}
+		public String getId() {
+			return id;
+		}
+		
+		public static void update(List<Model> list,Result result){
+			String type_en = null,color = null,url = null,brand = null,type = null;
+			float price = 0;
+			for(Model model : list){
+				switch (model.getType()) {
+				case Model.TYPE_BRAND:
+					brand = model.getName();
+					break;
+				case Model.TYPE_COLOR:
+					color = model.getName();
+					break;
+				case Model.TYPE_LINK:
+					url = model.getName();
+					break;
+				case Model.TYPE_PRICE:
+					price = Float.parseFloat(model.getName());
+					break;
+				case Model.TYPE_TAG:
+					type = model.getName();
+					type_en = model.getId();
+					break;
+				default:
+					break;
+				}
+			}
+			result.link.setBrand(brand);
+			result.link.setColor(color);
+			result.link.setType(type_en);
+			result.link.setPrice(price);
+			result.link.setUrl(url);
+			result.name = brand+" "+type;
+		}
+		
 		public static Result toResult(List<Model> list,float left,float top){
 			String type_en = null,color = null,url = null,brand = null,type = null;
 			float price = 0;
@@ -123,6 +162,7 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 		imageLoader = Utils.getImageLoader(this);
 		setContentView(R.layout.select_main_layout);
 		linkedView = (LinkedView) findViewById(R.id.linked_view);
+		linkedView.setMove(true);
 		linkedView.setOnTagClickListener(this);
 		linkedView.setClosed(true);
 		countView = (TextView) findViewById(R.id.count);
@@ -200,10 +240,29 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		if(ACTION_COMPLETE.equals(intent.getAction())){
+			
+			Result result = (Result) intent.getSerializableExtra(BaseSelectActivity.PARAM_SELECTED_RESULT);
 			List<Model> list = (List<Model>) intent.getSerializableExtra(BaseSelectActivity.PARAM_SELECTED_LIST);
-			float top = intent.getFloatExtra(PARAM_TOP, 0);
-			float left = intent.getFloatExtra(PARAM_LEFT, 0);
-			results.add(Result.toResult(list,left,top));
+			if(result != null){
+				Result.update(list, result);
+				for(Iterator<Result> itor = results.iterator();itor.hasNext();){
+					Result r = itor.next();
+					if(r.id.equals(result.id)){
+						itor.remove();
+						break;
+					}
+				}
+				results.add(result);
+				
+				
+			}else{
+				
+				float top = intent.getFloatExtra(PARAM_TOP, 0);
+				float left = intent.getFloatExtra(PARAM_LEFT, 0);
+				results.add(Result.toResult(list,left,top));
+			}
+			
+			
 			load();
 		}
 	}
@@ -234,7 +293,31 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 
 	@Override
 	public void onClick(com.yoka.fan.wiget.LinkModel.Link link) {
-		// TODO Auto-generated method stub
+		
+		for(Iterator<Result> itor = results.iterator();itor.hasNext();){
+			Result result = itor.next();
+			if(result.name == link.getName()){
+				Intent intent = new Intent(SelectMainActivity.this,SelectCategoryActivity.class);
+				intent.putExtra(SelectBrandActivity.PARAM_IMG_PATH, url);
+				intent.putExtra(SelectBrandActivity.PARAM_SELECTED_RESULT, result);
+				startActivity(intent);
+				break;
+			}
+		}
+		
+	}
+
+
+
+	@Override
+	public void onMove(com.yoka.fan.wiget.LinkModel.Link link) {
+		for(Result result : results){
+			if(result.name.equals(link.getName())){
+				result.link.setLeft(link.getLeft()*100+"%");
+				result.link.setTop(link.getTop()*100+"%");
+				break;
+			}
+		}
 		
 	}
 	

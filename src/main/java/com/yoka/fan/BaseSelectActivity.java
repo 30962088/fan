@@ -24,6 +24,8 @@ public abstract class BaseSelectActivity extends FragmentActivity{
 	
 	public static final String PARAM_SELECTED_LIST = "PARAM_SELECTED_LIST";
 	
+	public static final String PARAM_SELECTED_RESULT = "PARAM_SELECTED_RESULT";
+	
 	
 	@Override
 	protected void onCreate(Bundle bundle) {

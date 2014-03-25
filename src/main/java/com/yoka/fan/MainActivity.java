@@ -201,7 +201,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	}
 
 	private void onSelectSuccess(Uri uri) {
-		uri = SelectPicActivity.crop(BitmapFactory.decodeFile(uri.getPath()));
+		uri = SelectPicActivity.crop(Utils.getBitmap(uri.getPath()));
 		Intent intent = new Intent(this, SelectMainActivity.class);
 		intent.setData(uri);
 		startActivityForResult(intent, ACTION_REQUEST_SELECTION);

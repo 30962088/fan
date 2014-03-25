@@ -48,6 +48,8 @@ public class LinkedView extends RelativeLayout {
 	private RelativeLayout tagContainer;
 
 	private boolean closed = false;
+	
+	private boolean move = false;
 
 	public void setClosed(boolean closed) {
 		this.closed = closed;
@@ -61,6 +63,9 @@ public class LinkedView extends RelativeLayout {
 		public void onClose(LinkModel.Link link);
 
 		public void onClick(LinkModel.Link link);
+		
+		public void onMove(LinkModel.Link link);
+		
 	}
 
 	private onImageClickListener onImageClickListener;
@@ -89,6 +94,10 @@ public class LinkedView extends RelativeLayout {
 	public LinkedView(Context context) {
 		super(context);
 		init(context);
+	}
+	
+	public void setMove(boolean move) {
+		this.move = move;
 	}
 
 	private void init(final Context context) {
@@ -129,8 +138,10 @@ public class LinkedView extends RelativeLayout {
 			public void ondraw(float[] bounds) {
 				if (linkModel.getLinkList() != null) {
 					for (Link link : linkModel.getLinkList()) {
+						TagView tagView = new TagView(context, link, bounds);
+						tagView.setMove(move);
 						tagContainer
-								.addView(new TagView(context, link, bounds));
+								.addView(tagView);
 					}
 					// tagContainer.setVisibility(View.VISIBLE);
 				}
@@ -179,34 +190,22 @@ public class LinkedView extends RelativeLayout {
 		private float[] bounds;
 		
 		private int offset;
+		
+		private boolean move = false;
 
 		public TagView(Context context, final Link link, final float[] bounds) {
 			super(context);
 			if(closed){
 				offset = (int) getResources().getDimension(R.dimen.tag_close);
 			}
-			setLayoutParams(new android.view.ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+			
 			setTextColor(Color.WHITE);
 			setGravity(Gravity.CENTER);
 			setVisibility(View.INVISIBLE);
 			setSingleLine(true);
 			setTextSize(TypedValue.COMPLEX_UNIT_SP,10);
 			setEllipsize(TruncateAt.END);
-			if (link.getLeft() < 0.5) {
-				if (closed) {
-					setBackgroundResource(R.drawable.tag_close);
-				} else {
-					setBackgroundResource(R.drawable.tag);
-				}
-
-			} else {
-				if (closed) {
-					setBackgroundResource(R.drawable.tag_right_close);
-				} else {
-					setBackgroundResource(R.drawable.tag_right);
-				}
-
-			}
+			
 
 			setText(link.getName());
 
@@ -221,54 +220,116 @@ public class LinkedView extends RelativeLayout {
 							public void onGlobalLayout() {
 								getViewTreeObserver()
 										.removeGlobalOnLayoutListener(this);
-								int w = getWidth();
-								int h = getHeight();
-								int width = w, height = h;
-								RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) getLayoutParams();
-
-								int t = (int) (bounds[1]
-										+ (bounds[3] * link.getTop()) - height / 2);
-
-								int l = (int) (bounds[0] + (bounds[2] * link
-										.getLeft()));
-
-								if (link.getLeft() < 0.5) {
-									l -= width;
-									if (l < 0) {
-										setWidth(Math.max(getWidth() + l, 0));
-										l = 0;
-									}
-								}
-
-								params.setMargins(l, t, 0, 0);
-
-								setLayoutParams(params);
-
-								postDelayed(new Runnable() {
-
-									@Override
-									public void run() {
-										setVisibility(View.VISIBLE);
-
-									}
-								}, 50);
+								draw();
 
 							}
 						});
 			}
 
 		}
+		
+		public void setMove(boolean move) {
+			this.move = move;
+		}
+		
+		private void draw(){
+			if(move){
+				if (closed) {
+					setBackgroundResource(R.drawable.tag_right_close);
+				} else {
+					setBackgroundResource(R.drawable.tag_right);
+				}
+			}else{
+				if (link.getLeft() < 0.5) {
+					if (closed) {
+						setBackgroundResource(R.drawable.tag_close);
+					} else {
+						setBackgroundResource(R.drawable.tag);
+					}
 
-		@Override
-		public boolean onTouchEvent(MotionEvent event) {
-			if(event.getAction() == MotionEvent.ACTION_UP && onTagClickListener != null){
-				if(closed){
-					if( link.getLeft() < 0.5 && event.getX()<offset || link.getLeft() >= 0.5 && event.getX()>getWidth()-offset){
-						onTagClickListener.onClose(link);
-						return true;
+				} else {
+					if (closed) {
+						setBackgroundResource(R.drawable.tag_right_close);
+					} else {
+						setBackgroundResource(R.drawable.tag_right);
+					}
+
+				}
+			}
+			
+			setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+			measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED); 
+			
+			
+			int w = getMeasuredWidth();
+			int h = getMeasuredHeight();
+			int width = w, height = h;
+			RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) getLayoutParams();
+
+			int t = (int) (bounds[1]
+					+ (bounds[3] * link.getTop()) - height / 2);
+
+			int l = (int) (bounds[0] + (bounds[2] * link
+					.getLeft()));
+			
+			if(!move){
+				if (link.getLeft() < 0.5) {
+					l -= width;
+					if (l < 0) {
+						params.width = Math.max(getWidth() + l, 0);
+						l = 0;
 					}
 				}
-				onTagClickListener.onClick(link);
+			}
+			
+
+			params.setMargins(l, t, 0, 0);
+
+			setLayoutParams(params);
+
+			
+			setVisibility(View.VISIBLE);
+		}
+		
+		private float[] lastCoor;
+
+		private int[] lastMargin;
+		
+		private boolean isMove = false;
+		
+		@Override
+		public boolean onTouchEvent(MotionEvent event) {
+			
+			LayoutParams params = ((RelativeLayout.LayoutParams)getLayoutParams());
+			lastMargin = new int[]{params.leftMargin,params.topMargin};
+			if(event.getAction() == MotionEvent.ACTION_DOWN){
+				isMove = false;
+				lastCoor = new float[]{event.getX(),event.getY()};
+			}else if(event.getAction() == MotionEvent.ACTION_MOVE){
+				if(move){
+					isMove = true;
+					float deltaX = event.getX()-lastCoor[0],
+							  deltaY = event.getY()-lastCoor[1];
+					link.setLeft((lastMargin[0]+deltaX- bounds[0])/bounds[2]);
+					link.setTop((lastMargin[1]+deltaY-bounds[1]+getHeight()/2)/bounds[3]);
+					draw();
+				}
+			}if(event.getAction() == MotionEvent.ACTION_UP){
+				if(!isMove && onTagClickListener != null){
+				
+					if(closed){
+						if( link.getLeft() < 0.5 && event.getX()<offset || link.getLeft() >= 0.5 && event.getX()>getWidth()-offset){
+							onTagClickListener.onClose(link);
+							return true;
+						}
+					}
+					onTagClickListener.onClick(link);
+					
+				}else if(onTagClickListener != null){
+					onTagClickListener.onMove(link);
+				}
+				
+				
 			}
 			return true;
 		}
@@ -301,30 +362,7 @@ public class LinkedView extends RelativeLayout {
 			int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
 			int parentHeight = parentWidth / 3 * 4;
 			this.setMeasuredDimension(parentWidth, parentHeight);
-			// this.setLayoutParams(new
-			// *ParentLayoutType*.LayoutParams(parentWidth/2,parentHeight));
 			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-			// final Drawable d = this.getDrawable();
-			//
-			// int minHeight = DisplayUtils.Dp2Px(getContext(), 220);
-			//
-			// if (d != null) {
-			// // ceil not round - avoid thin vertical gaps along the
-			// // left/right edges
-			// final int width = MeasureSpec.getSize(widthMeasureSpec);
-			// int height = (int) Math.ceil(width
-			// * (float) d.getIntrinsicHeight()
-			// / d.getIntrinsicWidth());
-			// if(height < minHeight){
-			// height = minHeight;
-			// }
-			// this.setMeasuredDimension(width, height);
-			// } else {
-			// if(heightMeasureSpec < minHeight){
-			// heightMeasureSpec = minHeight;
-			// }
-			// super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-			// }
 		}
 
 		private void init() {

@@ -135,6 +135,12 @@ public class CommonListAdapter extends BaseAdapter  {
 //				new BuyPopupWindow(context, model.getId());
 				
 			}
+
+			@Override
+			public void onMove(Link link) {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 		holder.mPhotoView.setImageBitmap(null);
 

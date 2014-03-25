@@ -129,6 +129,14 @@ public class LinkModel{
 			return img;
 		}
 		
+		public void setTop(float top) {
+			this.top = top;
+		}
+		
+		public void setLeft(float left) {
+			this.left = left;
+		}
+		
 		public GoodsItem toGoodsItem(){
 			String text = "去购买>";
 			if(!UrlValidator.getInstance().isValid(url)){

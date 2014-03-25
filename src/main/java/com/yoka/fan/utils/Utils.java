@@ -1,6 +1,7 @@
 package com.yoka.fan.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -13,8 +14,11 @@ import java.util.regex.Pattern;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -77,9 +81,10 @@ public class Utils {
 	public synchronized static ImageLoader getImageLoader(Context context) {
 		if (imageLoader == null) {
 			DisplayImageOptions options = new DisplayImageOptions.Builder()
-			.cacheInMemory(true).cacheOnDisc(true).build();
+					.cacheInMemory(true).cacheOnDisc(true).build();
 			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-					context).defaultDisplayImageOptions(options).memoryCacheSizePercentage(33).build();
+					context).defaultDisplayImageOptions(options)
+					.memoryCacheSizePercentage(33).build();
 			imageLoader = ImageLoader.getInstance();
 			imageLoader.init(config);
 		}
@@ -234,24 +239,76 @@ public class Utils {
 		a.setDuration(200);
 		v.startAnimation(a);
 	}
-	
-	public static boolean isValidURL(String url) {  
 
-	    URL u = null;
+	public static boolean isValidURL(String url) {
 
-	    try {  
-	        u = new URL(url);  
-	    } catch (MalformedURLException e) {  
-	        return false;  
-	    }
+		URL u = null;
 
-	    try {  
-	        u.toURI();  
-	    } catch (URISyntaxException e) {  
-	        return false;  
-	    }  
+		try {
+			u = new URL(url);
+		} catch (MalformedURLException e) {
+			return false;
+		}
 
-	    return true;  
-	} 
+		try {
+			u.toURI();
+		} catch (URISyntaxException e) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private static final String TAG = "zzm";
+
+	public static Bitmap getBitmap(String path) {
+
+		final int IMAGE_MAX_SIZE = 600000; // 1.2MP
+
+		// Decode image size
+		BitmapFactory.Options o = new BitmapFactory.Options();
+		o.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(path, o);
+		// BitmapFactory.decodeStream(in, null, o);
+
+		int scale = 1;
+		while ((o.outWidth * o.outHeight) * (1 / Math.pow(scale, 2)) > IMAGE_MAX_SIZE) {
+			scale++;
+		}
+		Log.d(TAG, "scale = " + scale + ", orig-width: " + o.outWidth
+				+ ", orig-height: " + o.outHeight);
+
+		Bitmap b = null;
+
+		if (scale > 1) {
+			scale--;
+			// scale to max possible inSampleSize that still yields an image
+			// larger than target
+			o = new BitmapFactory.Options();
+			o.inSampleSize = scale;
+			b = BitmapFactory.decodeFile(path, o);
+
+			// resize to desired dimensions
+			int height = b.getHeight();
+			int width = b.getWidth();
+			Log.d(TAG, "1th scale operation dimenions - width: " + width
+					+ ", height: " + height);
+
+			double y = Math.sqrt(IMAGE_MAX_SIZE / (((double) width) / height));
+			double x = (y / height) * width;
+
+			Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, (int) x,
+					(int) y, true);
+			b.recycle();
+			b = scaledBitmap;
+
+			System.gc();
+		} else {
+			b = BitmapFactory.decodeFile(path);
+		}
+
+		return b;
+
+	}
 
 }

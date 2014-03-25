@@ -18,6 +18,7 @@ import com.yoka.fan.network.Request.Status;
 import com.yoka.fan.utils.DisplayUtils;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.AlertDialog;
 import com.yoka.fan.wiget.LoadingPopup;
 
 import android.app.Activity;
@@ -139,7 +140,7 @@ public class SelectConfirmActivity extends Activity implements OnClickListener{
 			return;
 		}
 		if(desc == null || desc.length() <5){
-			Utils.tip(this, "描述不能少于5个字哦:)");
+			AlertDialog.show(this, "描述不能少于5个字哦:)");
 			return;
 		}
 		final Map<String, Link> link_goods = new HashMap<String, CollSave.Link>();

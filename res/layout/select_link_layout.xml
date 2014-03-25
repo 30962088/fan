@@ -52,9 +52,9 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:columnWidth="60dp"
-        android:horizontalSpacing="5dp"
+        android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"
-        android:verticalSpacing="5dp" >
+        android:verticalSpacing="10dp" >
     </GridView>
 
 </LinearLayout>
