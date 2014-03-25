@@ -15,7 +15,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" android:launchMode="singleTask" >
+        <activity android:name=".MainActivity" android:launchMode="singleTask" 
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,55 +24,46 @@
         </activity>
         
         <activity 
-            android:name=".LoginActivity">
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         
         <activity 
-            android:name=".CrashActivity"></activity>
+            android:name=".CrashActivity"
+            android:screenOrientation="portrait"></activity>
         
         <activity 
-            android:name=".CommentActivity"></activity>
+            android:name=".CommentActivity"
+            android:screenOrientation="portrait"></activity>
         
         <activity 
-            android:name=".RegisterActivity"></activity>
+            android:name=".RegisterActivity"
+            android:screenOrientation="portrait"></activity>
         
         <activity 
-            android:name=".TagActivity"></activity>
+            android:name=".TagActivity"
+            android:screenOrientation="portrait"></activity>
         
         <activity 
-            android:name=".WebViewActivity"></activity>
+            android:name=".WebViewActivity"
+            android:screenOrientation="portrait"></activity>
         
         <activity 
-            android:name=".ZoneActivity"></activity>
+            android:name=".ZoneActivity"
+            android:screenOrientation="portrait"></activity>
         
         
         <activity 
-            android:name=".FansListActivity">
+            android:name=".FansListActivity"
+            android:screenOrientation="portrait">
             
         </activity>
         <activity 
-            android:name=".SelectCategoryActivity" android:windowSoftInputMode="adjustPan">
-            
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-            
-        </activity>
-        
-        <activity 
-            android:name=".SelectBrandActivity" android:windowSoftInputMode="adjustPan">
-            
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-            
-        </activity>
-        
-        <activity 
-            android:name=".SelectColorActivity" android:windowSoftInputMode="adjustPan">
+            android:name=".SelectCategoryActivity" android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -80,7 +72,8 @@
         </activity>
         
         <activity 
-            android:name=".SelectLinkActivity" android:windowSoftInputMode="adjustPan">
+            android:name=".SelectBrandActivity" android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -89,7 +82,8 @@
         </activity>
         
         <activity 
-            android:name=".SelectMainActivity">
+            android:name=".SelectColorActivity" android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -98,7 +92,8 @@
         </activity>
         
         <activity 
-            android:name=".SelectConfirmActivity">
+            android:name=".SelectLinkActivity" android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -107,12 +102,8 @@
         </activity>
         
         <activity 
-            android:name=".ModifyActivity"></activity>
-        
-        <activity 
-            android:name=".DragRectActivity"></activity>
-        <activity 
-            android:name=".RecommandListActivity">
+            android:name=".SelectMainActivity"
+            android:screenOrientation="portrait">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -121,7 +112,8 @@
         </activity>
         
         <activity 
-            android:name=".SelectPicActivity">
+            android:name=".SelectConfirmActivity"
+            android:screenOrientation="portrait">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -130,7 +122,35 @@
         </activity>
         
         <activity 
-            android:name=".TicklingActivity">
+            android:name=".ModifyActivity"
+            android:screenOrientation="portrait"></activity>
+        
+        <activity 
+            android:name=".DragRectActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity 
+            android:name=".RecommandListActivity"
+            android:screenOrientation="portrait">
+            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+            
+        </activity>
+        
+        <activity 
+            android:name=".SelectPicActivity"
+            android:screenOrientation="portrait">
+            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+            
+        </activity>
+        
+        <activity 
+            android:name=".TicklingActivity"
+            android:screenOrientation="portrait">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -144,6 +164,7 @@
         
         <activity
             android:name="com.tencent.tauth.AuthActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask"
             android:noHistory="true" >
             <intent-filter>
@@ -160,30 +181,40 @@
             android:screenOrientation="portrait" />
         
         <!-- 授权认证 -->
-        <activity android:name="com.sina.weibo.sdk.demo.WBAuthActivity" />
-        <activity android:name="com.sina.weibo.sdk.demo.WBAuthCodeActivity" />
-        <activity android:name="com.sina.weibo.sdk.demo.WBShareMainActivity" />
+        <activity android:name="com.sina.weibo.sdk.demo.WBAuthActivity" 
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.sina.weibo.sdk.demo.WBAuthCodeActivity" 
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.sina.weibo.sdk.demo.WBShareMainActivity" 
+            android:screenOrientation="portrait"/>
         
-        <activity android:name="com.tencent.weibo.sdk.android.component.Authorize" >
+        <activity android:name="com.tencent.weibo.sdk.android.component.Authorize" 
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name="com.tencent.weibo.sdk.android.component.GeneralDataShowActivity" >
+        <activity android:name="com.tencent.weibo.sdk.android.component.GeneralDataShowActivity" 
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name="com.tencent.weibo.sdk.android.component.ReAddActivity" >
+        <activity android:name="com.tencent.weibo.sdk.android.component.ReAddActivity" 
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.tencent.weibo.sdk.android.component.PublishActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name="com.tencent.weibo.sdk.android.component.GeneralInterfaceActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name="com.tencent.weibo.sdk.android.component.ConversationActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name="com.tencent.weibo.sdk.android.component.FriendActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
     </application>

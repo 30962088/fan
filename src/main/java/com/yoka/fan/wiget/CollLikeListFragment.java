@@ -37,7 +37,7 @@ public class CollLikeListFragment extends CommonListFragment{
 		CollLike request = new CollLike(offset, limit, user_id, target_id, access_token);
 		request.request();
 		List<ListItemData> list = request.getListData();
-		if(list != null && TextUtils.equals(user_id, User.readUser().id)){
+		if(list != null && TextUtils.equals(target_id, User.readUser().id)){
 			for(ListItemData data:list){
 				data.stared = true;
 			}
