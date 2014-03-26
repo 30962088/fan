@@ -318,7 +318,7 @@ public class LinkedView extends RelativeLayout {
 				if(!isMove && onTagClickListener != null){
 				
 					if(closed){
-						if( link.getLeft() < 0.5 && event.getX()<offset || link.getLeft() >= 0.5 && event.getX()>getWidth()-offset){
+						if( event.getX()>getWidth()-offset){
 							onTagClickListener.onClose(link);
 							return true;
 						}

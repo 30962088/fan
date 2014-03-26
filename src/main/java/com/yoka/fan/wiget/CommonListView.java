@@ -105,7 +105,7 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 	protected abstract LoadResult load(int offset,int limit);
 	
 	
-
+	private Status status;
 	
 	private int offset;
 	
@@ -113,8 +113,13 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 	public boolean onLoad(int offset,int limit) {
 		this.offset = offset;
 		LoadResult loadResult = load(offset,limit);
-		if(loadResult.getStatus() != Status.SUCCESS){
+		status = loadResult.getStatus();
+		if(status != Status.SUCCESS){
+			if(list.size() == 0){
+				return false;
+			}
 			return true;
+			
 		}
 		List<ListItemData> result = loadResult.list;
 		if(result == null ){
@@ -136,7 +141,7 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 	
 	@Override
 	public void onLoadSuccess() {
-		if(offset == 0 && list.size() == 0){
+		if(status == Status.SUCCESS && offset == 0 && list.size() == 0){
 			setBackgroundDrawable(writeOnDrawable(getEmptyTip()));
 		}else{
 			setBackgroundDrawable(null);

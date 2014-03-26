@@ -36,6 +36,7 @@ import com.google.gson.JsonObject;
 import com.yoka.fan.App;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
+import com.yoka.fan.wiget.AlertDialog;
 
 public abstract class Request implements Response{
 
@@ -70,7 +71,7 @@ public abstract class Request implements Response{
 	
 	public void request(){
 		if(!Utils.isMobileNetworkAvailable(App.getInstance())){
-			Utils.tip(App.getInstance(), "网络未连接");
+			AlertDialog.show(App.getInstance(), "网络未连接");
 			return;
 		}
 		try{
@@ -155,7 +156,7 @@ public abstract class Request implements Response{
 			User.saveUser(null);
 		}
 		if(ArrayUtils.indexOf(new int[]{CODE_NO_DATA}, code) == -1 ){
-			Utils.tip(App.getInstance(), msg);
+			AlertDialog.show(App.getInstance(), msg);
 		}
 		onResultError(code, msg);
 		onError(code,msg);
@@ -165,7 +166,7 @@ public abstract class Request implements Response{
 		String msg = "";
 		if(code == 500){
 			msg = "服务器内部错误";
-			Utils.tip(App.getInstance(), msg);
+			AlertDialog.show(App.getInstance(), msg);
 		}
 		onServerError(code,msg);
 		onError(code,msg);

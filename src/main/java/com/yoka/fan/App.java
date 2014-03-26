@@ -62,6 +62,7 @@ public class App extends Application{
 
 		@Override
 		public void uncaughtException(Thread thread, Throwable e) {
+			System.err.println(e);
 			StackTraceElement[] arr = e.getStackTrace();
 	        final StringBuffer report = new StringBuffer(e.toString());
 	        final String lineSeperator = "-------------------------------\n\n";
