@@ -82,11 +82,13 @@ public abstract class Request implements Response{
 			if(fileMap != null){
 				MultipartEntityBuilder builder = MultipartEntityBuilder.create();        
 			    builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-			    for(String filename:fileMap.keySet()){
-			    	builder.addPart(filename, new FileBody(fileMap.get(filename)));
-			    }
+			    
 			    for(NameValuePair param : fillParams()){
 			    	builder.addTextBody(param.getName(), param.getValue(),ContentType.create("text/plain", MIME.UTF8_CHARSET));
+			    }
+			    for(String filename:fileMap.keySet()){
+//			    	builder.addPart(filename, new FileBody(fileMap.get(filename)));
+			    	builder.addBinaryBody(filename, fileMap.get(filename), ContentType.create("image/jpeg"), "uploadimg");
 			    }
 			    requsetEntity = builder.build();
 			}else{
@@ -129,6 +131,8 @@ public abstract class Request implements Response{
 		
 		
 	}
+	
+	
 	
 	protected Map<String, File> fillFiles(){
 		return null;

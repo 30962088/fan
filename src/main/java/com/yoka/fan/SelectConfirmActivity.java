@@ -112,10 +112,10 @@ public class SelectConfirmActivity extends Activity implements OnClickListener{
 		
 		Bitmap bitmap = BitmapFactory.decodeFile(file.toString());
 		int width = bitmap.getWidth(),height = bitmap.getHeight();
-		if(width<480){
-			bitmap = Bitmap.createScaledBitmap(bitmap, 480, 640, true);
-			this.width = 480;
-			this.height = 640;
+		if(width<600){
+			bitmap = Bitmap.createScaledBitmap(bitmap, 600, 800, true);
+			this.width = 600;
+			this.height = 800;
 			FileOutputStream out = null;
 			try {
 			       out = new FileOutputStream(file.toString());
@@ -145,7 +145,7 @@ public class SelectConfirmActivity extends Activity implements OnClickListener{
 		}
 		final Map<String, Link> link_goods = new HashMap<String, CollSave.Link>();
 		for(int i = 0;i<list.size();i++){
-			link_goods.put("k"+i, list.get(i).getLink());
+			link_goods.put(""+(i+1), list.get(i).getLink());
 		}
 		final File uploadimg =  new File(Uri.parse(url).getPath());
 		scale(uploadimg);
@@ -165,7 +165,10 @@ public class SelectConfirmActivity extends Activity implements OnClickListener{
 					com.yoka.fan.network.Request.Status result) {
 				LoadingPopup.hide(SelectConfirmActivity.this);
 				if(result == com.yoka.fan.network.Request.Status.SUCCESS){
-					finish();
+					Intent intent = new Intent(SelectConfirmActivity.this,MainActivity.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+					startActivity(intent);
+					Utils.tip(SelectConfirmActivity.this, "上传成功");
 				}
 				
 				

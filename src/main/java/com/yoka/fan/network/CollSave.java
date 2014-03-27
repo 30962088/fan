@@ -22,10 +22,10 @@ public class CollSave extends Request{
 		private String left;
 		private String top;
 		private String type;
-		private float price;
+		private Float price;
 		private String url;
 		public Link(String brand, String color, float left, float top,
-				String type, float price, String url) {
+				String type, Float price, String url) {
 			this.brand = brand;
 			this.color = color;
 			this.left = left*100+"%";
@@ -49,7 +49,7 @@ public class CollSave extends Request{
 		public String getType() {
 			return type;
 		}
-		public float getPrice() {
+		public Float getPrice() {
 			return price;
 		}
 		public String getUrl() {
@@ -162,7 +162,7 @@ public class CollSave extends Request{
 		params.add(new BasicNameValuePair("link_goods", new Gson().toJson(link_goods)));
 		params.add(new BasicNameValuePair("access_token", access_token));
 		params.add(new BasicNameValuePair("description", description));
-		params.add(new BasicNameValuePair("coll_id", coll_id));
+//		params.add(new BasicNameValuePair("coll_id", coll_id));
 		params.add(new BasicNameValuePair("width", ""+width));
 		params.add(new BasicNameValuePair("height", ""+height));
 		params.add(new BasicNameValuePair("user_id", user_id));

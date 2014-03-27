@@ -112,7 +112,7 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 		
 		public static Result toResult(List<Model> list,float left,float top){
 			String type_en = null,color = null,url = null,brand = null,type = null;
-			float price = 0;
+			Float price = null;
 			for(Model model : list){
 				switch (model.getType()) {
 				case Model.TYPE_BRAND:
