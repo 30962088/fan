@@ -295,7 +295,8 @@ public class LinkedView extends RelativeLayout {
 
 		private int[] lastMargin;
 		
-		private boolean isMove = false;
+		private long touchTime;
+		
 		
 		@Override
 		public boolean onTouchEvent(MotionEvent event) {
@@ -303,11 +304,11 @@ public class LinkedView extends RelativeLayout {
 			LayoutParams params = ((RelativeLayout.LayoutParams)getLayoutParams());
 			lastMargin = new int[]{params.leftMargin,params.topMargin};
 			if(event.getAction() == MotionEvent.ACTION_DOWN){
-				isMove = false;
+				touchTime = System.currentTimeMillis();
 				lastCoor = new float[]{event.getX(),event.getY()};
 			}else if(event.getAction() == MotionEvent.ACTION_MOVE){
 				if(move){
-					isMove = true;
+					
 					float deltaX = event.getX()-lastCoor[0],
 							  deltaY = event.getY()-lastCoor[1];
 					link.setLeft((lastMargin[0]+deltaX- bounds[0])/bounds[2]);
@@ -315,17 +316,20 @@ public class LinkedView extends RelativeLayout {
 					draw();
 				}
 			}if(event.getAction() == MotionEvent.ACTION_UP){
-				if(!isMove && onTagClickListener != null){
-				
-					if(closed){
-						if( event.getX()>getWidth()-offset){
-							onTagClickListener.onClose(link);
-							return true;
+				if(System.currentTimeMillis()-touchTime < 300){
+					if( onTagClickListener != null ){
+						if(closed){
+							if( event.getX()>getWidth()-offset){
+								onTagClickListener.onClose(link);
+								return true;
+							}
 						}
+						onTagClickListener.onClick(link);
 					}
-					onTagClickListener.onClick(link);
 					
-				}else if(onTagClickListener != null){
+					
+				}else if(move && onTagClickListener != null){
+					
 					onTagClickListener.onMove(link);
 				}
 				

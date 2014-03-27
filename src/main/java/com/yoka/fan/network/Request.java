@@ -48,9 +48,9 @@ public abstract class Request implements Response{
 	
 	public static final int CODE_NO_DATA = 80503;
 	
-//	public static String HOST = "http://fan.yoka.com/api/";
+	public static String HOST = "http://fan.yoka.com/api/";
 	
-	public static String HOST = "http://211.151.225.211/api/";
+//	public static String HOST = "http://211.151.225.211/api/";
 	
 	
 	public static String IMG_HOST = "http://fanp1.yokacdn.com/";
