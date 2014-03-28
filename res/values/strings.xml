@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">星搭配-你的搭配时尚顾问</string>
+    <string name="app_name">星搭配</string>
     <string name="fashion">潮流搭配</string>
     <string name="zone">我的空间</string>
     <string name="setting">设置</string>

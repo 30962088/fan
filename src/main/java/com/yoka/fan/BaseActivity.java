@@ -1,5 +1,6 @@
 package com.yoka.fan;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yoka.fan.utils.Dirctionary;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.wiget.PhotoSelectPopupWindow;
@@ -27,6 +28,20 @@ public abstract class BaseActivity extends FragmentActivity{
 	protected void onCreate(Bundle bundle) {
 		// TODO Auto-generated method stub
 		super.onCreate(bundle);
+	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		MobclickAgent.onResume(this);
+	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 	
 	@Override

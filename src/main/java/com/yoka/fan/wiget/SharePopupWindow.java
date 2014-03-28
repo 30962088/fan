@@ -146,7 +146,7 @@ public class SharePopupWindow implements OnClickListener {
 			});
 			
 		}else{
-			final ShareDetailPopupWindow window = new ShareDetailPopupWindow(context,"腾讯微博",model.getLinkModel().getUrl(), "");
+			final ShareDetailPopupWindow window = new ShareDetailPopupWindow(context,"腾讯微博",model.getLinkModel(), "");
 			window.setOnOperateLisener(new OnOperateLisener() {
 				
 				@Override
@@ -194,7 +194,7 @@ public class SharePopupWindow implements OnClickListener {
 				}
 			});
 		} else {
-			final ShareDetailPopupWindow window = new ShareDetailPopupWindow(context, "新浪微博",model.getLinkModel().getUrl(), "");
+			final ShareDetailPopupWindow window = new ShareDetailPopupWindow(context, "新浪微博",model.getLinkModel(), "");
 			window.setOnOperateLisener(new OnOperateLisener() {
 				
 				@Override

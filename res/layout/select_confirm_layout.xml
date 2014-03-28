@@ -82,8 +82,8 @@
 
                 <ImageView
                     android:id="@+id/thumbnail"
-                    android:layout_width="85dp"
-                    android:layout_height="match_parent" />
+                    android:layout_width="@dimen/share_thumnail_width"
+                    android:layout_height="@dimen/share_thumnail_height" />
                 
                 <EditText 
                     android:id="@+id/desc"

@@ -3,6 +3,7 @@ package com.yoka.fan;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
+import com.umeng.analytics.MobclickAgent;
 import com.yoka.fan.utils.Dirctionary;
 import com.yoka.fan.utils.Relation;
 import com.yoka.fan.utils.User;
@@ -51,6 +52,8 @@ public class MainActivity extends SlidingFragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		MobclickAgent.updateOnlineConfig( this );
+//		MobclickAgent.setDebugMode( true );
 		instance = this;
 //		if (savedInstanceState != null)
 //			mContent = getSupportFragmentManager().getFragment(
@@ -78,9 +81,17 @@ public class MainActivity extends SlidingFragmentActivity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		MobclickAgent.onResume(this);
 		login(User.readUser());
 		// String s = null;
 		// s.toCharArray();
+	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 
 //	@Override

@@ -151,6 +151,12 @@ public class LinkedView extends RelativeLayout {
 		imageLoader = Utils.getImageLoader(context);
 
 	}
+	
+	private boolean online = true;
+	
+	public void setOnline(boolean online) {
+		this.online = online;
+	}
 
 	public void load(LinkModel model) {
 		if(this.linkModel != model){
@@ -159,7 +165,13 @@ public class LinkedView extends RelativeLayout {
 			tagContainer.removeAllViews();
 			// changeImageSize();
 			imageView.setImageBitmap(null);
-			imageLoader.displayImage(model.getUrl(), imageView);
+			if(online){
+				measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+				imageLoader.displayImage(model.getUrl(getMeasuredWidth(),getMeasuredHeight()), imageView);
+			}else{
+				imageLoader.displayImage(model.getUrl(), imageView);
+			}
+			
 			
 		}
 		if(model.isShowLink()){
@@ -316,7 +328,7 @@ public class LinkedView extends RelativeLayout {
 					draw();
 				}
 			}if(event.getAction() == MotionEvent.ACTION_UP){
-				if(System.currentTimeMillis()-touchTime < 300){
+				if(System.currentTimeMillis()-touchTime < 200){
 					if( onTagClickListener != null ){
 						if(closed){
 							if( event.getX()>getWidth()-offset){
@@ -328,7 +340,8 @@ public class LinkedView extends RelativeLayout {
 					}
 					
 					
-				}else if(move && onTagClickListener != null){
+				}
+				if(onTagClickListener != null){
 					
 					onTagClickListener.onMove(link);
 				}

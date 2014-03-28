@@ -165,6 +165,7 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 		linkedView.setMove(true);
 		linkedView.setOnTagClickListener(this);
 		linkedView.setClosed(true);
+		linkedView.setOnline(false);
 		countView = (TextView) findViewById(R.id.count);
 		linkedView.setOnImageClickListener(new onImageClickListener() {
 			

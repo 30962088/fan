@@ -46,13 +46,17 @@ public class ShareDetailPopupWindow implements OnClickListener, TextWatcher {
 
 	private Context context;
 
-	public ShareDetailPopupWindow(Context context, String title, String photo,
+	public ShareDetailPopupWindow(Context context, String title, LinkModel model,
 			String content) {
-		this.photo = photo;
+		
+		
 		this.context = context;
 		View view = LayoutInflater.from(context).inflate(
 				R.layout.share_detail_layout, null);
 		view.setOnClickListener(this);
+		thumnail = (ImageView) view.findViewById(R.id.thumbnail);
+		
+		
 		loading = view.findViewById(R.id.loading);
 		mPopupWindow = new PopupWindow(view, LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT, true);
@@ -74,7 +78,8 @@ public class ShareDetailPopupWindow implements OnClickListener, TextWatcher {
 
 		countText = (TextView) view.findViewById(R.id.count);
 		countText.setText("" + limit);
-		thumnail = (ImageView) view.findViewById(R.id.thumbnail);
+		
+		this.photo = model.getUrl((int)context.getResources().getDimension(R.dimen.share_thumnail_width),(int)context.getResources().getDimension(R.dimen.share_thumnail_height));
 		Utils.getImageLoader(context).displayImage(photo, thumnail);
 		popup.setOnClickListener(this);
 		popup.startAnimation(rotation);
@@ -130,6 +135,7 @@ public class ShareDetailPopupWindow implements OnClickListener, TextWatcher {
 		case R.id.layout:
 		case R.id.cancel:
 			mPopupWindow.dismiss();
+			break;
 		case R.id.send:
 			if (onOperateLisener != null) {
 				onOperateLisener.onsubmit(photo, contentText.getText()

@@ -7,6 +7,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 import com.yoka.fan.wiget.BuyPopupWindow.GoodsItem;
 
 import android.content.Context;
+import android.util.Log;
 
 public class LinkModel{
 	
@@ -33,11 +34,23 @@ public class LinkModel{
 		this.showLink = showLink;
 	}
 	
+	public static String insert(String bag, String marble, int index) {
+	    String bagBegin = bag.substring(0,index);
+	    String bagEnd = bag.substring(index);
+	    return bagBegin + marble + bagEnd;
+	}
+	
 	public boolean isShowLink() {
 		return showLink;
 	}
+	
+	public String getUrl(int width,int height){
+		String url = insert(this.url,"/resize/"+width+"/"+height,this.url.indexOf("/", 7));
+		return url;
+	}
 
 	public String getUrl() {
+		
 		return url;
 	}
 	

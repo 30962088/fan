@@ -106,7 +106,7 @@ public class CommonListAdapter extends BaseAdapter  {
 			Display display = wm.getDefaultDisplay();
 			int width = display.getWidth() - DisplayUtils.Dp2Px(context, 90); // deprecated
 			int height = width / 3 * 4;
-
+			
 			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
 					width, height);
 
