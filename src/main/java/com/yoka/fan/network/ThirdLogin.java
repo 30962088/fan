@@ -109,6 +109,7 @@ public class ThirdLogin extends Request{
 	public ThirdLogin(String authType, String third_token_info) {
 		super();
 		this.authType = authType;
+		
 		this.third_token_info = third_token_info;
 	}
 	
@@ -152,7 +153,7 @@ public class ThirdLogin extends Request{
 	public List<NameValuePair> fillParams() {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("authType", authType));
-		params.add(new BasicNameValuePair("third_token_info", new Gson().toJson(third_token_info)));
+		params.add(new BasicNameValuePair("third_token_info", third_token_info));
 		params.add(new BasicNameValuePair("uuid", uuid));
 		params.add(new BasicNameValuePair("token", token));
 		return params;
