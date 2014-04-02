@@ -67,7 +67,7 @@ public class ShareUtils {
 			
 			this.context = context;
 			api = WXAPIFactory.createWXAPI(context,Constant.WECHAT_APP_ID);
-			
+			api.registerApp(Constant.WECHAT_APP_ID);
 		}
 		
 		public void sharePhoto(String photo,int scene){
@@ -76,8 +76,14 @@ public class ShareUtils {
 				return;
 			}
 			
+			
 			ImageLoader loader = Utils.getImageLoader(context);
-			Bitmap bmp = BitmapFactory.decodeFile(DiscCacheUtil.findInCache(photo, loader.getDiscCache()).toString());
+			File file = DiscCacheUtil.findInCache(photo, loader.getDiscCache());
+			if(file == null){
+				Utils.tip(context, "图片未加载完成");
+				return;
+			}
+			Bitmap bmp = BitmapFactory.decodeFile(file.toString());
 			WXImageObject imgObj = new WXImageObject(bmp);
 			WXMediaMessage msg = new WXMediaMessage();
 			msg.mediaObject = imgObj;
