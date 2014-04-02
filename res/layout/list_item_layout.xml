@@ -156,6 +156,18 @@
                 android:textSize="11sp"
                 android:layout_alignParentBottom="true"/>
             
+            <TextView 
+                android:visibility="gone"
+                android:id="@+id/delete"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="删除"
+                android:gravity="center"
+                android:textSize="11sp"
+                android:layout_alignParentBottom="true"/>
+            
+            
+            
         </RelativeLayout>
     </LinearLayout>
 

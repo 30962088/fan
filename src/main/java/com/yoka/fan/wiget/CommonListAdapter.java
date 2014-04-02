@@ -14,6 +14,7 @@ import com.yoka.fan.TagActivity;
 import com.yoka.fan.ZoneActivity;
 import com.yoka.fan.SelectCategoryActivity.Model;
 import com.yoka.fan.network.Accuse;
+import com.yoka.fan.network.CollDel;
 import com.yoka.fan.network.Like;
 import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Request.Status;
@@ -34,6 +35,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -50,20 +52,28 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-public class CommonListAdapter extends BaseAdapter  {
+public class CommonListAdapter extends BaseAdapter {
 
 	private Context context;
 
 	private List<CommonListModel> list;
 
 	private ImageLoader imageLoader;
-	
-	private Animation zoomAnim;
 
-	public CommonListAdapter(Context context, List<CommonListModel> list) {
-		this.zoomAnim = AnimationUtils.loadAnimation(context, R.anim.zoom_center_closure);
+	private Animation zoomAnim;
+	
+	public static interface OperateListener{
+		public void onEmpty();
+	}
+	
+	private OperateListener operateListener;
+
+	public CommonListAdapter(Context context, List<CommonListModel> list,OperateListener operateListener) {
+		this.zoomAnim = AnimationUtils.loadAnimation(context,
+				R.anim.zoom_center_closure);
 		this.context = context;
 		this.list = list;
+		this.operateListener = operateListener;
 		imageLoader = Utils.getImageLoader(context);
 	}
 
@@ -85,14 +95,25 @@ public class CommonListAdapter extends BaseAdapter  {
 		return position;
 	}
 
-	private void openZoneActivity(CommonListModel model){
+	private void openZoneActivity(CommonListModel model) {
 		Intent intent = new Intent(context, ZoneActivity.class);
-		intent.putExtra(ZoneActivity.PARAM_TARGET_ID,
-				"" + model.getUser_id());
+		intent.putExtra(ZoneActivity.PARAM_TARGET_ID, "" + model.getUser_id());
 		intent.putExtra(ZoneActivity.PARAM_NAME, "" + model.getName());
 		context.startActivity(intent);
 	}
-	
+
+	private static int picWidth = 0;
+
+	private static int picHeight = 0;
+
+	public static int getPicWidth() {
+		return picWidth;
+	}
+
+	public static int getPicHeight() {
+		return picHeight;
+	}
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final CommonListModel model = list.get(position);
@@ -104,42 +125,42 @@ public class CommonListAdapter extends BaseAdapter  {
 			WindowManager wm = (WindowManager) context
 					.getSystemService(Context.WINDOW_SERVICE);
 			Display display = wm.getDefaultDisplay();
-			int width = display.getWidth() - DisplayUtils.Dp2Px(context, 90); // deprecated
-			int height = width / 3 * 4;
-			
+			picWidth = display.getWidth() - DisplayUtils.Dp2Px(context, 90); // deprecated
+			picHeight = picWidth / 3 * 4;
+
 			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-					width, height);
+					picWidth, picHeight);
 
 			holder.mLinkedView.setLayoutParams(layoutParams);
-			
+
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		holder.mLinkedView.setOnTagClickListener(new onTagClickListener() {
-			
+
 			@Override
 			public void onClose(Link link) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void onClick(Link link) {
 				List<GoodsItem> list = new ArrayList<BuyPopupWindow.GoodsItem>();
-				
-				for(LinkModel.Link link2 : model.getLinkModel().getLinkList()){
+
+				for (LinkModel.Link link2 : model.getLinkModel().getLinkList()) {
 					list.add(link2.toGoodsItem());
 				}
 				new BuyPopupWindow(context, list);
-//				new BuyPopupWindow(context, model.getId());
-				
+				// new BuyPopupWindow(context, model.getId());
+
 			}
 
 			@Override
 			public void onMove(Link link) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		holder.mPhotoView.setImageBitmap(null);
@@ -150,7 +171,7 @@ public class CommonListAdapter extends BaseAdapter  {
 			holder.mPhotoView.setVisibility(View.GONE);
 		} else {
 			holder.mPhotoView.setImageResource(R.drawable.photo_default);
-			if(UrlValidator.getInstance().isValid(model.getPhoto())){
+			if (UrlValidator.getInstance().isValid(model.getPhoto())) {
 				imageLoader.displayImage(model.getPhoto(), holder.mPhotoView);
 			}
 		}
@@ -161,64 +182,125 @@ public class CommonListAdapter extends BaseAdapter  {
 			holder.mNameView.setVisibility(View.VISIBLE);
 			holder.mNameView.setText(model.getName());
 			holder.mNameView.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					openZoneActivity(model);
-					
+
 				}
 			});
 		}
-		
+
 		holder.mJubaoBtn.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				ConfirmDialog.open(context, "举报", "举报本条搭配？", new ConfirmDialog.OnClickListener() {
-					
-					@Override
-					public void onPositiveClick() {
-						
-						new AsyncTask<Void, Void, Accuse>(){
+				ConfirmDialog.open(context, "举报", "举报本条搭配？",
+						new ConfirmDialog.OnClickListener() {
 
 							@Override
-							protected Accuse doInBackground(Void... params) {
-								User user = User.readUser();
-								Accuse accuse = null;
-								if(user == null){
-									accuse = new Accuse("", "", model.getId());
-								}else{
-									accuse = new Accuse(user.id, user.access_token, model.getId());
-								}
-								accuse.request();
-								return accuse;
+							public void onPositiveClick() {
+
+								new AsyncTask<Void, Void, Accuse>() {
+
+									@Override
+									protected Accuse doInBackground(
+											Void... params) {
+										User user = User.readUser();
+										Accuse accuse = null;
+										if (user == null) {
+											accuse = new Accuse("", "", model
+													.getId());
+										} else {
+											accuse = new Accuse(user.id,
+													user.access_token, model
+															.getId());
+										}
+										accuse.request();
+										return accuse;
+									}
+
+									protected void onPostExecute(Accuse result) {
+										if (result.getStatus() == Request.Status.SUCCESS) {
+											Utils.tip(context, "举报成功");
+										}
+									};
+
+								}.execute();
+
 							}
-							
-							protected void onPostExecute(Accuse result) {
-								if(result.getStatus() == Request.Status.SUCCESS){
-									Utils.tip(context, "举报成功");
-								}
-							};
-							
-						}.execute();
-						
-						
-					}
-					
-					@Override
-					public void onNegativeClick() {
-						// TODO Auto-generated method stub
-						
-					}
-				});
-				
+
+							@Override
+							public void onNegativeClick() {
+								// TODO Auto-generated method stub
+
+							}
+						});
+
 			}
 		});
 
+		holder.mDelBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ConfirmDialog.open(context, "删除", "删除本条搭配？",
+						new ConfirmDialog.OnClickListener() {
+
+							@Override
+							public void onPositiveClick() {
+								list.remove(model);
+								notifyDataSetChanged();
+								if(list.size() == 0){
+									operateListener.onEmpty();
+								}
+								new AsyncTask<Void, Void, Request>() {
+
+									@Override
+									protected Request doInBackground(
+											Void... params) {
+										User user = User.readUser();
+										
+										Request request = new CollDel(model.getId(), user.id, user.access_token);
+										
+										request.request();
+										
+										return request;
+									}
+
+									protected void onPostExecute(Request result) {
+										if (result.getStatus() == Request.Status.SUCCESS) {
+											Utils.tip(context, "删除成功");
+										}
+									};
+
+								}.execute();
+
+							}
+
+							@Override
+							public void onNegativeClick() {
+								// TODO Auto-generated method stub
+
+							}
+						});
+
+			}
+		});
+
+		User user = User.readUser();
+		if(user != null&&TextUtils.equals(user.id, model.getUser_id())){
+			holder.mJubaoBtn.setVisibility(View.GONE);
+			holder.mDelBtn.setVisibility(View.VISIBLE);
+		}else{
+			holder.mJubaoBtn.setVisibility(View.VISIBLE);
+			holder.mDelBtn.setVisibility(View.GONE);
+		}
+		
 		holder.mDatetimeView.setText(model.getDatetime());
 		holder.mStarCount.setText("" + model.getStar());
 		holder.mCommentCount.setText("" + model.getComment());
-		holder.setTags(context, model.getTags(),model.getMetaAttr().get("风格"));
+		holder.setTags(context, model.getTags(), model.getMetaAttr().get("风格"));
 		holder.mStarBtn.setSelected(model.isStared());
 		holder.mPhotoView.setOnClickListener(new OnClickListener() {
 
@@ -268,20 +350,20 @@ public class CommonListAdapter extends BaseAdapter  {
 
 			@Override
 			public void onClick(View v) {
-				
+
 				final boolean isStared = !model.isStared();
 				model.setStared(isStared);
 				int count = model.getStar();
-				
+
 				if (isStared) {
 					count++;
-					
+
 				} else {
 					count--;
-					
+
 				}
 				model.setStar(count);
-				
+
 				mStarBtn.setSelected(model.isStared());
 				mStarCount.setText("" + model.getStar());
 				mStarCount.startAnimation(zoomAnim);
@@ -289,18 +371,19 @@ public class CommonListAdapter extends BaseAdapter  {
 
 				final User user = User.readUser();
 
-				if(user != null){
+				if (user != null) {
 					new AsyncTask<String, Void, Status>() {
 
 						@Override
-						protected Request.Status doInBackground(String... params) {
+						protected Request.Status doInBackground(
+								String... params) {
 							Request request = null;
-							if(isStared){
-								request = new Like(user.id, user.access_token, model
-										.getId());
-							}else{
-								request = new UnLike(user.id, user.access_token, model
-										.getId());
+							if (isStared) {
+								request = new Like(user.id, user.access_token,
+										model.getId());
+							} else {
+								request = new UnLike(user.id,
+										user.access_token, model.getId());
 							}
 							request.request();
 							return request.getStatus();
@@ -323,8 +406,6 @@ public class CommonListAdapter extends BaseAdapter  {
 						};
 					}.execute(model.getId());
 				}
-				
-				
 
 			}
 		});
@@ -333,14 +414,12 @@ public class CommonListAdapter extends BaseAdapter  {
 
 			@Override
 			public void onClick(View v) {
-				new SharePopupWindow(context,model);
+				new SharePopupWindow(context, model);
 			}
 		});
 
 		return convertView;
 	}
-	
-	
 
 	private static class ViewHolder {
 
@@ -365,8 +444,10 @@ public class CommonListAdapter extends BaseAdapter  {
 		private View mMoreBtn;
 
 		private View mShareBtn;
-		
+
 		private View mJubaoBtn;
+
+		private View mDelBtn;
 
 		public ViewHolder(View view) {
 			mPhotoView = (ImageView) view.findViewById(R.id.photo);
@@ -381,9 +462,11 @@ public class CommonListAdapter extends BaseAdapter  {
 			mShareBtn = view.findViewById(R.id.share);
 			mCommentBtn = view.findViewById(R.id.comment);
 			mJubaoBtn = view.findViewById(R.id.jubao);
+			mDelBtn = view.findViewById(R.id.delete);
 		}
 
-		public void setTags(final Context context, List<NameValuePair> tags,final String style) {
+		public void setTags(final Context context, List<NameValuePair> tags,
+				final String style) {
 			mTagContainer.removeAllViews();
 			for (final NameValuePair pair : tags) {
 				TextView textView = (TextView) LayoutInflater.from(context)
@@ -398,7 +481,8 @@ public class CommonListAdapter extends BaseAdapter  {
 
 					@Override
 					public void onClick(View v) {
-						TagActivity.open(context, pair.getName(), pair.getValue());
+						TagActivity.open(context, pair.getName(),
+								pair.getValue());
 
 					}
 				});
@@ -452,7 +536,5 @@ public class CommonListAdapter extends BaseAdapter  {
 		mPopupWindow.showAtLocation(anchor, Gravity.BOTTOM, 0, 0);
 
 	}
-
-	
 
 }

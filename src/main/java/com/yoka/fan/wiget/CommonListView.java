@@ -74,7 +74,14 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 
 	private void init(){
 		
-		adapter = new CommonListAdapter(getContext(), list);
+		adapter = new CommonListAdapter(getContext(), list,new  CommonListAdapter.OperateListener() {
+			
+			@Override
+			public void onEmpty() {
+				onVerticalScrollListener.onScrollUp();
+				
+			}
+		});
 		setAdapter(adapter);
 		setOnLoadListener(this);
 		setLimit(limit);

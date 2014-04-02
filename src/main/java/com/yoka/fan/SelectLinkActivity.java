@@ -47,7 +47,7 @@ public class SelectLinkActivity extends BaseSelectActivity implements TextWatche
 		priceView.addTextChangedListener(this);
 		if(selected != null){
 			linkView.setText(selected.getLink().getUrl());
-			if(selected.getLink().getPrice()>0){
+			if(selected.getLink() != null && selected.getLink().getPrice() != null && selected.getLink().getPrice()>0){
 				priceView.setText(""+selected.getLink().getPrice());
 			}
 			

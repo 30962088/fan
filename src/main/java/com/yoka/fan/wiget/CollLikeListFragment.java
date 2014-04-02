@@ -50,7 +50,9 @@ public class CollLikeListFragment extends CommonListFragment{
 
 	@Override
 	public String getEmptyTip() {
-		// TODO Auto-generated method stub
+		if(!TextUtils.equals(target_id,user_id )){
+			return "TA还没有喜欢任何搭配";
+		}
 		return "您喜欢的人还没有任何搭配信息";
 	}
 	

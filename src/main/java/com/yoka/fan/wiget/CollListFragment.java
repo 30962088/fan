@@ -6,9 +6,11 @@ import java.util.List;
 
 import com.yoka.fan.network.Coll;
 import com.yoka.fan.network.ListItemData;
+import com.yoka.fan.utils.User;
 import com.yoka.fan.wiget.CommonListView.LoadResult;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 
 public class CollListFragment extends CommonListFragment{
 
@@ -17,6 +19,10 @@ public class CollListFragment extends CommonListFragment{
 	private String target_id;
 	
 	private String access_token;
+	
+	public CollListFragment() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +46,9 @@ public class CollListFragment extends CommonListFragment{
 
 	@Override
 	public String getEmptyTip() {
-		// TODO Auto-generated method stub
+		if(!TextUtils.equals(target_id, user_id)){
+			return "TA还没有任何搭配";
+		}
 		return "没有任何搭配信息";
 	}
 	

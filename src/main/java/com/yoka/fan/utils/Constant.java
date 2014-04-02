@@ -8,7 +8,7 @@ public class Constant {
 	
 	public static String token;
 	
-	public static String packageName = "com.wandoujia.phoenix2";
+	public static String packageName = "com.yoka.fan";
 	
 	public static final long TWEIBO_APP_KEY = 801486157;
 	

@@ -70,6 +70,10 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 	private View indicatorHeader;
 	
 	private View collBtn;
+	
+	public ZoneFragment() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
