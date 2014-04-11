@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.umeng.analytics.MobclickAgent;
 import com.yoka.fan.LoginActivity;
 import com.yoka.fan.MainActivity;
 import com.yoka.fan.R;
@@ -81,12 +82,18 @@ public class HomeFragment extends Fragment implements OnVerticalScrollListener{
 			
 			@Override
 			public boolean onclick(int index, View tabView) {
-				if(index == 2){
+				if(index == 0){
+					MobclickAgent.onEvent(getActivity(),"new");
+				}else if(index == 1){
+					MobclickAgent.onEvent(getActivity(),"hot");
+				}else if(index == 2){
 					User user = User.readUser();
 					if(user == null){
 						getActivity().startActivity(new Intent(getActivity(),LoginActivity.class));
 						return false;
 					}
+					MobclickAgent.onEvent(getActivity(),"myattention");
+					
 				}
 				return true;
 			}

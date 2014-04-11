@@ -7,6 +7,7 @@ import java.util.zip.Inflater;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 import com.yoka.fan.R;
 import com.yoka.fan.WebViewActivity;
 import com.yoka.fan.network.CollDetail;
@@ -305,6 +306,7 @@ public class BuyPopupWindow implements OnClickListener,OnItemClickListener{
 			long id) {
 		GoodsItem item = list.get(position);
 		if(UrlValidator.getInstance().isValid(item.url)){
+			MobclickAgent.onEvent(context,"buy");
 			WebViewActivity.open(context, item.url);
 		}
 		

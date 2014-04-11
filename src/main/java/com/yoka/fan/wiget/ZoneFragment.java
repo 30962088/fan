@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 import com.yoka.fan.FansListActivity;
 import com.yoka.fan.LoginActivity;
 import com.yoka.fan.MainActivity;
@@ -71,8 +72,14 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 	
 	private View collBtn;
 	
+	private static ZoneFragment instance;
+	
+	public static ZoneFragment getInstance() {
+		return instance;
+	}
+	
 	public ZoneFragment() {
-		// TODO Auto-generated constructor stub
+		instance = this;
 	}
 
 	@Override
@@ -181,8 +188,16 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 	}
 	
 	private boolean isInit = false;
+	
+	private String matchCount;
 
+	public void changeMatchCount(int count){
+		matchView.setText("" + count);
+		matchCount = ""+count;
+	}
+	
 	private void initUserView(Result result) {
+		
 		matchView.setText("" + result.getShow_count());
 		fansView.setText("" + result.getFollowers());
 		focusView.setText("" + result.getFollows());
@@ -195,6 +210,14 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 			getView().findViewById(R.id.loading).setVisibility(View.GONE);
 			isInit = true;
 		}
+		
+		if(matchCount != null && !matchCount.equals(result.getShow_count() )){
+			collBtn.performClick();
+		}
+		
+		matchCount = result.getShow_count();
+		
+		
 		
 	}
 
@@ -283,6 +306,7 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 			startActivity(intent1);
 			break;
 		case R.id.follow_btn:
+			MobclickAgent.onEvent(getActivity(),"attention");
 			onFollowClick();
 			break;
 		default:
@@ -313,6 +337,7 @@ public class ZoneFragment extends Fragment implements OnClickListener,
 				Request request = null;
 				if (followBtn.isSelected()) {
 					request = new Follow(user.id, target_id, user.access_token);
+					
 				} else {
 					request = new UnFollow(user.id, target_id,
 							user.access_token);

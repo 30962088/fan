@@ -75,12 +75,22 @@ public abstract class CommonListView extends BaseListView implements OnLoadListe
 	private void init(){
 		
 		adapter = new CommonListAdapter(getContext(), list,new  CommonListAdapter.OperateListener() {
-			
+
 			@Override
-			public void onEmpty() {
-				onVerticalScrollListener.onScrollUp();
+			public void onDel(List<CommonListModel> list) {
+				if(list.size() == 0){
+					onVerticalScrollListener.onScrollUp();
+					
+				}
+				ZoneFragment fragment = ZoneFragment.getInstance();
+				if(fragment != null){
+					fragment.changeMatchCount(list.size());
+				}
+				
 				
 			}
+			
+			
 		});
 		setAdapter(adapter);
 		setOnLoadListener(this);

@@ -47,9 +47,9 @@ public class CollListFragment extends CommonListFragment{
 	@Override
 	public String getEmptyTip() {
 		if(!TextUtils.equals(target_id, user_id)){
-			return "TA还没有任何搭配";
+			return "TA目前还没有发布搭配";
 		}
-		return "没有任何搭配信息";
+		return "您目前还没有发布搭配";
 	}
 	
 }

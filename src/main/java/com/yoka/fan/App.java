@@ -50,7 +50,7 @@ public class App extends Application{
 		Category.sync(null);
 		
 		
-		Thread.setDefaultUncaughtExceptionHandler(handler);
+//		Thread.setDefaultUncaughtExceptionHandler(handler);
 
 	}
 	

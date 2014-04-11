@@ -155,6 +155,7 @@ public class BaseListView extends PullToRefreshListView{
         paint.setColor(Color.parseColor("#a8a8a8")); 
         paint.setTextSize(DisplayUtils.spToPx(getContext(), 18)); 
         paint.setTextAlign(Align.CENTER); 
+        paint.setAntiAlias(true);
 
         FontMetrics fontMetrics = paint.getFontMetrics(); 
         // 计算文字高度 

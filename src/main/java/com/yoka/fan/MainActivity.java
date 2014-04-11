@@ -184,7 +184,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private static final int ACTION_REQUEST_SELECTION = 3;
 
 	public void openShare() {
-
+		MobclickAgent.onEvent(this,"add");
 		new PhotoSelectPopupWindow(this, new OnItemClickListener() {
 
 			@Override

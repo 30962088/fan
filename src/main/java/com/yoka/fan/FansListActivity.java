@@ -186,6 +186,11 @@ public class FansListActivity extends BaseActivity implements OnLoadListener{
 					
 				}
 			});
+			if(model.id.equals(User.readUser().id)){
+				holder.btnView.setVisibility(View.GONE);
+			}else{
+				holder.btnView.setVisibility(View.VISIBLE);
+			}
 			final TextView _btnView = holder.btnView;
 			final User user = User.readUser();
 			_btnView.setSelected(model.selected);

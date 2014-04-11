@@ -3,6 +3,7 @@ package com.yoka.fan;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yoka.fan.utils.User;
 import com.yoka.fan.utils.Utils;
 import com.yoka.fan.wiget.HomeFragment;
@@ -77,6 +78,7 @@ public class SidingMenuFragment extends Fragment implements OnClickListener{
 			}
 			break;
 		case R.id.zone:
+			MobclickAgent.onEvent(getActivity(),"myhome");
 			if(User.readUser() == null){
 				startActivity(new Intent(getActivity(),LoginActivity.class));
 			}else{

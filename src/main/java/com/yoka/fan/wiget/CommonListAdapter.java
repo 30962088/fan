@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.analytics.MobclickAgent;
 import com.yoka.fan.CommentActivity;
 import com.yoka.fan.LoginActivity;
 import com.yoka.fan.R;
@@ -63,7 +64,7 @@ public class CommonListAdapter extends BaseAdapter {
 	private Animation zoomAnim;
 	
 	public static interface OperateListener{
-		public void onEmpty();
+		public void onDel(List<CommonListModel> list);
 	}
 	
 	private OperateListener operateListener;
@@ -152,6 +153,7 @@ public class CommonListAdapter extends BaseAdapter {
 				for (LinkModel.Link link2 : model.getLinkModel().getLinkList()) {
 					list.add(link2.toGoodsItem());
 				}
+				MobclickAgent.onEvent(context,"goods");
 				new BuyPopupWindow(context, list);
 				// new BuyPopupWindow(context, model.getId());
 
@@ -185,6 +187,7 @@ public class CommonListAdapter extends BaseAdapter {
 
 				@Override
 				public void onClick(View v) {
+					MobclickAgent.onEvent(context,"home");
 					openZoneActivity(model);
 
 				}
@@ -251,9 +254,7 @@ public class CommonListAdapter extends BaseAdapter {
 							public void onPositiveClick() {
 								list.remove(model);
 								notifyDataSetChanged();
-								if(list.size() == 0){
-									operateListener.onEmpty();
-								}
+								operateListener.onDel(list);
 								new AsyncTask<Void, Void, Request>() {
 
 									@Override
@@ -314,6 +315,7 @@ public class CommonListAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
+				MobclickAgent.onEvent(context,"ping");
 				CommentActivity.commonListAdapter = CommonListAdapter.this;
 				CommentActivity.commonListModel = model;
 				Intent intent = new Intent(context, CommentActivity.class);
@@ -328,6 +330,7 @@ public class CommonListAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
+				MobclickAgent.onEvent(context,"look");
 				popup(context, model.getDescr(), mMoreBtn);
 
 			}
@@ -341,6 +344,10 @@ public class CommonListAdapter extends BaseAdapter {
 				boolean isshow = !linkModel.isShowLink();
 				linkModel.setShowLink(isshow);
 				mLinkedView.load(linkModel);
+				if(isshow){
+					MobclickAgent.onEvent(context,"pic");
+				}
+				
 
 			}
 		});
@@ -350,7 +357,7 @@ public class CommonListAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-
+				MobclickAgent.onEvent(context,"like");
 				final boolean isStared = !model.isStared();
 				model.setStared(isStared);
 				int count = model.getStar();
@@ -414,6 +421,7 @@ public class CommonListAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
+				MobclickAgent.onEvent(context,"share");
 				new SharePopupWindow(context, model);
 			}
 		});
@@ -481,6 +489,7 @@ public class CommonListAdapter extends BaseAdapter {
 
 					@Override
 					public void onClick(View v) {
+						MobclickAgent.onEvent(context,"tag");
 						TagActivity.open(context, pair.getName(),
 								pair.getValue());
 

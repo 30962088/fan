@@ -12,6 +12,7 @@ import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.tencent.weibo.sdk.android.component.sso.WeiboToken;
 import com.tencent.weibo.sdk.android.model.ModelResult;
+import com.umeng.analytics.MobclickAgent;
 import com.yoka.fan.network.Login;
 import com.yoka.fan.network.Request;
 import com.yoka.fan.network.Register.Result;
@@ -70,16 +71,20 @@ public class LoginActivity extends BaseActivity2 implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.register:
+			MobclickAgent.onEvent(this,"reg");
 			startActivityForResult(new Intent(this, RegisterActivity.class),REQ_REGISTER);
 			break;
 
 		case R.id.login_qq_btn:
+			MobclickAgent.onEvent(this,"open");
 			onQWeiboLogin();
 			break;
 		case R.id.login_weibo_btn:
+			MobclickAgent.onEvent(this,"open");
 			onWeiboLogin();
 			break;
 		case R.id.login_btn:
+			MobclickAgent.onEvent(this,"login");
 			onLogin();
 			break;
 		default:
