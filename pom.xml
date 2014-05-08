@@ -8,7 +8,6 @@
 	<packaging>apk</packaging>
 	<name>fan</name>
 	
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<platform.version> 4.1.1.4

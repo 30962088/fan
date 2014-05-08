@@ -18,11 +18,24 @@
         
         <meta-data android:value="53338a3856240b86b70672be" android:name="UMENG_APPKEY"></meta-data>
         
-        <activity android:name=".MainActivity" android:launchMode="singleTask" 
+        <meta-data android:value="WANDOUJIA" android:name="UMENG_CHANNEL"/>
+        
+        <!-- <activity 
+            android:name=".LauncherActivity"
+            android:launchMode="singleTop" 
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+        </activity>
+         -->
+        <activity android:name=".MainActivity" android:launchMode="singleTask" 
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         
