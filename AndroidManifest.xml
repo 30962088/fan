@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         
-        <meta-data android:value="53338a3856240b86b70672be" android:name="UMENG_APPKEY"></meta-data>
+       <!--  <meta-data android:value="53338a3856240b86b70672be" android:name="UMENG_APPKEY"></meta-data> -->
         
         <meta-data android:value="WANDOUJIA" android:name="UMENG_CHANNEL"/>
         

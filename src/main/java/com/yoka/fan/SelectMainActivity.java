@@ -23,6 +23,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -52,6 +55,8 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 	private int height;
 	
 	private ImageLoader imageLoader;
+	
+	private TextView nextTextView;
 	
 	private static SelectMainActivity instance;
 	
@@ -141,12 +146,23 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 	}
 	
 	private void load(){
+		if(results.size() == 0){
+			nextTextView.setText("重拍");
+		}else{
+			nextTextView.setText("完成");
+		}
 		List<LinkModel.Link> list = new ArrayList<LinkModel.Link>();
 		for(Result result : results){
 			list.add(new LinkModel.Link("", result.name, result.link.getLeftFloat(), result.link.getTopFloat()));
 		}
+		if(results.size() == 0){
+			SpannableString string = new SpannableString("点击图片，为服饰添加标记或全部跳过");
+			string.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), string.length()-5, string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			countView.setText(string);
+		}else{
+			countView.setText(getString(R.string.share_count, 5-list.size()));
+		}
 		
-		countView.setText(getString(R.string.share_count, 5-list.size()));
 		LinkModel linkModel = new LinkModel(url, -1, -1, list);
 		linkModel.setShowLink(true);
 		linkedView.load(linkModel);
@@ -166,7 +182,18 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 		linkedView.setOnTagClickListener(this);
 		linkedView.setClosed(true);
 		linkedView.setOnline(false);
+		nextTextView = (TextView) findViewById(R.id.next_text);
 		countView = (TextView) findViewById(R.id.count);
+		countView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if(countView.getText().toString().indexOf("全部跳过")!=-1){
+					doFinish();
+				}
+				
+			}
+		});
 		linkedView.setOnImageClickListener(new onImageClickListener() {
 			
 			@Override
@@ -223,18 +250,27 @@ public class SelectMainActivity extends Activity implements onTagClickListener{
 			
 			@Override
 			public void onClick(View v) {
+				if(results.size() == 0){
+					finish();
+					MainActivity.getInstance().openShare();
+				}else{
+					doFinish();
+				}
 				
-				Intent intent = new Intent(SelectMainActivity.this,SelectConfirmActivity.class);
-				intent.putExtra(SelectConfirmActivity.PARAM_RESULT, results);
-				intent.putExtra(BaseSelectActivity.PARAM_IMG_PATH, url);
-				intent.putExtra(PARAM_WIDTH, width);
-				intent.putExtra(PARAM_HEIGHT, height);
-				startActivity(intent);
 				
 			}
 		});
 		
 		
+	}
+	
+	private void doFinish(){
+		Intent intent = new Intent(SelectMainActivity.this,SelectConfirmActivity.class);
+		intent.putExtra(SelectConfirmActivity.PARAM_RESULT, results);
+		intent.putExtra(BaseSelectActivity.PARAM_IMG_PATH, url);
+		intent.putExtra(PARAM_WIDTH, width);
+		intent.putExtra(PARAM_HEIGHT, height);
+		startActivity(intent);
 	}
 	
 	@Override
