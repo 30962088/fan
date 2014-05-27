@@ -21,6 +21,8 @@ public class CommonListModel {
 	
 	private int comment;
 	
+	private String title;
+	
 	
 	
 	private LinkModel linkModel;
@@ -157,6 +159,9 @@ public class CommonListModel {
 		return user_id;
 	}
 	
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	
 	public Map<String, String> getMetaAttr() {
@@ -164,5 +169,8 @@ public class CommonListModel {
 	}
 	public void setMetaAttr(Map<String, String> metaAttr) {
 		this.metaAttr = metaAttr;
+	}
+	public String getTitle() {
+		return title;
 	}
 }

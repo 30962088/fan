@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yoka.fan"
-    android:versionCode="1"
-    android:versionName="1.0.0" >
+    android:versionCode="2"
+    android:versionName="1.4" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -16,9 +16,9 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         
-       <!--  <meta-data android:value="53338a3856240b86b70672be" android:name="UMENG_APPKEY"></meta-data> -->
+      	<meta-data android:value="53338a3856240b86b70672be" android:name="UMENG_APPKEY"></meta-data>
         
-        <meta-data android:value="WANDOUJIA" android:name="UMENG_CHANNEL"/>
+        <meta-data android:value="GFAN" android:name="UMENG_CHANNEL"/>
         
         <!-- <activity 
             android:name=".LauncherActivity"

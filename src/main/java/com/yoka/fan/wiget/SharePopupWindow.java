@@ -125,7 +125,7 @@ public class SharePopupWindow implements OnClickListener {
 	
 	private void shareWechat(CommonListModel model,int scene){
 		Wechat wechat = new Wechat(context);
-		wechat.sharePhoto(model.getLinkModel().getUrl(CommonListAdapter.getPicWidth(),CommonListAdapter.getPicHeight()), scene);
+		wechat.sharePhoto(model.getId(),model.getTitle(),model.getDescr() , model.getLinkModel().getUrl(CommonListAdapter.getPicWidth(),CommonListAdapter.getPicHeight()), scene);
 	}
 	
 	private void shareQWeibo(CommonListModel model){
@@ -146,7 +146,7 @@ public class SharePopupWindow implements OnClickListener {
 			});
 			
 		}else{
-			final ShareDetailPopupWindow window = new ShareDetailPopupWindow(context,"腾讯微博",model.getLinkModel(), "");
+			final ShareDetailPopupWindow window = new ShareDetailPopupWindow(context,"腾讯微博",model.getLinkModel(), model.getDescr());
 			window.setOnOperateLisener(new OnOperateLisener() {
 				
 				@Override
@@ -194,7 +194,7 @@ public class SharePopupWindow implements OnClickListener {
 				}
 			});
 		} else {
-			final ShareDetailPopupWindow window = new ShareDetailPopupWindow(context, "新浪微博",model.getLinkModel(), "");
+			final ShareDetailPopupWindow window = new ShareDetailPopupWindow(context, "新浪微博",model.getLinkModel(), model.getDescr());
 			window.setOnOperateLisener(new OnOperateLisener() {
 				
 				@Override

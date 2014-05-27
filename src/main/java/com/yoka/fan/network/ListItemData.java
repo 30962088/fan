@@ -89,6 +89,7 @@ public class ListItemData {
 	public CommonListModel toCommonListModel(){
 		CommonListModel model = new CommonListModel();
 		model.setId(_id);
+		model.setTitle(title);
 		model.setComment(comments);
 		model.setDatetime(RelativeDateFormat.format(new Date(ctime)));
 		List<LinkModel.Link> links = new ArrayList<LinkModel.Link>();

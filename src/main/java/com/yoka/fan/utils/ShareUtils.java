@@ -33,6 +33,7 @@ import com.tencent.mm.sdk.openapi.SendMessageToWX;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.tencent.mm.sdk.openapi.WXImageObject;
 import com.tencent.mm.sdk.openapi.WXMediaMessage;
+import com.tencent.mm.sdk.openapi.WXWebpageObject;
 import com.tencent.weibo.sdk.android.api.UserAPI;
 import com.tencent.weibo.sdk.android.api.WeiboAPI;
 import com.tencent.weibo.sdk.android.api.util.Util;
@@ -70,7 +71,7 @@ public class ShareUtils {
 			api.registerApp(Constant.WECHAT_APP_ID);
 		}
 		
-		public void sharePhoto(String photo,int scene){
+		public void sharePhoto(String id,String title,String desc,String photo,int scene){
 			if(!api.isWXAppInstalled()){
 				Utils.tip(context, "微信未安装");
 				return;
@@ -84,17 +85,19 @@ public class ShareUtils {
 				return;
 			}
 			Bitmap bmp = BitmapFactory.decodeFile(file.toString());
-			WXImageObject imgObj = new WXImageObject(bmp);
-			WXMediaMessage msg = new WXMediaMessage();
-			msg.mediaObject = imgObj;
+			WXWebpageObject object = new WXWebpageObject();
+			object.webpageUrl= "http://fan.yoka.com/wap/topic_show.do?id="+id;
+			WXMediaMessage localWXMediaMessage = new WXMediaMessage(object);
+			localWXMediaMessage.title = title;
+			localWXMediaMessage.description = desc;
+			
 			
 			Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
 			bmp.recycle();
-			msg.thumbData = Utils.bmpToByteArray(thumbBmp, true);  // 设置缩略图
-
+			localWXMediaMessage.thumbData = Utils.bmpToByteArray(thumbBmp, true);
 			SendMessageToWX.Req req = new SendMessageToWX.Req();
-			req.transaction = buildTransaction("img");
-			req.message = msg;
+			req.transaction = buildTransaction("imbg");
+			req.message = localWXMediaMessage;
 			req.scene = scene;
 			api.sendReq(req);
 		}
